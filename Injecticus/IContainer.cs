@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {
     public interface IContainer
     {
-        IBinder<T> Bind<T>();
-        IBinder Bind(Type t);
+        IBinderFactory BinderFactory { get; }
 
-        void RegisterBuilder(IObjectBuilder builder);
-        void UnregisterBuilder(IObjectBuilder builder);
+        void RegisterBuilder(Type type, IObjectBuilder builder);
+        void RegisterBuilder<TargetType>(IObjectBuilder builder);
 
-        T Get<T>();
-        object Get();
+        void UnregisterBuilder(Type type, IObjectBuilder builder);
+        void UnregisterBuilder<TargetType>(IObjectBuilder builder);
+
+        TargetType Get<TargetType>();
+        TargetType[] GetAll<TargetType>();
+
+        object Get(Type type);
+        object[] GetAll(Type type);
     }
 }

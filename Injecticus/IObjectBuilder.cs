@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {
     public interface IObjectBuilder
     {
@@ -10,20 +10,20 @@ namespace Injecticus
         object Create(IContainer container);
     }
 
-    public interface IObjectBuilder<T> : IObjectBuilder
+    public interface IObjectBuilder<out InstanceType> : IObjectBuilder
     {
-        T CreateInstance(IContainer container);
+        InstanceType CreateInstance(IContainer container);
     }
 
-    public abstract class ObjectBuilder<T> : IObjectBuilder<T>
+    public abstract class ObjectBuilder<InstanceType> : IObjectBuilder<InstanceType>
     {
-        public Type Type => typeof(T);
+        public Type Type => typeof(InstanceType);
 
         public object Create(IContainer container)
         {
             return CreateInstance(container);
         }
 
-        public abstract T CreateInstance(IContainer container);
+        public abstract InstanceType CreateInstance(IContainer container);
     }
 }

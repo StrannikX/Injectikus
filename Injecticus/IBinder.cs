@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {   
     public interface IBinder
     {      
-        void Create(IContainer container);
+        public Type Type { get;  }
+        
+        public IContainer Container { get; }
         
         IObjectBuilder To(Type type);
         IObjectBuilder ToMethod(Func<IContainer, object> builder);
         IObjectBuilder ToBuilder(IObjectBuilder builder);
     }
 
-    public interface IBinder<T> : IBinder
+    public interface IBinder<TargetT> : IBinder
     {
-        IObjectBuilder<T> To<T2>() where T2 : class, T;
-        IObjectBuilder<T> ToMethod<T2>(Func<IContainer, T2> builder) where T2: class, T;
-        IObjectBuilder<T> ToBuilder<T2>(IObjectBuilder<T2> builder) where T2: class, T;
+        IObjectBuilder<InstanceT> To<InstanceT>() where InstanceT : class, TargetT;
+        IObjectBuilder<InstanceT> ToMethod<InstanceT>(Func<IContainer, InstanceT> builder) where InstanceT : class, TargetT;
+        IObjectBuilder<InstanceT> ToBuilder<InstanceT>(IObjectBuilder<InstanceT> builder) where InstanceT : class, TargetT;
     }
 }

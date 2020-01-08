@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injecticus", "Injecticus\Injecticus.csproj", "{CCD1BAFE-9733-4C36-A378-06FC66F7409A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injectikus", "Injecticus\Injectikus.csproj", "{CCD1BAFE-9733-4C36-A378-06FC66F7409A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{0B7E52B9-FCA6-4EC4-B014-485D24C0524F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProgram", "TestProgram\TestProgram.csproj", "{D80180AB-BEC7-4AED-8D48-6C140F008024}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0B7E52B9-FCA6-4EC4-B014-485D24C0524F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B7E52B9-FCA6-4EC4-B014-485D24C0524F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B7E52B9-FCA6-4EC4-B014-485D24C0524F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80180AB-BEC7-4AED-8D48-6C140F008024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80180AB-BEC7-4AED-8D48-6C140F008024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80180AB-BEC7-4AED-8D48-6C140F008024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80180AB-BEC7-4AED-8D48-6C140F008024}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

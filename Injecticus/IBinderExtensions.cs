@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {
     public static class IBinderExtensions
     {
@@ -11,14 +11,29 @@ namespace Injecticus
             return new SingletonBinder(binder);
         }
 
-        public static IBinder<T> Singleton<T>(this IBinder<T> binder)
+        public static SingletonBinder<TargetType> Singleton<TargetType>(this IBinder<TargetType> binder)
         {
-            return new SingletonBinder<T>(binder);
+            return new SingletonBinder<TargetType>(binder);
         }
 
-        public static IObjectBuilder<T> ToThemselve<T>(this IBinder<T> binder) where T : class
+        public static IObjectBuilder<TargetType> Singleton<TargetType, InstanceT>(this IBinder<TargetType> binder, InstanceT obj) where InstanceT : class, TargetType
         {
-            return binder.To<T>();
+            return (new SingletonBinder<TargetType>(binder)).ToObject(obj);
+        }
+
+        public static IObjectBuilder Singleton(this IBinder binder, object instance)
+        {
+            return (new SingletonBinder(binder)).ToObject(instance);
+        }
+
+        public static IObjectBuilder<TargetT> ToThemselve<TargetT>(this IBinder<TargetT> binder) where TargetT : class
+        {
+            return binder.To<TargetT>();
+        }
+
+        public static IObjectBuilder ToThemselve(this IBinder binder)
+        {
+            return binder.To(binder.Type);
         }
     }
 }

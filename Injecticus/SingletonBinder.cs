@@ -2,38 +2,37 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {
     public class SingletonBinder : IBinder
     {
-        protected IContainer container;
         protected IBinder binder;
+
+        public Type Type => binder.Type;
+
+        public IContainer Container { get; }
 
         public SingletonBinder(IBinder binder)
         {
             this.binder = binder;
-        }
-
-        public void Create(IContainer container)
-        {
-            this.container = container;
+            this.Container = binder.Container;
         }
 
         public IObjectBuilder To(Type type)
         {
             var builder = binder.To(type);
-            container.UnregisterBuilder(builder);
+            Container.UnregisterBuilder(Type, builder);
             builder = new SingletonObjectBuilder(builder);
-            container.RegisterBuilder(builder);
+            Container.RegisterBuilder(Type, builder);
             return builder;
         }
 
         public IObjectBuilder ToBuilder(IObjectBuilder builder)
         {
             builder = binder.ToBuilder(builder);
-            container.UnregisterBuilder(builder);
+            Container.UnregisterBuilder(Type, builder);
             builder = new SingletonObjectBuilder(builder);
-            container.RegisterBuilder(builder);
+            Container.RegisterBuilder(Type, builder);
             return builder;
         }
 
@@ -41,45 +40,56 @@ namespace Injecticus
         {
             var builder = binder.ToMethod(method);
             builder = new SingletonObjectBuilder(builder);
-            container.RegisterBuilder(builder);
+            Container.RegisterBuilder(Type, builder);
             return builder;
         }
 
+        public IObjectBuilder ToObject(object instance)
+        {
+            return new SingletonObjectBuilder(instance);
+        }
     }
 
-    public class SingletonBinder<T> : SingletonBinder, IBinder<T>
+    public class SingletonBinder<TargetT> : SingletonBinder, IBinder<TargetT>
     {
-        protected new IBinder<T> binder;
+        protected new IBinder<TargetT> binder;
 
-        public SingletonBinder(IBinder<T> binder) : base(binder)
+        public SingletonBinder(IBinder<TargetT> binder) : base(binder)
         {
             this.binder = binder;
         }
 
-        public IObjectBuilder<T> To<T2>() where T2 : class, T
+        public IObjectBuilder<InstanceT> To<InstanceT>() where InstanceT : class, TargetT
         {
-            IObjectBuilder<T> builder = binder.To<T2>();
-            container.UnregisterBuilder(builder);
-            builder = new SingletonObjectBuilder<T>(builder);
-            container.RegisterBuilder(builder);
+            IObjectBuilder<InstanceT> builder = binder.To<InstanceT>();
+            Container.UnregisterBuilder<TargetT>(builder);
+            builder = new SingletonObjectBuilder<InstanceT>(builder);
+            Container.RegisterBuilder<TargetT>(builder);
             return builder;
         }
 
-        public IObjectBuilder<T> ToBuilder<T2>(IObjectBuilder<T2> b) where T2 : class, T
+        public IObjectBuilder<InstanceT> ToBuilder<InstanceT>(IObjectBuilder<InstanceT> b) where InstanceT : class, TargetT
         {
             var builder = binder.ToBuilder(b);
-            container.UnregisterBuilder(builder);
-            builder = new SingletonObjectBuilder<T>(builder);
-            container.RegisterBuilder(builder);
+            Container.UnregisterBuilder<TargetT>(builder);
+            builder = new SingletonObjectBuilder<InstanceT>(builder);
+            Container.RegisterBuilder<TargetT>(builder);
             return builder;
         }
 
-        public IObjectBuilder<T> ToMethod<T2>(Func<IContainer, T2> method) where T2 : class, T 
+        public IObjectBuilder<InstanceT> ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetT
         {
             var builder = binder.ToMethod(method);
-            container.UnregisterBuilder(builder);
-            builder = new SingletonObjectBuilder<T>(builder);
-            container.RegisterBuilder(builder);
+            Container.UnregisterBuilder<TargetT>(builder);
+            builder = new SingletonObjectBuilder<InstanceT>(builder);
+            Container.RegisterBuilder<TargetT>(builder);
+            return builder;
+        }
+
+        public IObjectBuilder<InstanceType> ToObject<InstanceType>(InstanceType obj) where InstanceType : class, TargetT
+        {
+            var builder = new SingletonObjectBuilder<InstanceType>(obj);
+            Container.RegisterBuilder<TargetT>(builder);
             return builder;
         }
     }

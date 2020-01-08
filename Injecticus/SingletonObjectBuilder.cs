@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injecticus
+namespace Injectikus
 {
-    class SingletonObjectBuilder<T> : ObjectBuilder<T>
+    public class SingletonObjectBuilder<InstanceT> : ObjectBuilder<InstanceT>
     {
-        T instance = default;
-        IObjectBuilder<T> builder;
+        InstanceT instance = default;
+        IObjectBuilder<InstanceT> builder;
 
-        public SingletonObjectBuilder(IObjectBuilder<T> builder)
+        public SingletonObjectBuilder(IObjectBuilder<InstanceT> builder)
         {
             this.builder = builder;
         }
 
-        public SingletonObjectBuilder(T instance)
+        public SingletonObjectBuilder(InstanceT instance)
         { 
             this.instance = instance;
         }
 
-        public override T CreateInstance(IContainer container)
+        public override InstanceT CreateInstance(IContainer container)
         {
             if (instance == null)
             {
@@ -29,7 +29,7 @@ namespace Injecticus
         }
     }
 
-    class SingletonObjectBuilder : IObjectBuilder
+    public class SingletonObjectBuilder : IObjectBuilder
     {
         IObjectBuilder builder;
         object instance = default;
