@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace Injectikus
 {
+    // TODO: Реализовать умную систему создания классов
     internal class ClassInstanceBuilder : IObjectBuilder
     {
         public Type Type { get; }
@@ -15,8 +16,8 @@ namespace Injectikus
         // Naive realization
         public object Create(IContainer container)
         {
-            ConstructorInfo info = Type.GetConstructor(Type.EmptyTypes);
-            return info?.Invoke(new object[0]);
+            var service = container.Get<DIInstanceCreationService>();
+            return service.CreateInstance(Type);
         }
     }
 
@@ -24,8 +25,8 @@ namespace Injectikus
     {
         public override InstanceT CreateInstance(IContainer container)
         {
-            ConstructorInfo info = Type.GetConstructor(Type.EmptyTypes);
-            return info?.Invoke(new object[0]) as InstanceT;
+            var service = container.Get<DIInstanceCreationService>();
+            return (InstanceT) service.CreateInstance(typeof(InstanceT));
         }
     }
 }

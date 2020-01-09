@@ -14,6 +14,13 @@ namespace Injectikus
         public Injectikus()
         {
             BinderFactory = new DefaultBinderFactory(this);
+
+            this.Bind<IContainer>()
+                .Singleton(this);
+
+            this.Bind<DIInstanceCreationService>()
+                .Singleton()
+                .ToObject(new DIInstanceCreationService(this));
         }
 
         public TargetType Get<TargetType>()
@@ -21,18 +28,42 @@ namespace Injectikus
             return (TargetType)Get(typeof(TargetType));
         }
 
-        public object Get(Type type)
+        public bool TryGet<TargetType>(out TargetType @object)
+        {
+            object temp;
+            @object = default;
+            if (TryGet(typeof(TargetType), out temp))
+            {
+                @object = (TargetType)temp;
+                return true;
+            }
+            return false;
+        }
+
+        public bool TryGet(Type type, out object @object)
         {
             IObjectBuilder[] builders;
+            @object = default;
             if (this.builders.TryGetValue(type, out builders))
             {
                 if (builders.Length > 0)
                 {
                     var builder = builders[0];
-                    return builder.Create(this);
+                    @object = builder.Create(this);
+                    return true;
                 }
             }
-            throw new Exception();
+            return false;
+        }
+
+        public object Get(Type type)
+        {
+            object @object;
+            if (TryGet(type, out @object))
+            {
+                return @object;
+            }
+            throw new ArgumentException($"Type {type.FullName} not known to container");
         }
 
         public TargetType[] GetAll<TargetType>()
@@ -55,7 +86,7 @@ namespace Injectikus
                         .ToArray();
                 }
             }
-            throw new Exception();
+            return Array.Empty<object>();
         }
 
         public void RegisterBuilder(Type type, IObjectBuilder builder)
@@ -94,6 +125,16 @@ namespace Injectikus
         public void UnregisterBuilder<TargetType>(IObjectBuilder builder)
         {
             UnregisterBuilder(typeof(TargetType), builder);
+        }
+
+        public bool Contains<TargetType>()
+        {
+            return Contains(typeof(TargetType));
+        }
+
+        public bool Contains(Type type)
+        {
+            return builders.ContainsKey(type);
         }
     }
 }
