@@ -16,24 +16,24 @@ namespace Injectikus
             return new SingletonBinder<TargetType>(binder);
         }
 
-        public static IObjectBuilder<TargetType> Singleton<TargetType, InstanceT>(this IBinder<TargetType> binder, InstanceT obj) where InstanceT : class, TargetType
+        public static void Singleton<TargetType, InstanceT>(this IBinder<TargetType> binder, InstanceT instance) where InstanceT : class, TargetType
         {
-            return (new SingletonBinder<TargetType>(binder)).ToObject(obj);
+            (new SingletonBinder<TargetType>(binder)).ToObject(instance);
         }
 
-        public static IObjectBuilder Singleton(this IBinder binder, object instance)
+        public static void Singleton(this IBinder binder, object instance)
         {
-            return (new SingletonBinder(binder)).ToObject(instance);
+            (new SingletonBinder(binder)).ToObject(instance);
         }
 
-        public static IObjectBuilder<TargetT> ToThemselve<TargetT>(this IBinder<TargetT> binder) where TargetT : class
+        public static void ToThemselves<TargetT>(this IBinder<TargetT> binder) where TargetT : class
         {
-            return binder.To<TargetT>();
+            binder.To<TargetT>();
         }
 
-        public static IObjectBuilder ToThemselve(this IBinder binder)
+        public static void ToThemselves(this IBinder binder)
         {
-            return binder.To(binder.Type);
+            binder.To(binder.Type);
         }
     }
 }

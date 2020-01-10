@@ -8,21 +8,21 @@ namespace Injectikus
     {
         IBinderFactory BinderFactory { get; }
 
-        void RegisterBuilder(Type type, IObjectBuilder builder);
-        void RegisterBuilder<TargetType>(IObjectBuilder builder);
+        void RegisterProvider(Type type, IObjectProvider provider);
+        void RegisterProvider<TargetType>(IObjectProvider provider);
 
-        void UnregisterBuilder(Type type, IObjectBuilder builder);
-        void UnregisterBuilder<TargetType>(IObjectBuilder builder);
+        void UnregisterProvider(Type type, IObjectProvider provider);
+        void UnregisterProvider<TargetType>(IObjectProvider provider);
 
         bool Contains<TargetType>();
         bool Contains(Type type);
 
         TargetType Get<TargetType>();
-        bool TryGet<TargetType>(out TargetType @object);
+        bool TryGet<TargetType>(out TargetType obj);
         TargetType[] GetAll<TargetType>();
 
         object Get(Type type);
-        bool TryGet(Type type, out object @object);
+        bool TryGet(Type type, out object obj);
         object[] GetAll(Type type);
     }
 }

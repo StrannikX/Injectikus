@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Injectikus.Providers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,41 +13,37 @@ namespace Injectikus
 
         public IContainer Container { get; }
 
-        public SingletonBinder(IBinder binder)
+        public IProviderFactory DefaultProviderFactory { get; }
+
+        public SingletonBinder(IBinder baseBinder)
         {
-            this.binder = binder;
-            this.Container = binder.Container;
+            this.binder = baseBinder;
+            this.DefaultProviderFactory = 
+                new SingletonProviderFactory(baseBinder.DefaultProviderFactory);
         }
 
-        public IObjectBuilder To(Type type)
+        public void To(Type type)
         {
-            var builder = binder.To(type);
-            Container.UnregisterBuilder(Type, builder);
-            builder = new SingletonObjectBuilder(builder);
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetClassInstanceProvider(type);
+            binder.ToProvider(provider);
         }
 
-        public IObjectBuilder ToBuilder(IObjectBuilder builder)
+        public void ToMethod(Func<IContainer, object> method)
         {
-            builder = binder.ToBuilder(builder);
-            Container.UnregisterBuilder(Type, builder);
-            builder = new SingletonObjectBuilder(builder);
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
+            binder.ToProvider(provider);
         }
 
-        public IObjectBuilder ToMethod(Func<IContainer, object> method)
+        public void ToObject(object instance)
         {
-            var builder = binder.ToMethod(method);
-            builder = new SingletonObjectBuilder(builder);
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            var provider = new SingletonObjectProvider(instance);
+            binder.ToProvider(provider);
         }
 
-        public IObjectBuilder ToObject(object instance)
+        public void ToProvider(IObjectProvider provider)
         {
-            return new SingletonObjectBuilder(instance);
+            provider = new SingletonObjectProvider(provider);
+            binder.ToProvider(provider);
         }
     }
 
@@ -59,38 +56,16 @@ namespace Injectikus
             this.binder = binder;
         }
 
-        public IObjectBuilder<InstanceT> To<InstanceT>() where InstanceT : class, TargetT
+        public void To<InstanceT>() where InstanceT : class, TargetT
         {
-            IObjectBuilder<InstanceT> builder = binder.To<InstanceT>();
-            Container.UnregisterBuilder<TargetT>(builder);
-            builder = new SingletonObjectBuilder<InstanceT>(builder);
-            Container.RegisterBuilder<TargetT>(builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetClassInstanceProvider(Type);
+            binder.ToProvider(provider);
         }
 
-        public IObjectBuilder<InstanceT> ToBuilder<InstanceT>(IObjectBuilder<InstanceT> b) where InstanceT : class, TargetT
+        public void ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetT
         {
-            var builder = binder.ToBuilder(b);
-            Container.UnregisterBuilder<TargetT>(builder);
-            builder = new SingletonObjectBuilder<InstanceT>(builder);
-            Container.RegisterBuilder<TargetT>(builder);
-            return builder;
-        }
-
-        public IObjectBuilder<InstanceT> ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetT
-        {
-            var builder = binder.ToMethod(method);
-            Container.UnregisterBuilder<TargetT>(builder);
-            builder = new SingletonObjectBuilder<InstanceT>(builder);
-            Container.RegisterBuilder<TargetT>(builder);
-            return builder;
-        }
-
-        public IObjectBuilder<InstanceType> ToObject<InstanceType>(InstanceType obj) where InstanceType : class, TargetT
-        {
-            var builder = new SingletonObjectBuilder<InstanceType>(obj);
-            Container.RegisterBuilder<TargetT>(builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
+            binder.ToProvider(provider);
         }
     }
 }

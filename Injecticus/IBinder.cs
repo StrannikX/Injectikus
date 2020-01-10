@@ -6,19 +6,20 @@ namespace Injectikus
 {   
     public interface IBinder
     {      
-        public Type Type { get;  }
-        
-        public IContainer Container { get; }
-        
-        IObjectBuilder To(Type type);
-        IObjectBuilder ToMethod(Func<IContainer, object> builder);
-        IObjectBuilder ToBuilder(IObjectBuilder builder);
+        Type Type { get;  }
+
+        IContainer Container { get; }
+
+        IProviderFactory DefaultProviderFactory { get; }
+
+        void To(Type type);
+        void ToMethod(Func<IContainer, object> builder);
+        void ToProvider(IObjectProvider builder);
     }
 
     public interface IBinder<TargetT> : IBinder
     {
-        IObjectBuilder<InstanceT> To<InstanceT>() where InstanceT : class, TargetT;
-        IObjectBuilder<InstanceT> ToMethod<InstanceT>(Func<IContainer, InstanceT> builder) where InstanceT : class, TargetT;
-        IObjectBuilder<InstanceT> ToBuilder<InstanceT>(IObjectBuilder<InstanceT> builder) where InstanceT : class, TargetT;
+        void To<InstanceT>() where InstanceT : class, TargetT;
+        void ToMethod<InstanceT>(Func<IContainer, InstanceT> builder) where InstanceT : class, TargetT;
     }
 }

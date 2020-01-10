@@ -6,8 +6,8 @@ namespace Injectikus
 {
     public class Injectikus : IContainer
     {
-        private ConcurrentDictionary<Type, IObjectBuilder[]> builders =
-            new ConcurrentDictionary<Type, IObjectBuilder[]>();
+        private ConcurrentDictionary<Type, IObjectProvider[]> providers =
+            new ConcurrentDictionary<Type, IObjectProvider[]>();
 
         public IBinderFactory BinderFactory { get; }
 
@@ -28,28 +28,26 @@ namespace Injectikus
             return (TargetType)Get(typeof(TargetType));
         }
 
-        public bool TryGet<TargetType>(out TargetType @object)
+        public bool TryGet<TargetType>(out TargetType obj)
         {
-            object temp;
-            @object = default;
-            if (TryGet(typeof(TargetType), out temp))
+            obj = default;
+            if (TryGet(typeof(TargetType), out var temp))
             {
-                @object = (TargetType)temp;
+                obj = (TargetType)temp;
                 return true;
             }
             return false;
         }
 
-        public bool TryGet(Type type, out object @object)
+        public bool TryGet(Type type, out object obj)
         {
-            IObjectBuilder[] builders;
-            @object = default;
-            if (this.builders.TryGetValue(type, out builders))
+            obj = default;
+            if (providers.TryGetValue(type, out var builders))
             {
                 if (builders.Length > 0)
                 {
                     var builder = builders[0];
-                    @object = builder.Create(this);
+                    obj = builder.Create(this);
                     return true;
                 }
             }
@@ -58,10 +56,9 @@ namespace Injectikus
 
         public object Get(Type type)
         {
-            object @object;
-            if (TryGet(type, out @object))
+            if (TryGet(type, out var obj))
             {
-                return @object;
+                return obj;
             }
             throw new ArgumentException($"Type {type.FullName} not known to container");
         }
@@ -76,12 +73,11 @@ namespace Injectikus
 
         public object[] GetAll(Type type)
         {
-            IObjectBuilder[] builders;
-            if (this.builders.TryGetValue(type, out builders))
+            if (this.providers.TryGetValue(type, out var providers))
             {
-                if (builders.Length > 0)
+                if (providers.Length > 0)
                 {
-                    return builders
+                    return providers
                         .Select(b => b.Create(this))
                         .ToArray();
                 }
@@ -89,42 +85,42 @@ namespace Injectikus
             return Array.Empty<object>();
         }
 
-        public void RegisterBuilder(Type type, IObjectBuilder builder)
+        public void RegisterProvider(Type type, IObjectProvider provider)
         {
-            IObjectBuilder[] oldBuilders, newBuilders;
+            IObjectProvider[] oldProviders, newProviders;
             do
             {
-                oldBuilders = builders.GetOrAdd(type, _ => new IObjectBuilder[0]);
-                newBuilders = new IObjectBuilder[oldBuilders.Length + 1];
-                Array.Copy(oldBuilders, newBuilders, oldBuilders.Length);
-                newBuilders[oldBuilders.Length] = builder;
-            } while (!builders.TryUpdate(type, newBuilders, oldBuilders));
+                oldProviders = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
+                newProviders = new IObjectProvider[oldProviders.Length + 1];
+                Array.Copy(oldProviders, newProviders, oldProviders.Length);
+                newProviders[oldProviders.Length] = provider;
+            } while (!providers.TryUpdate(type, newProviders, oldProviders));
         }
 
-        public void RegisterBuilder<TargetType>(IObjectBuilder builder)
+        public void RegisterProvider<TargetType>(IObjectProvider provider)
         {
-            RegisterBuilder(typeof(TargetType), builder);
+            RegisterProvider(typeof(TargetType), provider);
         }
 
-        public void UnregisterBuilder(Type type, IObjectBuilder builder)
+        public void UnregisterProvider(Type type, IObjectProvider provider)
         {
-            IObjectBuilder[] oldBuilders, newBuilders;
+            IObjectProvider[] oldProviders, newProviders;
             do
             {
-                oldBuilders = builders.GetOrAdd(type, _ => new IObjectBuilder[0]);
-                int i = Array.IndexOf(oldBuilders, builder);
+                oldProviders = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
+                int i = Array.IndexOf(oldProviders, provider);
 
                 if (i == -1) return;
 
-                newBuilders = new IObjectBuilder[oldBuilders.Length - 1];
-                Array.Copy(oldBuilders, newBuilders, i);
-                Array.Copy(oldBuilders, i + 1, newBuilders, i, newBuilders.Length - i);
-            } while (!builders.TryUpdate(type, newBuilders, oldBuilders));
+                newProviders = new IObjectProvider[oldProviders.Length - 1];
+                Array.Copy(oldProviders, newProviders, i);
+                Array.Copy(oldProviders, i + 1, newProviders, i, newProviders.Length - i);
+            } while (!providers.TryUpdate(type, newProviders, oldProviders));
         }
 
-        public void UnregisterBuilder<TargetType>(IObjectBuilder builder)
+        public void UnregisterProvider<TargetType>(IObjectProvider provider)
         {
-            UnregisterBuilder(typeof(TargetType), builder);
+            UnregisterProvider(typeof(TargetType), provider);
         }
 
         public bool Contains<TargetType>()
@@ -134,7 +130,7 @@ namespace Injectikus
 
         public bool Contains(Type type)
         {
-            return builders.ContainsKey(type);
+            return providers.ContainsKey(type);
         }
     }
 }

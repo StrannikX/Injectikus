@@ -4,18 +4,13 @@ using System.Text;
 
 namespace Injectikus
 {
-    public interface IObjectBuilder
+    public interface IObjectProvider
     {
         Type Type { get; }
         object Create(IContainer container);
     }
 
-    public interface IObjectBuilder<out InstanceType> : IObjectBuilder
-    {
-        InstanceType CreateInstance(IContainer container);
-    }
-
-    public abstract class ObjectBuilder<InstanceType> : IObjectBuilder<InstanceType>
+    public abstract class ObjectProvider<InstanceType> : IObjectProvider
     {
         public Type Type => typeof(InstanceType);
 

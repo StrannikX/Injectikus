@@ -15,7 +15,7 @@ namespace Tests
         }
     }
     
-    class TestObjectBuilder : ObjectBuilder<TestObject>
+    class TestObjectBuilder : ObjectProvider<TestObject>
     {
         int i = 0;
         public override TestObject CreateInstance(IContainer container)
@@ -46,19 +46,19 @@ namespace Tests
         [Test]
         public void ShouldReturnSameObject()
         {
-            container.Bind<object>().Singleton().ToThemselve();
+            container.Bind<object>().Singleton().ToThemselves();
             Assert.That(container.Get<object>(), Is.SameAs(container.Get<object>()));
         }
     }
 
     public class SingletonObjectBuilderTests
     {
-        IObjectBuilder builder;
+        IObjectProvider builder;
 
         [SetUp]
         public void SetUp()
         {
-            builder = new SingletonObjectBuilder<TestObject>(new TestObjectBuilder());
+            builder = new SingletonObjectProvider<TestObject>(new TestObjectBuilder());
         }
 
         [Test]

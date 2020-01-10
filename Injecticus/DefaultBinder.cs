@@ -10,30 +10,30 @@ namespace Injectikus
 
         public IContainer Container { get; }
 
+        public IProviderFactory DefaultProviderFactory { get; }
+
         public DefaultBinder(IContainer container, Type type)
         {
             this.Type = type;
             this.Container = container;
+            this.DefaultProviderFactory = new DefaultProviderFactory();
         }
 
-        public IObjectBuilder ToBuilder(IObjectBuilder builder)
+        public void ToProvider(IObjectProvider builder)
         {
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            Container.RegisterProvider(Type, builder);
         }
 
-        public IObjectBuilder ToMethod(Func<IContainer, object> method)
+        public void ToMethod(Func<IContainer, object> method)
         {
-            IObjectBuilder builder = new FactoryMethodObjectBuilder(Type, method);
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            IObjectProvider provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
+            Container.RegisterProvider(Type, provider);
         }
 
-        public IObjectBuilder To(Type instanceType)
+        public void To(Type instanceType)
         {
-            IObjectBuilder builder = new ClassInstanceBuilder(instanceType);
-            Container.RegisterBuilder(Type, builder);
-            return builder;
+            IObjectProvider provider = DefaultProviderFactory.GetClassInstanceProvider(Type);
+            Container.RegisterProvider(Type, provider);
         }
     }
 
@@ -43,24 +43,16 @@ namespace Injectikus
         {
         }
 
-        public IObjectBuilder<InstanceT> To<InstanceT>() where InstanceT : class, TargetType
+        public void To<InstanceT>() where InstanceT : class, TargetType
         {
-            IObjectBuilder<InstanceT> builder = new ClassInstanceBuilder<InstanceT>();
-            Container.RegisterBuilder<TargetType>(builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetClassInstanceProvider(typeof(InstanceT));
+            Container.RegisterProvider<TargetType>(provider);
         }
 
-        public IObjectBuilder<InstanceT> ToBuilder<InstanceT>(IObjectBuilder<InstanceT> builder) where InstanceT : class, TargetType
+        public void ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetType
         {
-            Container.RegisterBuilder<TargetType>(builder);
-            return builder;
-        }
-
-        public IObjectBuilder<InstanceT> ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetType
-        {
-            IObjectBuilder<InstanceT> builder = new FactoryMethodObjectBuilder<InstanceT>(method);
-            Container.RegisterBuilder<TargetType>(builder);
-            return builder;
+            var provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
+            Container.RegisterProvider<TargetType>(provider);
         }
     }
 }
