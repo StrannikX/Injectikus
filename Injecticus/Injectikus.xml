@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Injectikus</name>
+    </assembly>
+    <members>
+        <member name="T:Injectikus.IContainer">
+            <summary>
+            Interface IContainer - basic interface for DI Container.
+            Contains all methods for performing dependency injection container functions.. 
+            </summary>
+        </member>
+        <member name="P:Injectikus.IContainer.BinderFactory">
+            <value>
+            A binder factory for this container.
+            <see cref="T:Injectikus.IBinderFactory"/>
+            <seealso cref="T:Injectikus.IBinder"/>
+            </value>
+        </member>
+        <member name="M:Injectikus.IContainer.BindProvider(System.Type,Injectikus.IObjectProvider)">
+            <summary>
+            Bind <paramref name="type"/> to <paramref name="provider"/> in di container. 
+            </summary>
+            <param name="type">Type to bind</param>
+            <param name="provider">Provider associated with type</param>
+        </member>
+        <member name="M:Injectikus.IContainer.BindProvider``1(Injectikus.IObjectProvider)">
+            <summary>
+            Bind <typeparamref name="TargetType"/> to <paramref name="provider"/> in di container. 
+            </summary>
+            <typeparam name="TargetType">Type to bind</typeparam>
+            <param name="provider">Provider associated with type</param>
+        </member>
+    </members>
+</doc>

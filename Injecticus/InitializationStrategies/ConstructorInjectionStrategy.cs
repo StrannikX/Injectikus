@@ -35,7 +35,7 @@ namespace Injectikus.InitializationStrategies
         public override bool IsAcceptableFor(Type type)
         {
             var constructors = type.GetMarkedConstructors();
-            return constructors != null;
+            return constructors.Length > 0;
         }
     }
 }

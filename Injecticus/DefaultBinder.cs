@@ -21,19 +21,19 @@ namespace Injectikus
 
         public void ToProvider(IObjectProvider builder)
         {
-            Container.RegisterProvider(Type, builder);
+            Container.BindProvider(Type, builder);
         }
 
         public void ToMethod(Func<IContainer, object> method)
         {
             IObjectProvider provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
-            Container.RegisterProvider(Type, provider);
+            Container.BindProvider(Type, provider);
         }
 
         public void To(Type instanceType)
         {
             IObjectProvider provider = DefaultProviderFactory.GetClassInstanceProvider(Type);
-            Container.RegisterProvider(Type, provider);
+            Container.BindProvider(Type, provider);
         }
     }
 
@@ -46,13 +46,13 @@ namespace Injectikus
         public void To<InstanceT>() where InstanceT : class, TargetType
         {
             var provider = DefaultProviderFactory.GetClassInstanceProvider(typeof(InstanceT));
-            Container.RegisterProvider<TargetType>(provider);
+            Container.BindProvider<TargetType>(provider);
         }
 
         public void ToMethod<InstanceT>(Func<IContainer, InstanceT> method) where InstanceT : class, TargetType
         {
             var provider = DefaultProviderFactory.GetFactoryMethodProvider(Type, method);
-            Container.RegisterProvider<TargetType>(provider);
+            Container.BindProvider<TargetType>(provider);
         }
     }
 }

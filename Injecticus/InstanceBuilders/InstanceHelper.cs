@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+using Injectikus.InitializationStrategies;
 
 namespace Injectikus.InstanceBuilders
 {
@@ -15,7 +15,12 @@ namespace Injectikus.InstanceBuilders
                 foreach (var param in method.GetParameters())
                 {
                     object @object;
-                    if (container.TryGet(param.ParameterType, out @object))
+
+                    if (param.HasArrayInjectionAttribute())
+                    {
+                        yield return container.GetAll(param.ParameterType.GetElementType());
+                    } 
+                    else if (container.TryGet(param.ParameterType, out @object))
                     {
                         yield return @object;
                     }

@@ -103,5 +103,10 @@ namespace Injectikus.InitializationStrategies
             var attr = type.GetCustomAttribute<InjectionInitializationAttribute>();
             return attr?.InitializationMethod;
         }
+
+        internal static bool HasArrayInjectionAttribute(this ParameterInfo parameter)
+        {
+            return parameter.GetCustomAttribute<ArrayInjectionAttribute>() != null;
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Injectikus.Providers
 {
-    class SingletonProviderFactory : IProviderFactory
+    public class SingletonProviderFactory : IProviderFactory
     {
         IProviderFactory baseFactory;
 

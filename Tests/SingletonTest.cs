@@ -1,4 +1,5 @@
 ﻿using Injectikus;
+using Injectikus.Providers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            builder = new SingletonObjectProvider<TestObject>(new TestObjectBuilder());
+            builder = new SingletonObjectProvider(new TestObjectBuilder());
         }
 
         [Test]

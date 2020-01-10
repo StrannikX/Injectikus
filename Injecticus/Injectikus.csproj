@@ -5,4 +5,8 @@
     <RootNamespace>Injectikus</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Users\Strannik\source\repos\Injecticus\Injecticus\Injectikus.xml</DocumentationFile>
+  </PropertyGroup>
+
 </Project>
