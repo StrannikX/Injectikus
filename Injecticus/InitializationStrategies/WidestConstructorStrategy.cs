@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Injectikus.InstanceBuilders;
+using System;
 using System.Linq;
 
 namespace Injectikus.InitializationStrategies
@@ -17,22 +17,22 @@ namespace Injectikus.InitializationStrategies
 
         public override IInstanceBuilder CreateBuilderFor(Type type)
         {
-            throw new NotImplementedException();
+            var constructors = type.GetPublicConstructors()
+                .Where(c => c.GetParameters().Length > 0)
+                .ToArray();
+
+            if (constructors.Length == 0)
+            {
+                throw new ArgumentException($"Class {type.FullName} have no public constructor for this initialization method");
+            }
+
+            return new WidestConstructorInstanceBuilder(type);
         }
 
         public override bool IsAcceptableFor(Type type)
         {
             return type.GetPublicConstructors()
-                .Where(c => c.GetParameters().Length > 0)
-                .Any(c => c.GetUnresolvedTypes(container).Length == 0);
-        }
-
-        public void VerifyFor(Type type)
-        {
-            if (!IsAcceptableFor(type))
-            {
-                throw new ArgumentException("No suitable constructor found for this initialization method");
-            }
+                .Any(c => c.GetParameters().Length > 0);
         }
     }
 }

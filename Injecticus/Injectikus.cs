@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Injectikus
 {
@@ -8,7 +8,7 @@ namespace Injectikus
     {
         private ConcurrentDictionary<Type, IObjectBuilder[]> builders =
             new ConcurrentDictionary<Type, IObjectBuilder[]>();
-        
+
         public IBinderFactory BinderFactory { get; }
 
         public Injectikus()

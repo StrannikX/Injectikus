@@ -18,8 +18,7 @@ namespace Injectikus.InstanceBuilders
         public object BuildInstance(IContainer container)
         {
             object[] parameters = InstanceHelper
-                .GetMethodParameters(constructor, container)
-                .ToArray();
+                .GetMethodParameters(constructor, container);
             return constructor.Invoke(parameters);
         }
     }
