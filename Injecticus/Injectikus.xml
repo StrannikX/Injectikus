@@ -128,7 +128,7 @@
         </member>
         <member name="T:Injectikus.Injectikus">
             <summary>
-            Базовый контейнер внедрения зависимостей
+            Базовый потокобезопасный контейнер внедрения зависимостей.
             </summary>
         </member>
         <member name="P:Injectikus.Injectikus.BinderFactory">

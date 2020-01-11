@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Injectikus
 {
     /// <summary>
-    /// Базовый контейнер внедрения зависимостей
+    /// Базовый потокобезопасный контейнер внедрения зависимостей.
     /// </summary>
     public class Injectikus : IContainer
     {
-        private ConcurrentDictionary<Type, IObjectProvider[]> providers =
-            new ConcurrentDictionary<Type, IObjectProvider[]>();
+        private ConcurrentDictionary<Type, ImmutableList<IObjectProvider>> providers =
+            new ConcurrentDictionary<Type, ImmutableList<IObjectProvider>>();
 
         /// <value>
         /// Фабрика объектов связывания
@@ -66,6 +67,7 @@ namespace Injectikus
             return (TargetType)Get(typeof(TargetType));
         }
 
+
         /// <summary>
         /// Попробовать получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
         /// </summary>
@@ -92,12 +94,12 @@ namespace Injectikus
         public bool TryGet(Type type, out object obj)
         {
             obj = default;
-            if (providers.TryGetValue(type, out var builders))
+            if (this.providers.TryGetValue(type, out var providers))
             {
-                if (builders.Length > 0)
+                if (!providers.IsEmpty)
                 {
-                    var builder = builders[0];
-                    obj = builder.Create(this);
+                    var provider = providers.First();
+                    obj = provider.Create(this);
                     return true;
                 }
             }
@@ -132,14 +134,12 @@ namespace Injectikus
             var type = typeof(TargetType);
             if (this.providers.TryGetValue(type, out var providers))
             {
-                if (providers.Length > 0)
+                if (!providers.IsEmpty)
                 {
                     var objects = providers
-                        .Select(b => b.Create(this))
+                        .Select(b => (TargetType) b.Create(this))
                         .ToArray();
-                    var targetArr = new TargetType[objects.Length];
-                    Array.Copy(objects, targetArr, objects.Length);
-                    return targetArr;
+                    return objects;
                 }
             }
             return Array.Empty<TargetType>();
@@ -156,7 +156,7 @@ namespace Injectikus
         {
             if (this.providers.TryGetValue(type, out var providers))
             {
-                if (providers.Length > 0)
+                if (!providers.IsEmpty)
                 {
                     var objects = providers
                         .Select(b => b.Create(this))
@@ -174,13 +174,11 @@ namespace Injectikus
         /// <param name="provider">Поставщик объектов</param>
         public void BindProvider(Type type, IObjectProvider provider)
         {
-            IObjectProvider[] oldProviders, newProviders;
+            ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
             {
-                oldProviders = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
-                newProviders = new IObjectProvider[oldProviders.Length + 1];
-                Array.Copy(oldProviders, newProviders, oldProviders.Length);
-                newProviders[oldProviders.Length] = provider;
+                oldProviders = providers.GetOrAdd(type, _ => ImmutableList<IObjectProvider>.Empty);
+                newProviders = oldProviders.Add(provider);
             } while (!providers.TryUpdate(type, newProviders, oldProviders));
         }
 
@@ -201,17 +199,11 @@ namespace Injectikus
         /// <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
         public void UnbindProvider(Type type, IObjectProvider provider)
         {
-            IObjectProvider[] oldProviders, newProviders;
+            ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
             {
-                oldProviders = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
-                int i = Array.IndexOf(oldProviders, provider);
-
-                if (i == -1) return;
-
-                newProviders = new IObjectProvider[oldProviders.Length - 1];
-                Array.Copy(oldProviders, newProviders, i);
-                Array.Copy(oldProviders, i + 1, newProviders, i, newProviders.Length - i);
+                oldProviders = providers.GetOrAdd(type, _ => ImmutableList<IObjectProvider>.Empty);
+                newProviders = oldProviders.Remove(provider);
             } while (!providers.TryUpdate(type, newProviders, oldProviders));
         }
 
@@ -243,8 +235,8 @@ namespace Injectikus
         public bool Contains(Type type)
         {
             if (!providers.ContainsKey(type)) return false;
-            var p = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
-            return p.Length > 0;
+            var p = providers.GetOrAdd(type, _ => ImmutableList<IObjectProvider>.Empty);
+            return !p.IsEmpty;
         }
 
         /// <summary>
