@@ -4,6 +4,203 @@
         <name>Injectikus</name>
     </assembly>
     <members>
+        <member name="T:Injectikus.ContainerExtension">
+            <summary>
+            Класс с методами расширения для <see cref="T:Injectikus.IContainer"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.ContainerExtension.Bind(Injectikus.IContainer,System.Type)">
+            <summary>
+            Начать связывание типа <paramref name="type"/>
+            </summary>
+            <param name="container">Контейнер, в котором выполняется связывание</param>
+            <param name="type">Связываемый тип</param>
+            <returns>Объект связывания для типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.ContainerExtension.Bind``1(Injectikus.IContainer)">
+            <summary>
+            Начать связывание типа <typeparamref name="TargetT"/>
+            </summary>
+            <param name="container">Контейнер, в котором выполняется связывание</param>
+            <typeparam name="TargetT">Связываемый тип</typeparam>
+            <returns>Объект связывания для типа <typeparamref name="TargetT"/></returns>
+        </member>
+        <member name="T:Injectikus.DefaultBinder">
+            <summary>
+            Базовый объект связывания
+            </summary>
+        </member>
+        <member name="P:Injectikus.DefaultBinder.Type">
+            <summary>Базовый тип</summary>
+        </member>
+        <member name="P:Injectikus.DefaultBinder.Container">
+            <summary>
+            Контейнер, в котором осуществляется привязка
+            </summary>
+        </member>
+        <member name="P:Injectikus.DefaultBinder.DefaultProviderFactory">
+            <summary>
+            Фабрика поставщиков объектов по-умолчанию.
+            </summary>
+        </member>
+        <member name="M:Injectikus.DefaultBinder.#ctor(Injectikus.IContainer,Injectikus.IProviderFactory,System.Type)">
+            <summary>
+            Конструктор объекта связывания
+            </summary>
+            <param name="container">Контейнер, в котором будет осуществляться связывание</param>
+            <param name="factory">Не стандартная фабрика поставщиков</param>
+            <param name="type">Базовый тип</param>
+        </member>
+        <member name="M:Injectikus.DefaultBinder.ToProvider(Injectikus.IObjectProvider)">
+            <summary>
+            Выполнить привязку произвольного поставщика к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.DefaultBinder.ToMethod(System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Выполнить привязку производящего метода к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="factoryMethod">Производящий метод</param>
+        </member>
+        <member name="M:Injectikus.DefaultBinder.To(System.Type)">
+            <summary>
+            Выполнить привязку производного типа <paramref name="type"/> к базовому <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="type">Тип к которому осуществляется привязка базового типа</param>
+        </member>
+        <member name="T:Injectikus.DefaultBinder`1">
+            <summary>
+            Базовый объект связывания
+            <typeparam name="TargetT">Базовый тип, к которому осуществляется привязка</typeparam>
+            </summary>
+        </member>
+        <member name="M:Injectikus.DefaultBinder`1.#ctor(Injectikus.IContainer,Injectikus.IProviderFactory)">
+            <summary>
+            Конструктор объекта связывания
+            </summary>
+            <param name="container">Контейнер, в котором будет осуществляться связывание</param>
+            <param name="factory">Не стандартная фабрика поставщиков</param>
+        </member>
+        <member name="M:Injectikus.DefaultBinder`1.To``1">
+            <summary>
+            Выполнить привязку производного класса <typeparamref name="InstanceT"/> к базовому типу <typeparamref name="TargetT"/>
+            </summary>
+            <typeparam name="InstanceT">Класс производный от типа <typeparamref name="TargetT"/></typeparam>
+        </member>
+        <member name="M:Injectikus.DefaultBinder`1.ToMethod``1(System.Func{Injectikus.IContainer,``0})">
+            <summary>
+            Выполнить привязку производящего метода <paramref name="factoryMethod"/> к базовому типу <typeparamref name="TargetT"/>
+            </summary>
+            <param name="factoryMethod">Производящий метод, возвращающий объект типа <typeparamref name="InstanceT"/></param>
+            <typeparam name="InstanceT">Класс, производный от <typeparamref name="TargetT"/>, объекты которого возвращаются производящим методом</typeparam>
+        </member>
+        <member name="T:Injectikus.IBinder">
+            <summary>
+            Интерфейс объекта связывания. 
+            Предоставляет интерфейс для удобного добавления объектов в контейнер.
+            </summary>
+        </member>
+        <member name="P:Injectikus.IBinder.Type">
+            <summary>Базовый тип</summary>
+        </member>
+        <member name="P:Injectikus.IBinder.Container">
+            <summary>
+            Контейнер, в котором осуществляется привязка
+            </summary>
+        </member>
+        <member name="P:Injectikus.IBinder.DefaultProviderFactory">
+            <summary>
+            Фабрика поставщиков объектов по-умолчанию
+            </summary>
+        </member>
+        <member name="M:Injectikus.IBinder.To(System.Type)">
+            <summary>
+            Выполнить привязку производного типа <paramref name="type"/> к базовому <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="type">Тип к которому осуществляется привязка базового типа</param>
+        </member>
+        <member name="M:Injectikus.IBinder.ToMethod(System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Выполнить привязку производящего метода к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="factoryMethod">Производящий метод</param>
+        </member>
+        <member name="M:Injectikus.IBinder.ToProvider(Injectikus.IObjectProvider)">
+            <summary>
+            Выполнить привязку произвольного поставщика к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="T:Injectikus.IBinder`1">
+            <summary>
+            Интерфейс объекта связывания. 
+            Предоставляет интерфейс для удобного добавления объектов в контейнер.
+            <typeparam name="TargetT">Базовый тип, к которому осуществляется привязка</typeparam>
+            </summary>
+        </member>
+        <member name="M:Injectikus.IBinder`1.To``1">
+            <summary>
+            Выполнить привязку производного класса <typeparamref name="InstanceT"/> к базовому типу <typeparamref name="TargetT"/>
+            </summary>
+            <typeparam name="InstanceT">Класс производный от типа <typeparamref name="TargetT"/></typeparam>
+        </member>
+        <member name="M:Injectikus.IBinder`1.ToMethod``1(System.Func{Injectikus.IContainer,``0})">
+            <summary>
+            Выполнить привязку производящего метода <paramref name="factoryMethod"/> к базовому типу <typeparamref name="TargetT"/>
+            </summary>
+            <param name="factoryMethod">Производящий метод, возвращающий объект типа <typeparamref name="InstanceT"/></param>
+            <typeparam name="InstanceT">Класс, производный от <typeparamref name="TargetT"/>, объекты которого возвращаются производящим методом</typeparam>
+        </member>
+        <member name="T:Injectikus.IBinderExtensions">
+            <summary>
+            Расширение интерфейса <see cref="T:Injectikus.IBinder"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.Singleton(Injectikus.IBinder)">
+            <summary>
+            Связать с объектом-одиночкой
+            </summary>
+            <param name="binder">Базовый объект-связывания</param>
+            <returns>Объект связывания для экземпляров-одиночек</returns>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.Singleton``1(Injectikus.IBinder{``0})">
+            <summary>
+            Связать с объектом-одиночкой
+            </summary>
+            <typeparam name="TargetType">Базовый тип</typeparam>
+            <param name="binder">Базовый объект-связывания</param>
+            <returns>Объект связывания для экземпляров-одиночек с базовым типом <typeparamref name="TargetType"/></returns>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.Singleton``2(Injectikus.IBinder{``0},``1)">
+            <summary>
+            Связать с конкретным объектом-одиночкой <paramref name="instance"/>
+            </summary>
+            <typeparam name="TargetType">Базовый тип</typeparam>
+            <typeparam name="InstanceT">Тип объекта-одиночки <paramref name="instance"/></typeparam>
+            <param name="binder">Базовый объект-связывания</param>
+            <param name="instance">Конкретный экземпляр-одиночка</param>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.Singleton(Injectikus.IBinder,System.Object)">
+            <summary>
+            Связать с конкретным объектом-одиночкой <paramref name="instance"/>
+            </summary>
+            <param name="binder">Базовый объект-связывания</param>
+            <param name="instance">Конкретный экземпляр-одиночка</param>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.ToThemselves``1(Injectikus.IBinder{``0})">
+            <summary>
+            Связать тип <typeparamref name="TargetT"/> с самим собой
+            </summary>
+            <typeparam name="TargetT">Базовый тип</typeparam>
+            <param name="binder">Объект связывания</param>
+        </member>
+        <member name="M:Injectikus.IBinderExtensions.ToThemselves(Injectikus.IBinder)">
+            <summary>
+            Связать тип с самим собой
+            </summary>
+            <param name="binder">Объект связывания</param>
+        </member>
         <member name="T:Injectikus.IContainer">
             <summary>
             Базовый интерфейс контейнера инъекции зависимостей
@@ -263,6 +460,235 @@
             </summary>
             <param name="type">Тип создаваемого экземпляра</param>
             <returns>Экземпляр класса <paramref name="type"/></returns>
+        </member>
+        <member name="T:Injectikus.IObjectProvider">
+            <summary>
+            Поставщик объектов - описывает алгоритм построения нового объекта для контейнера внедрения зависимостей
+            </summary>
+        </member>
+        <member name="P:Injectikus.IObjectProvider.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.IObjectProvider.Create(Injectikus.IContainer)">
+            <summary>
+            Создаёт объект типа <see cref="P:Injectikus.IObjectProvider.Type"/>
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Объект типа <see cref="P:Injectikus.IObjectProvider.Type"/></returns>
+        </member>
+        <member name="T:Injectikus.ObjectProvider`1">
+            <summary>
+            Базовый класс для реализаций интерфейса <see cref="T:Injectikus.IObjectProvider"/>
+            </summary>
+            <typeparam name="InstanceType">Тип возвращаемого поставщиком объекта</typeparam>
+        </member>
+        <member name="P:Injectikus.ObjectProvider`1.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.ObjectProvider`1.Create(Injectikus.IContainer)">
+            <summary>
+            Создаёт объект типа <see cref="P:Injectikus.IObjectProvider.Type"/>
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Объект типа <see cref="P:Injectikus.IObjectProvider.Type"/></returns>
+        </member>
+        <member name="M:Injectikus.ObjectProvider`1.CreateInstance(Injectikus.IContainer)">
+            <summary>
+            Фабричный метод создания экземпляра типа <typeparamref name="InstanceType"/>
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Экземпляр типа <typeparamref name="InstanceType"/></returns>
+        </member>
+        <member name="T:Injectikus.Providers.ClassInstanceProvider">
+            <summary>
+            Поставщик объектов, создающий объекты по объекту их типа
+            </summary>
+        </member>
+        <member name="P:Injectikus.Providers.ClassInstanceProvider.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.Providers.ClassInstanceProvider.#ctor(System.Type)">
+            <summary>
+            Создать новый поставщик
+            </summary>
+            <param name="type">Тип создаваемого поставщиком объекта</param>
+        </member>
+        <member name="M:Injectikus.Providers.ClassInstanceProvider.Create(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр типа <see cref="P:Injectikus.Providers.ClassInstanceProvider.Type"/>
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Объект типа <see cref="P:Injectikus.Providers.ClassInstanceProvider.Type"/></returns>
+        </member>
+        <member name="T:Injectikus.Providers.SingletonObjectProvider">
+            <summary>
+            Поставщик объектов-одиночек. Обёртка над другим поставщиком, реализующая паттерн Singleton.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Providers.SingletonObjectProvider.provider">
+            <summary>
+            Базовый поставщик объектов
+            </summary>
+        </member>
+        <member name="F:Injectikus.Providers.SingletonObjectProvider.instance">
+            <summary>
+            Экземпляр-одиночка 
+            </summary>
+        </member>
+        <member name="P:Injectikus.Providers.SingletonObjectProvider.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonObjectProvider.#ctor(Injectikus.IObjectProvider)">
+            <summary>
+            Создаёт поставщик объектов-одиночек, оборачивая базовый поставщик <paramref name="provider"/>
+            </summary>
+            <param name="provider">Базовый поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonObjectProvider.#ctor(System.Object)">
+            <summary>
+            Создаёт поставщик заданного в <paramref name="instance"/> объекта-одиночки 
+            </summary>
+            <param name="instance">Объект-одиночка</param>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonObjectProvider.Create(Injectikus.IContainer)">
+            <summary>
+            Получить объект-одиночку типа <see cref="P:Injectikus.IObjectProvider.Type"/>
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Экземпляр-одиночка типа <see cref="P:Injectikus.FactoryMethodProvider.Type"/></returns>
+        </member>
+        <member name="T:Injectikus.FactoryMethodProvider">
+            <summary>
+            Поставщик объектов, создающий их с помощью заданного производящего делегата
+            </summary>
+        </member>
+        <member name="F:Injectikus.FactoryMethodProvider.method">
+            <summary>
+            Производящий делегат
+            </summary>
+        </member>
+        <member name="P:Injectikus.FactoryMethodProvider.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.FactoryMethodProvider.#ctor(System.Type,System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Создать новый поставщик объектов типа <paramref name="type"/>, создающий их с помощью производящего делегата <paramref name="method"/>
+            </summary>
+            <param name="type">Тип создаваемого объекта</param>
+            <param name="method">Производящий делегат</param>
+        </member>
+        <member name="M:Injectikus.FactoryMethodProvider.Create(Injectikus.IContainer)">
+            <summary>
+            Создать объект
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Экземпляр типа <see cref="P:Injectikus.FactoryMethodProvider.Type"/></returns>
+        </member>
+        <member name="T:Injectikus.SingletonBinder">
+            <summary>
+            Объект связывания для объектов-одиночек.
+            Представляет собой фасад над другими объектами-свзявыния,
+            оборачивая полученные от них поставщики объектов в <see cref="T:Injectikus.Providers.SingletonObjectProvider"/>
+            и привязывая полученные поставщики их с помощью <see cref="M:Injectikus.IBinder.ToProvider(Injectikus.IObjectProvider)"/> 
+            обёрнутого объекта-связывания.
+            </summary>
+        </member>
+        <member name="F:Injectikus.SingletonBinder.binder">
+            <summary>
+            Оборачиваемый объект-связывания
+            </summary>
+        </member>
+        <member name="P:Injectikus.SingletonBinder.Type">
+            <summary>Базовый тип</summary>
+        </member>
+        <member name="P:Injectikus.SingletonBinder.Container">
+            <summary>
+            Контейнер, в котором осуществляется привязка
+            </summary>
+        </member>
+        <member name="P:Injectikus.SingletonBinder.DefaultProviderFactory">
+            <summary>
+            Фабрика поставщиков объектов по-умолчанию
+            </summary>
+        </member>
+        <member name="M:Injectikus.SingletonBinder.#ctor(Injectikus.IBinder)">
+            <summary>
+            Создаёт объект связывания одиночек
+            </summary>
+            <param name="baseBinder">Оборачиваемый объект-связывания</param>
+        </member>
+        <member name="M:Injectikus.SingletonBinder.To(System.Type)">
+            <summary>
+            Выполнить привязку производного типа <paramref name="type"/> к базовому <see cref="P:Injectikus.IBinder.Type"/>,
+            для которого в контейнере будет создан только один экземпляр.
+            </summary>
+            <param name="type">Тип к которому осуществляется привязка базового типа</param>
+        </member>
+        <member name="M:Injectikus.SingletonBinder.ToMethod(System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Выполнить привязку производящего метода к базовому типу <see cref="P:Injectikus.IBinder.Type"/>.
+            В контейнере будет создан только один экземпляр этого типа.
+            </summary>
+            <param name="factoryMethod">Производящий метод</param>
+        </member>
+        <member name="M:Injectikus.SingletonBinder.ToObject(System.Object)">
+            <summary>
+            Выполнить привязку конкретного объекта к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            </summary>
+            <param name="instance"></param>
+        </member>
+        <member name="M:Injectikus.SingletonBinder.ToProvider(Injectikus.IObjectProvider)">
+            <summary>
+            Выполнить привязку произвольного поставщика к базовому типу <see cref="P:Injectikus.IBinder.Type"/>
+            В контейнере будет создан только один экземпляр этого типа.
+            </summary>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="T:Injectikus.SingletonBinder`1">
+            <summary>
+            Параметризованный объект связывания для объектов-одиночек.
+            Представляет собой фасад над другими параметризованными объектами-свзявыния,
+            оборачивая полученные от них поставщики объектов в <see cref="T:Injectikus.Providers.SingletonObjectProvider"/>
+            и привязывая полученные поставщики их с помощью <see cref="M:Injectikus.IBinder.ToProvider(Injectikus.IObjectProvider)"/> 
+            обёрнутого объекта-связывания.
+            </summary>
+            <typeparam name="TargetT">Базовый тип</typeparam>
+        </member>
+        <member name="F:Injectikus.SingletonBinder`1.binder">
+            <summary>
+            Оборачиваемый параметризованный объект-связывания
+            </summary>
+        </member>
+        <member name="M:Injectikus.SingletonBinder`1.#ctor(Injectikus.IBinder{`0})">
+            <summary>
+            Создаёт новы параметризованный объект связывание одиночек
+            </summary>
+            <param name="binder"></param>
+        </member>
+        <member name="M:Injectikus.SingletonBinder`1.To``1">
+            <summary>
+            Выполнить привязку производного типа <typeparamref name="InstanceT"/> к базовому <typeparamref name="TargetT"/>
+            для которого в контейнере будет создан только один экземпляр.
+            </summary>
+            <typeparam name="InstanceT">Тип к которому осуществляется привязка базового типа</typeparam>
+        </member>
+        <member name="M:Injectikus.SingletonBinder`1.ToMethod``1(System.Func{Injectikus.IContainer,``0})">
+            <summary>
+            Выполнить привязку производящего метода к базовому типу <typeparamref name="TargetT"/>.
+            В контейнере будет создан только один экземпляр этого типа.
+            </summary>
+            <typeparam name="InstanceT">Тип к которому осуществляется привязка базового типа</typeparam>
+            <param name="factoryMethod">Производящий метод</param>
         </member>
     </members>
 </doc>

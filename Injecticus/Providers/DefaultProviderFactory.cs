@@ -12,7 +12,7 @@ namespace Injectikus
 
         public IObjectProvider GetFactoryMethodProvider(Type type, Func<IContainer, object> method)
         {
-            return new FactoryMethodObjectProvider(type, method);
+            return new FactoryMethodProvider(type, method);
         }
     }
 }
