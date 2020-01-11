@@ -62,22 +62,15 @@ namespace Injectikus
                 .Where(s => s.IsAcceptableFor(type))
                 .ToArray();
 
-            var attributeBasedStrategies = possibleStrategies
-                .Where(s => s.IsAttributeBasedStrategy)
-                .ToArray();
+            var attributeBasedStrategiesCount = possibleStrategies
+                .Count(s => s.IsAttributeBasedStrategy);
 
-            if (attributeBasedStrategies.Length == 1)
-            {
-                strategy = attributeBasedStrategies[0];
-                return strategy.CreateBuilderFor(type);
-            }
-
-            if (attributeBasedStrategies.Length > 2)
+            if (attributeBasedStrategiesCount > 2)
             {
                 throw new ArgumentException("Can't determine which attribute based strategy should be used for init");
             }
 
-            strategy = possibleStrategies[0];
+            strategy = possibleStrategies.First();
             return strategy.CreateBuilderFor(type);
         }
     }
