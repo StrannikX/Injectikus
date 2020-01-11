@@ -12,11 +12,11 @@ namespace Injectikus
 
         public IProviderFactory DefaultProviderFactory { get; }
 
-        public DefaultBinder(IContainer container, Type type)
+        public DefaultBinder(IContainer container, IProviderFactory factory, Type type)
         {
             this.Type = type;
             this.Container = container;
-            this.DefaultProviderFactory = new DefaultProviderFactory();
+            this.DefaultProviderFactory = factory;
         }
 
         public void ToProvider(IObjectProvider builder)
@@ -39,7 +39,7 @@ namespace Injectikus
 
     public class DefaultBinder<TargetType> : DefaultBinder, IBinder<TargetType>
     {
-        public DefaultBinder(IContainer container) : base(container, typeof(TargetType))
+        public DefaultBinder(IContainer container, IProviderFactory factory) : base(container, factory, typeof(TargetType))
         {
         }
 

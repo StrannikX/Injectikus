@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Injectikus
 {
+    /// <summary>
+    /// Базовый контейнер внедрения зависимостей
+    /// </summary>
     public class Injectikus : IContainer
     {
         private ConcurrentDictionary<Type, IObjectProvider[]> providers =
@@ -204,6 +207,38 @@ namespace Injectikus
             if (!providers.ContainsKey(type)) return false;
             var p = providers.GetOrAdd(type, _ => new IObjectProvider[0]);
             return p.Length > 0;
+        }
+
+        /// <summary>
+        /// Создаёт экземпляр класса <typeparamref name="TargetType"/>, внедряя в него зависимости по одной из доступных стратегий.
+        /// При этом, для создания объекта не используются зарегестрированные провайдеры.
+        /// Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+        /// </summary>
+        /// <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
+        /// <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
+        public TargetType CreateInstance<TargetType>() where TargetType : class
+        {
+            return BinderFactory
+                .GetBinder<TargetType>()
+                .DefaultProviderFactory
+                .GetClassInstanceProvider(typeof(TargetType))
+                .Create(this) as TargetType;
+        }
+
+        /// <summary>
+        /// Создаёт экземпляр класса <paramref name="type"/>, внедряя в него зависимости по одной из доступных стратегий.
+        /// При этом, для создания объекта не используются зарегестрированные провайдеры.
+        /// Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+        /// </summary>
+        /// <param name="type">Тип создаваемого экземпляра</param>
+        /// <returns>Экземпляр класса <paramref name="type"/></returns>
+        public object CreateInstance(Type type)
+        {
+            return BinderFactory
+                .GetBinder(type)
+                .DefaultProviderFactory
+                .GetClassInstanceProvider(type)
+                .Create(this);
         }
     }
 }

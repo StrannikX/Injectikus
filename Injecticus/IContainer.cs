@@ -67,6 +67,24 @@ namespace Injectikus
         bool TryGet<TargetType>(out TargetType obj);
         TargetType[] GetAll<TargetType>();
 
+        /// <summary>
+        /// Создаёт экземпляр класса <typeparamref name="TargetType"/>, внедряя в него зависимости по одной из доступных стратегий.
+        /// При этом, для создания объекта не используются зарегестрированные провайдеры.
+        /// Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+        /// </summary>
+        /// <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
+        /// <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
+        TargetType CreateInstance<TargetType>() where TargetType : class;
+
+        /// <summary>
+        /// Создаёт экземпляр класса <paramref name="type"/>, внедряя в него зависимости по одной из доступных стратегий.
+        /// При этом, для создания объекта не используются зарегестрированные провайдеры.
+        /// Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+        /// </summary>
+        /// <param name="type">Тип создаваемого экземпляра</param>
+        /// <returns>Экземпляр класса <paramref name="type"/></returns>
+        object CreateInstance(Type type);
+
         object Get(Type type);
         bool TryGet(Type type, out object obj);
         object[] GetAll(Type type);
