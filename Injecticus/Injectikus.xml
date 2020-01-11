@@ -60,10 +60,76 @@
         </member>
         <member name="M:Injectikus.IContainer.Get``1">
             <summary>
-            
+            Получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
             </summary>
-            <typeparam name="TargetType"></typeparam>
-            <returns></returns>
+            <typeparam name="TargetType">Тип экземпляра</typeparam>
+            <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
+            <exception cref="T:System.ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
+        </member>
+        <member name="M:Injectikus.IContainer.TryGet``1(``0@)">
+            <summary>
+            Попробовать получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
+            </summary>
+            <typeparam name="TargetType">Требуемый тип</typeparam>
+            <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+            <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.GetAll``1">
+            <summary>
+            Получить массив всех экземпляров типа <typeparamref name="TargetType"/> из контейнера
+            </summary>
+            <typeparam name="TargetType">Требуемый тип</typeparam>
+            <returns>Массив <typeparamref name="TargetType"/>[]. 
+            Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
+            то будет возращен массив длины 0</returns>
+        </member>
+        <member name="M:Injectikus.IContainer.CreateInstance``1">
+            <summary>
+            Создаёт экземпляр класса <typeparamref name="TargetType"/>, внедряя в него зависимости по одной из доступных стратегий.
+            При этом, для создания объекта не используются зарегестрированные провайдеры.
+            Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+            </summary>
+            <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
+            <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.CreateInstance(System.Type)">
+            <summary>
+            Создаёт экземпляр класса <paramref name="type"/>, внедряя в него зависимости по одной из доступных стратегий.
+            При этом, для создания объекта не используются зарегестрированные провайдеры.
+            Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+            </summary>
+            <param name="type">Тип создаваемого экземпляра</param>
+            <returns>Экземпляр класса <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.Get(System.Type)">
+            <summary>
+            Получить экземпляр типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Тип экземпляра</param>
+            <returns>Экземпляр типа <paramref name="type"/></returns>
+            <exception cref="T:System.ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
+        </member>
+        <member name="M:Injectikus.IContainer.TryGet(System.Type,System.Object@)">
+            <summary>
+            Попробовать получить экземпляр типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Требуемый тип</param>
+            <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+            <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.GetAll(System.Type)">
+            <summary>
+            Получить массив всех экземпляров типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Требуемый тип</param>
+            <returns>Массив object[] с элементами типа <paramref name="type"/>. 
+            Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
+            то будет возращен массив длины 0</returns>
+        </member>
+        <member name="T:Injectikus.Injectikus">
+            <summary>
+            Базовый контейнер внедрения зависимостей
+            </summary>
         </member>
         <member name="P:Injectikus.Injectikus.BinderFactory">
             <value>
@@ -87,6 +153,56 @@
             <summary>
             Базовая инициализация контейнера
             </summary>
+        </member>
+        <member name="M:Injectikus.Injectikus.Get``1">
+            <summary>
+            Получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
+            </summary>
+            <typeparam name="TargetType">Тип экземпляра</typeparam>
+            <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
+            <exception cref="T:System.ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
+        </member>
+        <member name="M:Injectikus.Injectikus.TryGet``1(``0@)">
+            <summary>
+            Попробовать получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
+            </summary>
+            <typeparam name="TargetType">Требуемый тип</typeparam>
+            <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+            <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.TryGet(System.Type,System.Object@)">
+            <summary>
+            Попробовать получить экземпляр типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Требуемый тип</param>
+            <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+            <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.Get(System.Type)">
+            <summary>
+            Получить экземпляр типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Тип экземпляра</param>
+            <returns>Экземпляр типа <paramref name="type"/></returns>
+            <exception cref="T:System.ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
+        </member>
+        <member name="M:Injectikus.Injectikus.GetAll``1">
+            <summary>
+            Получить массив всех экземпляров типа <typeparamref name="TargetType"/> из контейнера
+            </summary>
+            <typeparam name="TargetType">Требуемый тип</typeparam>
+            <returns>Массив <typeparamref name="TargetType"/>[]. 
+            Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
+            то будет возращен массив длины 0</returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.GetAll(System.Type)">
+            <summary>
+            Получить массив всех экземпляров типа <paramref name="type"/> из контейнера
+            </summary>
+            <param name="type">Требуемый тип</param>
+            <returns>Массив object[] с элементами типа <paramref name="type"/>. 
+            Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
+            то будет возращен массив длины 0</returns>
         </member>
         <member name="M:Injectikus.Injectikus.BindProvider(System.Type,Injectikus.IObjectProvider)">
             <summary>
@@ -129,6 +245,24 @@
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.CreateInstance``1">
+            <summary>
+            Создаёт экземпляр класса <typeparamref name="TargetType"/>, внедряя в него зависимости по одной из доступных стратегий.
+            При этом, для создания объекта не используются зарегестрированные провайдеры.
+            Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+            </summary>
+            <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
+            <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.CreateInstance(System.Type)">
+            <summary>
+            Создаёт экземпляр класса <paramref name="type"/>, внедряя в него зависимости по одной из доступных стратегий.
+            При этом, для создания объекта не используются зарегестрированные провайдеры.
+            Основное предназначение данного метода - создание экземпляров класса, не зарегистрированного в контейнере.
+            </summary>
+            <param name="type">Тип создаваемого экземпляра</param>
+            <returns>Экземпляр класса <paramref name="type"/></returns>
         </member>
     </members>
 </doc>

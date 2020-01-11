@@ -55,11 +55,23 @@ namespace Injectikus
                 .Singleton(new DIInstanceCreationService(this));
         }
 
+        /// <summary>
+        /// Получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
+        /// </summary>
+        /// <typeparam name="TargetType">Тип экземпляра</typeparam>
+        /// <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
+        /// <exception cref="ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
         public TargetType Get<TargetType>()
         {
             return (TargetType)Get(typeof(TargetType));
         }
 
+        /// <summary>
+        /// Попробовать получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
+        /// </summary>
+        /// <typeparam name="TargetType">Требуемый тип</typeparam>
+        /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+        /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
         public bool TryGet<TargetType>(out TargetType obj)
         {
             obj = default;
@@ -71,6 +83,12 @@ namespace Injectikus
             return false;
         }
 
+        /// <summary>
+        /// Попробовать получить экземпляр типа <paramref name="type"/> из контейнера
+        /// </summary>
+        /// <param name="type">Требуемый тип</param>
+        /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
+        /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
         public bool TryGet(Type type, out object obj)
         {
             obj = default;
@@ -86,6 +104,12 @@ namespace Injectikus
             return false;
         }
 
+        /// <summary>
+        /// Получить экземпляр типа <paramref name="type"/> из контейнера
+        /// </summary>
+        /// <param name="type">Тип экземпляра</param>
+        /// <returns>Экземпляр типа <paramref name="type"/></returns>
+        /// <exception cref="ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
         public object Get(Type type)
         {
             if (TryGet(type, out var obj))
@@ -96,6 +120,13 @@ namespace Injectikus
             throw new ArgumentException($"Type {type.FullName} not known to container");
         }
 
+        /// <summary>
+        /// Получить массив всех экземпляров типа <typeparamref name="TargetType"/> из контейнера
+        /// </summary>
+        /// <typeparam name="TargetType">Требуемый тип</typeparam>
+        /// <returns>Массив <typeparamref name="TargetType"/>[]. 
+        /// Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
+        /// то будет возращен массив длины 0</returns>
         public TargetType[] GetAll<TargetType>()
         {
             var type = typeof(TargetType);
@@ -114,6 +145,13 @@ namespace Injectikus
             return Array.Empty<TargetType>();
         }
 
+        /// <summary>
+        /// Получить массив всех экземпляров типа <paramref name="type"/> из контейнера
+        /// </summary>
+        /// <param name="type">Требуемый тип</param>
+        /// <returns>Массив object[] с элементами типа <paramref name="type"/>. 
+        /// Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
+        /// то будет возращен массив длины 0</returns>
         public object[] GetAll(Type type)
         {
             if (this.providers.TryGetValue(type, out var providers))
