@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Injectikus.Attributes
 {
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
     public class ArrayInjectionAttribute : Attribute
     {
     }

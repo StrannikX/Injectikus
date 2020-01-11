@@ -18,7 +18,11 @@ namespace Injectikus.InstanceBuilders
 
                     if (param.HasArrayInjectionAttribute())
                     {
-                        yield return container.GetAll(param.ParameterType.GetElementType());
+                        var type = param.ParameterType.GetElementType();
+                        var tempArr = container.GetAll(type);
+                        var objects = Array.CreateInstance(type, tempArr.Length);
+                        Array.Copy(tempArr, objects, objects.Length);
+                        yield return objects;
                     } 
                     else if (container.TryGet(param.ParameterType, out @object))
                     {

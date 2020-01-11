@@ -14,6 +14,7 @@ namespace Injectikus.Attributes
         DefaultConstructor
     }
 
+    [AttributeUsage(AttributeTargets.Class)]
     public class InjectionInitializationAttribute : Attribute
     {
         public InitializationMethod InitializationMethod { get; }

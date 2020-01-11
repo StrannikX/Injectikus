@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Injectikus.Attributes
 {
+    [AttributeUsage(AttributeTargets.Method)]
     public class InjectionSetterAttribute : Attribute
     {
     }

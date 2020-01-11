@@ -95,10 +95,20 @@ namespace Injectikus
 
         public TargetType[] GetAll<TargetType>()
         {
-            object[] arr = GetAll(typeof(TargetType));
-            TargetType[] targetArr = new TargetType[arr.Length];
-            Array.Copy(arr, targetArr, arr.Length);
-            return targetArr;
+            var type = typeof(TargetType);
+            if (this.providers.TryGetValue(type, out var providers))
+            {
+                if (providers.Length > 0)
+                {
+                    var objects = providers
+                        .Select(b => b.Create(this))
+                        .ToArray();
+                    var targetArr = new TargetType[objects.Length];
+                    Array.Copy(objects, targetArr, objects.Length);
+                    return targetArr;
+                }
+            }
+            return Array.Empty<TargetType>();
         }
 
         public object[] GetAll(Type type)
@@ -107,9 +117,10 @@ namespace Injectikus
             {
                 if (providers.Length > 0)
                 {
-                    return providers
+                    var objects = providers
                         .Select(b => b.Create(this))
                         .ToArray();
+                    return objects;
                 }
             }
             return Array.Empty<object>();

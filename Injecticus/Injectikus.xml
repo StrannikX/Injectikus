@@ -6,30 +6,129 @@
     <members>
         <member name="T:Injectikus.IContainer">
             <summary>
-            Interface IContainer - basic interface for DI Container.
-            Contains all methods for performing dependency injection container functions.. 
+            Базовый интерфейс контейнера инъекции зависимостей
             </summary>
         </member>
         <member name="P:Injectikus.IContainer.BinderFactory">
             <value>
-            A binder factory for this container.
+            Фабрика объектов связывания
             <see cref="T:Injectikus.IBinderFactory"/>
             <seealso cref="T:Injectikus.IBinder"/>
             </value>
         </member>
         <member name="M:Injectikus.IContainer.BindProvider(System.Type,Injectikus.IObjectProvider)">
             <summary>
-            Bind <paramref name="type"/> to <paramref name="provider"/> in di container. 
+            Создаёт связь между типом <paramref name="type"/> и поставщиком объектов <paramref name="provider"/>
             </summary>
-            <param name="type">Type to bind</param>
-            <param name="provider">Provider associated with type</param>
+            <param name="type">Тип, с которым следует связать поставщика</param>
+            <param name="provider">Поставщик объектов</param>
         </member>
         <member name="M:Injectikus.IContainer.BindProvider``1(Injectikus.IObjectProvider)">
             <summary>
-            Bind <typeparamref name="TargetType"/> to <paramref name="provider"/> in di container. 
+            Создаёт связь между типом <typeparamref name="TargetType"/> и поставщиком объектов <paramref name="provider"/>
             </summary>
-            <typeparam name="TargetType">Type to bind</typeparam>
-            <param name="provider">Provider associated with type</param>
+            <typeparam name="TargetType">Тип, с которым следует связать поставщика</typeparam>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.IContainer.UnbindProvider(System.Type,Injectikus.IObjectProvider)">
+            <summary>
+            Удаляет связь между типом <paramref name="type"/> и поставщиком <paramref name="provider"/>
+            </summary>
+            <param name="type">Тип</param>
+            <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
+        </member>
+        <member name="M:Injectikus.IContainer.UnbindProvider``1(Injectikus.IObjectProvider)">
+            <summary>
+            Удаляет связь между типом <typeparamref name="TargetType"/> и поставщиком <paramref name="provider"/>
+            </summary>
+            <typeparam name="TargetType">Тип</typeparam>
+            <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
+        </member>
+        <member name="M:Injectikus.IContainer.Contains``1">
+            <summary>
+            Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+            </summary>
+            <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
+            <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.Contains(System.Type)">
+            <summary>
+            Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка</param>
+            <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.IContainer.Get``1">
+            <summary>
+            
+            </summary>
+            <typeparam name="TargetType"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="P:Injectikus.Injectikus.BinderFactory">
+            <value>
+            Фабрика объектов связывания
+            <see cref="T:Injectikus.IBinderFactory"/>
+            <seealso cref="T:Injectikus.IBinder"/>
+            </value>
+        </member>
+        <member name="M:Injectikus.Injectikus.#ctor">
+            <summary>
+            Создаёт новый контейнер инъекции зависимостей
+            </summary>
+        </member>
+        <member name="M:Injectikus.Injectikus.#ctor(Injectikus.IBinderFactory)">
+            <summary>
+            Создаёт новый контейнер внедрения зависимостей c указанной в <paramref name="binderFactory"/> фабрикой объектов связывания
+            </summary>
+            <param name="binderFactory"></param>
+        </member>
+        <member name="M:Injectikus.Injectikus.InitContainer">
+            <summary>
+            Базовая инициализация контейнера
+            </summary>
+        </member>
+        <member name="M:Injectikus.Injectikus.BindProvider(System.Type,Injectikus.IObjectProvider)">
+            <summary>
+            Создаёт связь между типом <paramref name="type"/> и поставщиком объектов <paramref name="provider"/>
+            </summary>
+            <param name="type">Тип, с которым следует связать поставщика</param>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.Injectikus.BindProvider``1(Injectikus.IObjectProvider)">
+            <summary>
+            Создаёт связь между типом <typeparamref name="TargetType"/> и поставщиком объектов <paramref name="provider"/>
+            </summary>
+            <typeparam name="TargetType">Тип, с которым следует связать поставщика</typeparam>
+            <param name="provider">Поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.Injectikus.UnbindProvider(System.Type,Injectikus.IObjectProvider)">
+            <summary>
+            Удаляет связь между типом <paramref name="type"/> и поставщиком <paramref name="provider"/>
+            </summary>
+            <param name="type">Тип</param>
+            <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
+        </member>
+        <member name="M:Injectikus.Injectikus.UnbindProvider``1(Injectikus.IObjectProvider)">
+            <summary>
+            Удаляет связь между типом <typeparamref name="TargetType"/> и поставщиком <paramref name="provider"/>
+            </summary>
+            <typeparam name="TargetType">Тип</typeparam>
+            <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
+        </member>
+        <member name="M:Injectikus.Injectikus.Contains``1">
+            <summary>
+            Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+            </summary>
+            <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
+            <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.Injectikus.Contains(System.Type)">
+            <summary>
+            Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка</param>
+            <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
         </member>
     </members>
 </doc>
