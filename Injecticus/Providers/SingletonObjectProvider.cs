@@ -22,7 +22,7 @@ namespace Injectikus.Providers
         /// <summary>
         /// Тип создаваемого объекта
         /// </summary>
-        public Type Type => provider.Type;
+        public Type Type { get; }
 
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace Injectikus.Providers
         public SingletonObjectProvider(IObjectProvider provider)
         {
             this.provider = provider;
+            this.Type = provider.Type;
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Injectikus.Providers
         public SingletonObjectProvider(object instance)
         {
             this.instance = instance;
+            this.Type = instance.GetType();
         }
 
         /// <summary>

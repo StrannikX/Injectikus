@@ -41,7 +41,7 @@ namespace Injectikus.InitializationStrategies
         /// Применима ли данная стратегия для типа <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
-        /// <returns><c>true</c> если тип <param name="type"> имеет хотя бы один конструктор 
+        /// <returns><c>true</c> если тип <paramref name="type"/> имеет хотя бы один конструктор 
         /// с ненулевым количеством параметров, иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {

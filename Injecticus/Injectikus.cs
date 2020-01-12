@@ -10,6 +10,9 @@ namespace Injectikus
     /// </summary>
     public class Injectikus : IContainer
     {
+        /// <summary>
+        /// Словарь тип - список поставщиков
+        /// </summary>
         protected ConcurrentDictionary<Type, ImmutableList<IObjectProvider>> providers =
             new ConcurrentDictionary<Type, ImmutableList<IObjectProvider>>();
 
@@ -35,6 +38,10 @@ namespace Injectikus
         /// <param name="binderFactory"></param>
         public Injectikus(IBinderFactory binderFactory)
         {
+            if (binderFactory == null)
+            {
+                throw new ArgumentNullException();
+            }
             BinderFactory = binderFactory;
             InitContainer();
         }
@@ -93,6 +100,11 @@ namespace Injectikus
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
         public virtual bool TryGet(Type type, out object obj)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             obj = default;
             if (this.providers.TryGetValue(type, out var providers))
             {
@@ -174,6 +186,21 @@ namespace Injectikus
         /// <param name="provider">Поставщик объектов</param>
         public virtual void BindProvider(Type type, IObjectProvider provider)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (provider == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (!type.IsAssignableFrom(provider.Type))
+            {
+                throw new ArgumentException();
+            }
+
             ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
             {
@@ -199,6 +226,11 @@ namespace Injectikus
         /// <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
         public virtual void UnbindProvider(Type type, IObjectProvider provider)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
             {
@@ -264,6 +296,11 @@ namespace Injectikus
         /// <returns>Экземпляр класса <paramref name="type"/></returns>
         public virtual object CreateInstance(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             return BinderFactory
                 .GetBinder(type)
                 .DefaultProviderFactory

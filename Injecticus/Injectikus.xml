@@ -9,7 +9,7 @@
             Аттрибут, указывающий на то, что этот метод необходимо использовать для внедрения завимостей в объект
             </summary>
         </member>
-        <member name="T:Injectikus.Attributes.InjectArray">
+        <member name="T:Injectikus.Attributes.InjectArrayAttribute">
             <summary>
             Аттрибут, указывающий на то, что в указанный параметр необходимо внедридить массив экземпляров.
             </summary>
@@ -196,6 +196,46 @@
             </summary>
             <typeparam name="TargetT">Тип, для которого нужно получить объект связывания</typeparam>
             <returns>Объект связывание для типа <typeparamref name="TargetT"/></returns>
+        </member>
+        <member name="T:Injectikus.DIInstanceCreationService">
+            <summary>
+            Сервис создания экземпляров класса
+            </summary>
+        </member>
+        <member name="F:Injectikus.DIInstanceCreationService.container">
+            <summary>
+            Контейнер, который разрешает зависимости при создании экземпляра
+            </summary>
+        </member>
+        <member name="F:Injectikus.DIInstanceCreationService.buildersCache">
+            <summary>
+            Кэш-производителей
+            </summary>
+        </member>
+        <member name="F:Injectikus.DIInstanceCreationService.strategies">
+            <summary>
+            Стратеги создания экземпляра
+            </summary>
+        </member>
+        <member name="M:Injectikus.DIInstanceCreationService.#ctor(Injectikus.IContainer)">
+            <summary>
+            Создать сервис-производитель экземпляров
+            </summary>
+            <param name="container">Контейнер, который разрешает зависимости при создании экземпляра</param>
+        </member>
+        <member name="M:Injectikus.DIInstanceCreationService.CreateInstance(System.Type)">
+            <summary>
+            Создать экземпляр типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, экземпляр которого нужно создать</param>
+            <returns>Экземпляр типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.DIInstanceCreationService.CreateBuilder(System.Type)">
+            <summary>
+            Создать построитель экземпляров
+            </summary>
+            <param name="type">Тип, для которого нужно создать построитель</param>
+            <returns>Построитель экземпляров для типа <paramref name="type"/></returns>
         </member>
         <member name="T:Injectikus.IBinder">
             <summary>
@@ -444,6 +484,96 @@
             Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
             то будет возращен массив длины 0</returns>
         </member>
+        <member name="T:Injectikus.IInstanceBuilder">
+            <summary>
+            Построитель экземпляров. Скрывает конкретную стратегию построения экземпляра.
+            </summary>
+        </member>
+        <member name="M:Injectikus.IInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр
+            </summary>
+            <param name="container">Контейнер, в котором создаётся экземпляр</param>
+            <returns>Экземпляр класса, с внедрёнными в него зависимостями</returns>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.ConstructorInjectionStrategy">
+            <summary>
+            Стратегия основанная на внедрении зависимостей через параметры конструктора
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.ConstructorInjectionStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            <value><c>true</c> - Данная стратегия требует наличия конструктора с атрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/></value>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.ConstructorInjectionStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра,
+            реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns><see cref="T:Injectikus.InstanceBuilders.InjectionConstructorInstanceBuilder"/></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.ConstructorInjectionStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если тип <paramref name="type"/> имеет открытые конструкторы, 
+            помеченные аттрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/> иначе <c>false</c></returns>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.DefaultConstructorStrategy">
+            <summary>
+            Стратегия создания объекта без внедрения завимостей
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.DefaultConstructorStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            <value><c>false</c> - Данная стратегия не основана на атрибутах</value>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.DefaultConstructorStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns><see cref="T:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder"/></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.DefaultConstructorStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если тип <paramref name="type"/> имеет конструктор по-умолчанию, иначе <c>false</c></returns>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.InjectionMethodStrategy">
+            <summary>
+            Стратегия основанная на создании объекта с помощью конструктора по-умолчанию
+            и внедрении зависимостей через аргументы отмеченного метода
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.InjectionMethodStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/></value>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.InjectionMethodStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns><see cref="T:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder"/></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.InjectionMethodStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/> метод, иначе <c>false</c></returns>
+        </member>
         <member name="T:Injectikus.InitializationStrategies.ObjectInitializationStrategy">
             <summary>
             Описывает стратегию инициализации экземпляра
@@ -468,9 +598,155 @@
             <param name="type">Тип, для которого создаётся построитель</param>
             <returns>Построитель объекта</returns>
         </member>
+        <member name="T:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy">
+            <summary>
+            Стратегия, основанная на создании объекта с помощью конструктора по-умолчанию
+            и внедрении зависимостей через свойства и сеттеры
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
+            или свойств с атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/></value>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns><see cref="T:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder"/></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если тип <paramref name="type"/> иммет конструктор по-умолчанию и хотя бы один 
+            отмеченный атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/> метод
+            или отмеченное атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/> свойство, иначе <c>false</c></returns>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.TypeAnalyzer">
+            <summary>
+            Класс-помошник в анализе типов
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.HasAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Проверить, есть ли в члена класса атрибут <paramref name="member"/>
+            </summary>
+            <typeparam name="Attr">Атрибут</typeparam>
+            <param name="member">Описание члена класса</param>
+            <returns>Результат проверки</returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedConstructor(System.Reflection.ConstructorInfo)">
+            <summary>
+            Помечен ли конструктор атрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicConstructors(System.Type)">
+            <summary>
+            Возвращает массив публичных конструкторов
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedConstructors(System.Type)">
+            <summary>
+            Получить все конструкторы, отмеченные аттрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicDefaultConstructor(System.Type)">
+            <summary>
+            Получить публичный конструктор по-умолчанию
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicMethods(System.Type)">
+            <summary>
+            Получить публичные методы типа
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedSetter(System.Reflection.MethodInfo)">
+            <summary>
+            Помечен ли метод атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedSetters(System.Type)">
+            <summary>
+            Получить методы, помеченные атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedMethods(System.Type)">
+            <summary>
+            Получить методы, помеченные атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedMethod(System.Reflection.MethodInfo)">
+            <summary>
+            Помечен ли метод атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicProperties(System.Type)">
+            <summary>
+            Получить все публичные свойства
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedProperty(System.Reflection.PropertyInfo)">
+            <summary>
+            Помечен ли свойство атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedProperties(System.Type)">
+            <summary>
+            Получить свойства, помеченные атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetUserDefinedInitializationMethod(System.Type)">
+            <summary>
+            Возвращает значение атрибута <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>, если такой присутствует у типа
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.HasArrayInjectionAttribute(System.Reflection.ParameterInfo)">
+            <summary>
+            Проверяет, помечено ли свойство атрибутом <see cref="T:Injectikus.Attributes.InjectArrayAttribute"/>
+            </summary>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.WidestConstructorStrategy">
+            <summary>
+            Стратегия основанная на использовании
+            конструктора класса
+            с наибольшим числом параметров, типы которых могут быть
+            разрешены контейнером.
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.WidestConstructorStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            <value><c>false</c> - Данная стратегия не основана на атрибутах</value>
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.WidestConstructorStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns><see cref="T:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder"/></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.WidestConstructorStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если тип <paramref name="type"/> имеет хотя бы один конструктор 
+            с ненулевым количеством параметров, иначе <c>false</c></returns>
+        </member>
         <member name="T:Injectikus.Injectikus">
             <summary>
             Базовый потокобезопасный контейнер внедрения зависимостей.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Injectikus.providers">
+            <summary>
+            Словарь тип - список поставщиков
             </summary>
         </member>
         <member name="P:Injectikus.Injectikus.BinderFactory">
@@ -606,6 +882,178 @@
             <param name="type">Тип создаваемого экземпляра</param>
             <returns>Экземпляр класса <paramref name="type"/></returns>
         </member>
+        <member name="T:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder">
+            <summary>
+            Фабрика объектов, использующая конструктор по-умолчанию
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder.constructor">
+            <summary>
+            Конструктор по-умолчанию объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder.#ctor(System.Reflection.ConstructorInfo)">
+            <summary>
+            Создать фабрику объектов, использующую конструктор по-умолчанию
+            </summary>
+            <param name="constructor">Конструктор по-умолчанию</param>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр
+            </summary>
+            <param name="container">Контейнер, в котором создаётся экземпляр</param>
+            <returns>Экземпляр объекта</returns>
+        </member>
+        <member name="T:Injectikus.InstanceBuilders.InjectionConstructorInstanceBuilder">
+            <summary>
+            Фабрика экземпляров, использующая конкретный конструктор объекта и осуществляющая внедрение зависимостей через его параметры
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.InjectionConstructorInstanceBuilder.constructor">
+            <summary>
+            Конструктор объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InjectionConstructorInstanceBuilder.#ctor(System.Reflection.ConstructorInfo)">
+            <summary>
+            Создать фабрику объектов
+            </summary>
+            <param name="constructor">Конструктор, в параметры которого необходимо внедрить зависимости</param>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InjectionConstructorInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр класса, используя внедрение зависимостей в один из его конструкторов
+            </summary>
+            <param name="container">Контейнер, в котором создаётся экземпляр</param>
+            <returns>Экземпляр класса, с внедрёнными в него зависимостями</returns>
+        </member>
+        <member name="T:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder">
+            <summary>
+            Фабрика экземпляров, создающая их с помощью конструктора по-умолчанию 
+            и внедряющая зависимости путём вызова определённого метода.
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder.constructor">
+            <summary>
+            Конструктор по-умолчанию
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder.method">
+            <summary>
+            Метод, через который внедряются зависимости
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder.#ctor(System.Reflection.ConstructorInfo,System.Reflection.MethodInfo)">
+            <summary>
+            Создать фабрику
+            </summary>
+            <param name="constructor">Конструктор по-умолчанию</param>
+            <param name="method">Метод, через который внедряются зависимости</param>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InjectionMethodInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр класса, используя конструктор по-умолчанию и внедрение зависимостей с помощью одного из его методов
+            </summary>
+            <param name="container">Контейнер, в котором создаётся экземпляр</param>
+            <returns>Экземпляр класса, с внедрёнными в него зависимостями</returns>
+        </member>
+        <member name="T:Injectikus.InstanceBuilders.InstanceCreationHelper">
+            <summary>
+            Помощник в создании экземпляров класса
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InstanceCreationHelper.GetMethodDependencies(System.Reflection.MethodBase,Injectikus.IContainer)">
+            <summary>
+            Получить зависимости метода <paramref name="method"/> разрешенные контейнером <paramref name="container"/>
+            </summary>
+            <param name="method">Метод, для параметров которого необходимо разрешить зависимости</param>
+            <param name="container">Контейнер, который будет разрешать зависимости</param>
+            <returns>Массив в с разрешёнными зависимостями</returns>
+        </member>
+        <member name="T:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder">
+            <summary>
+            Фабрика экземпляров, создающая их с использованием конструктора по-умолчанию
+            и внедрение зависимостей через свойства и сеттеры.
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder.constructor">
+            <summary>
+            Конструктор по-умолчанию
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder.setters">
+            <summary>
+            Список сеттеров для внедрения зависимостей
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder.properties">
+            <summary>
+            Список свойств для внедрения зависимостей
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder.#ctor(System.Reflection.ConstructorInfo,System.Reflection.MethodInfo[],System.Reflection.PropertyInfo[])">
+            <summary>
+            Создать фабрику объектов
+            </summary>
+            <param name="constructor">Конструктор по-умолчанию</param>
+            <param name="setters">Список сеттеров для внедрения зависимостей</param>
+            <param name="properties">Список свойств для внедрения зависимостей</param>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр класса, используя конструктор по-умолчанию 
+            и внедрение зависимостей через его свойства и сеттеры.
+            </summary>
+            <param name="container"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="T:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder">
+            <summary>
+            Фабрика экземпляров, использующая конструктор класса
+            с наибольшим числом параметров, типы которых могут быть
+            разрешены контейнером.
+            Поиск подхлдящего конструктора осуществляется каждый раз, когда вызывается метод <see cref="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.BuildInstance(Injectikus.IContainer)"/>
+            </summary>
+        </member>
+        <member name="F:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.#ctor(System.Type)">
+            <summary>
+            Создать фабрику
+            </summary>
+            <param name="type">Тип создаваемого объекта</param>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.BuildInstance(Injectikus.IContainer)">
+            <summary>
+            Создать экземпляр типа <see cref="F:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.type"/>.
+            Используя "широчайший" из конструкторов с разрешимыми контейнером параметрами.
+            </summary>
+            <param name="container">Контейнер, в котором создаётся экземпляр</param>
+            <returns>Экземпляр класса, с внедрёнными в него зависимостями</returns>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.GetConstructorWeight(System.Reflection.ConstructorInfo)">
+            <summary>Получить вес конструктора</summary>
+            <param name="info">Описание конструктора</param>
+            <returns>Неотрицательное число - сумма весов параметров конструктора</returns>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.GetParameterWeight(System.Reflection.ParameterInfo)">
+            <summary>Получить вес параметра</summary>
+            <param name="p">Описание параметра</param>
+            <returns>Неотрицательное число - вес параметра</returns>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.WidestConstructorInstanceBuilder.CheckConstructorTypes(System.Reflection.ConstructorInfo,Injectikus.IContainer)">
+            <summary>
+            Проверить, могут ли параметры конструктора быть разрешены контейнером
+            </summary>
+            <param name="info">Описание конструктора</param>
+            <param name="container">Контейнер, который будет разрешать зависимости конструктора</param>
+            <returns><c>true</c> - если параметры конструктора могут быть разрешены контейнером <paramref name="container"/>, иначе <c>false</c></returns>
+        </member>
         <member name="T:Injectikus.IObjectProvider">
             <summary>
             Поставщик объектов - описывает алгоритм построения нового объекта для контейнера внедрения зависимостей
@@ -689,6 +1137,35 @@
             <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
             <returns>Объект типа <see cref="P:Injectikus.Providers.ClassInstanceProvider.Type"/></returns>
         </member>
+        <member name="T:Injectikus.Providers.FactoryMethodProvider">
+            <summary>
+            Поставщик объектов, создающий их с помощью заданного производящего делегата
+            </summary>
+        </member>
+        <member name="F:Injectikus.Providers.FactoryMethodProvider.method">
+            <summary>
+            Производящий делегат
+            </summary>
+        </member>
+        <member name="P:Injectikus.Providers.FactoryMethodProvider.Type">
+            <summary>
+            Тип создаваемого объекта
+            </summary>
+        </member>
+        <member name="M:Injectikus.Providers.FactoryMethodProvider.#ctor(System.Type,System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Создать новый поставщик объектов типа <paramref name="type"/>, создающий их с помощью производящего делегата <paramref name="method"/>
+            </summary>
+            <param name="type">Тип создаваемого объекта</param>
+            <param name="method">Производящий делегат</param>
+        </member>
+        <member name="M:Injectikus.Providers.FactoryMethodProvider.Create(Injectikus.IContainer)">
+            <summary>
+            Создать объект
+            </summary>
+            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
+            <returns>Экземпляр типа <see cref="P:Injectikus.Providers.FactoryMethodProvider.Type"/></returns>
+        </member>
         <member name="T:Injectikus.Providers.SingletonObjectProvider">
             <summary>
             Поставщик объектов-одиночек. Обёртка над другим поставщиком, реализующая паттерн Singleton.
@@ -726,7 +1203,7 @@
             Получить объект-одиночку типа <see cref="P:Injectikus.IObjectProvider.Type"/>
             </summary>
             <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
-            <returns>Экземпляр-одиночка типа <see cref="P:Injectikus.FactoryMethodProvider.Type"/></returns>
+            <returns>Экземпляр-одиночка типа <see cref="P:Injectikus.Providers.FactoryMethodProvider.Type"/></returns>
         </member>
         <member name="T:Injectikus.Providers.SingletonProviderFactory">
             <summary>
@@ -776,35 +1253,6 @@
             </summary>
             <param name="type">Тип, для которого нужно создать поставщик</param>
             <param name="factoryMethod">Фабричный метод</param>
-        </member>
-        <member name="T:Injectikus.FactoryMethodProvider">
-            <summary>
-            Поставщик объектов, создающий их с помощью заданного производящего делегата
-            </summary>
-        </member>
-        <member name="F:Injectikus.FactoryMethodProvider.method">
-            <summary>
-            Производящий делегат
-            </summary>
-        </member>
-        <member name="P:Injectikus.FactoryMethodProvider.Type">
-            <summary>
-            Тип создаваемого объекта
-            </summary>
-        </member>
-        <member name="M:Injectikus.FactoryMethodProvider.#ctor(System.Type,System.Func{Injectikus.IContainer,System.Object})">
-            <summary>
-            Создать новый поставщик объектов типа <paramref name="type"/>, создающий их с помощью производящего делегата <paramref name="method"/>
-            </summary>
-            <param name="type">Тип создаваемого объекта</param>
-            <param name="method">Производящий делегат</param>
-        </member>
-        <member name="M:Injectikus.FactoryMethodProvider.Create(Injectikus.IContainer)">
-            <summary>
-            Создать объект
-            </summary>
-            <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
-            <returns>Экземпляр типа <see cref="P:Injectikus.FactoryMethodProvider.Type"/></returns>
         </member>
         <member name="T:Injectikus.SingletonBinder">
             <summary>

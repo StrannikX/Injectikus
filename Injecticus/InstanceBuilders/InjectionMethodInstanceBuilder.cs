@@ -30,7 +30,7 @@ namespace Injectikus.InstanceBuilders
             this.method = method;
         }
 
-        // <summary>
+        /// <summary>
         /// Создать экземпляр класса, используя конструктор по-умолчанию и внедрение зависимостей с помощью одного из его методов
         /// </summary>
         /// <param name="container">Контейнер, в котором создаётся экземпляр</param>
