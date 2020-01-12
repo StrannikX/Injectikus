@@ -4,19 +4,26 @@ using System.Linq;
 
 namespace Injectikus.InitializationStrategies
 {
+    /// <summary>
+    /// Стратегия основанная на создании объекта с помощью конструктора по-умолчанию
+    /// и внедрении зависимостей через аргументы отмеченного метода
+    /// </summary>
     class InjectionMethodStrategy : ObjectInitializationStrategy
     {
-        protected IContainer container;
+        /// <summary>
+        /// Основана ли стратегии на аттрибутах 
+        /// <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="Attributes.DIMethodAttribute"/></value>
+        /// </summary>
         public override bool IsAttributeBasedStrategy => true;
 
-        public InjectionMethodStrategy(IContainer container)
-        {
-            this.container = container;
-        }
-
+        /// <summary>
+        /// Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+        /// </summary>
+        /// <param name="type">Тип, для которого создаётся построитель</param>
+        /// <returns><see cref="InjectionMethodInstanceBuilder"/></returns>
         public override IInstanceBuilder CreateBuilderFor(Type type)
         {
-            var constructor = type.GetPublicEmptyConstructor();
+            var constructor = type.GetPublicDefaultConstructor();
 
             if (constructor == null)
             {
@@ -40,10 +47,14 @@ namespace Injectikus.InitializationStrategies
             return new InjectionMethodInstanceBuilder(constructor, method);
         }
 
+        /// <summary>
+        /// Применима ли данная стратегия для типа <paramref name="type"/>
+        /// </summary>
+        /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+        /// <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="Attributes.DIMethodAttribute"/> метод, иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {
-            var methods = type.GetMarkedMethods();
-            return methods.Any(m => m.GetParameters().Length > 0);
+            return type.GetMarkedMethods().Length > 0;
         }
     }
 }

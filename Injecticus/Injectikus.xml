@@ -4,6 +4,83 @@
         <name>Injectikus</name>
     </assembly>
     <members>
+        <member name="T:Injectikus.Attributes.DIMethodAttribute">
+            <summary>
+            Аттрибут, указывающий на то, что этот метод необходимо использовать для внедрения завимостей в объект
+            </summary>
+        </member>
+        <member name="T:Injectikus.Attributes.InjectArray">
+            <summary>
+            Аттрибут, указывающий на то, что в указанный параметр необходимо внедридить массив экземпляров.
+            </summary>
+        </member>
+        <member name="T:Injectikus.Attributes.InjectionConstructorAttribute">
+            <summary>
+            Аттрибут, указывающий на то, что данный конструтор должен быть использован для внедрения зависимостей
+            </summary>
+        </member>
+        <member name="T:Injectikus.Attributes.DependencyInjectionMethod">
+            <summary>
+            Способ инициализации экземпляра класса
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.Auto">
+            <summary>
+            Определить способ автоматически.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.ConstructorParametersInjection">
+            <summary>
+            Внедрение зависимостей через параметры конструктора.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.MethodParametersInjection">
+            <summary>
+            Вызов указанного метода и внедрение зависимостей через его параметры.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.PropertiesAndSettersInjection">
+            <summary>
+            Внедрение зависимостей через помеченные аттрибутами <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/> и <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/> методы и свойства
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.WidestConstructorParametersInjection">
+            <summary>
+            Выбор конструктора с максимальным количеством параметров, типы которых удасться разрешить.
+            И внедрение зависимостей через эти параметры.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.DefaultConstructorWithoutInjection">
+            <summary>
+            Вызов конструктора по-умолчанию, без внедрения зависимостей.
+            </summary>
+        </member>
+        <member name="T:Injectikus.Attributes.InjectionMethodAttribute">
+            <summary>
+            Аттрибут, указывающий способ внедрения зависимостей для класса.
+            </summary>
+        </member>
+        <member name="P:Injectikus.Attributes.InjectionMethodAttribute.DependencyInjectionMethod">
+            <summary>
+            Указанный способ внедрения зависимостей
+            </summary>
+        </member>
+        <member name="M:Injectikus.Attributes.InjectionMethodAttribute.#ctor(Injectikus.Attributes.DependencyInjectionMethod)">
+            <summary>
+            Создать аттрибут для указанного метода внедрения зависимостей <paramref name="method"/>
+            </summary>
+            <param name="method">Указанный способ внедрения зависимостей</param>
+        </member>
+        <member name="T:Injectikus.Attributes.InjectionPropertyAttribute">
+            <summary>
+            Аттрибут, указывающий на то, что данное свойство должно использоваться для внедрения зависимости
+            </summary>
+        </member>
+        <member name="T:Injectikus.Attributes.InjectionSetterAttribute">
+            <summary>
+            Аттрибут, указывающий на то, что данный сеттер должен использоваться для внедрения зависимости
+            </summary>
+        </member>
         <member name="T:Injectikus.ContainerExtension">
             <summary>
             Класс с методами расширения для <see cref="T:Injectikus.IContainer"/>
@@ -94,6 +171,31 @@
             </summary>
             <param name="factoryMethod">Производящий метод, возвращающий объект типа <typeparamref name="InstanceT"/></param>
             <typeparam name="InstanceT">Класс, производный от <typeparamref name="TargetT"/>, объекты которого возвращаются производящим методом</typeparam>
+        </member>
+        <member name="T:Injectikus.DefaultBinderFactory">
+            <summary>
+            Фабрика объектов связывания по-умолчанию.
+            </summary>
+        </member>
+        <member name="M:Injectikus.DefaultBinderFactory.#ctor(Injectikus.IContainer)">
+            <summary>
+            Создаёт стандартную фабрику объектов привязывания для контейнера <paramref name="container"/>
+            </summary>
+            <param name="container">Контейнер, в котором будет осуществляться связывание</param>
+        </member>
+        <member name="M:Injectikus.DefaultBinderFactory.GetBinder(System.Type)">
+            <summary>
+            Получить объект связывание для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого нужно получить объект связывания</param>
+            <returns>Объект связывание для типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.DefaultBinderFactory.GetBinder``1">
+            <summary>
+            Получить объект связывание для типа <typeparamref name="TargetT"/>
+            </summary>
+            <typeparam name="TargetT">Тип, для которого нужно получить объект связывания</typeparam>
+            <returns>Объект связывание для типа <typeparamref name="TargetT"/></returns>
         </member>
         <member name="T:Injectikus.IBinder">
             <summary>
@@ -201,6 +303,25 @@
             </summary>
             <param name="binder">Объект связывания</param>
         </member>
+        <member name="T:Injectikus.IBinderFactory">
+            <summary>
+            Фабрика объектов связывания.
+            </summary>
+        </member>
+        <member name="M:Injectikus.IBinderFactory.GetBinder(System.Type)">
+            <summary>
+            Получить объект связывание для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого нужно получить объект связывания</param>
+            <returns>Объект связывание для типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.IBinderFactory.GetBinder``1">
+            <summary>
+            Получить объект связывание для типа <typeparamref name="TargetT"/>
+            </summary>
+            <typeparam name="TargetT">Тип, для которого нужно получить объект связывания</typeparam>
+            <returns>Объект связывание для типа <typeparamref name="TargetT"/></returns>
+        </member>
         <member name="T:Injectikus.IContainer">
             <summary>
             Базовый интерфейс контейнера инъекции зависимостей
@@ -241,16 +362,16 @@
             <typeparam name="TargetType">Тип</typeparam>
             <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
         </member>
-        <member name="M:Injectikus.IContainer.Contains``1">
+        <member name="M:Injectikus.IContainer.CanResolve``1">
             <summary>
-            Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+            Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
             </summary>
             <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
             <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
         </member>
-        <member name="M:Injectikus.IContainer.Contains(System.Type)">
+        <member name="M:Injectikus.IContainer.CanResolve(System.Type)">
             <summary>
-            Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
@@ -322,6 +443,30 @@
             <returns>Массив object[] с элементами типа <paramref name="type"/>. 
             Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
             то будет возращен массив длины 0</returns>
+        </member>
+        <member name="T:Injectikus.InitializationStrategies.ObjectInitializationStrategy">
+            <summary>
+            Описывает стратегию инициализации экземпляра
+            </summary>
+        </member>
+        <member name="P:Injectikus.InitializationStrategies.ObjectInitializationStrategy.IsAttributeBasedStrategy">
+            <summary>
+            Основана ли стратегии на аттрибутах 
+            </summary>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.ObjectInitializationStrategy.IsAcceptableFor(System.Type)">
+            <summary>
+            Применима ли данная стратегия для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+            <returns><c>true</c> если стратегия применима, иначе <c>false</c></returns>
+        </member>
+        <member name="M:Injectikus.InitializationStrategies.ObjectInitializationStrategy.CreateBuilderFor(System.Type)">
+            <summary>
+            Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+            </summary>
+            <param name="type">Тип, для которого создаётся построитель</param>
+            <returns>Построитель объекта</returns>
         </member>
         <member name="T:Injectikus.Injectikus">
             <summary>
@@ -429,16 +574,16 @@
             <typeparam name="TargetType">Тип</typeparam>
             <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
         </member>
-        <member name="M:Injectikus.Injectikus.Contains``1">
+        <member name="M:Injectikus.Injectikus.CanResolve``1">
             <summary>
-            Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+            Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
             </summary>
             <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
             <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
         </member>
-        <member name="M:Injectikus.Injectikus.Contains(System.Type)">
+        <member name="M:Injectikus.Injectikus.CanResolve(System.Type)">
             <summary>
-            Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
@@ -503,6 +648,24 @@
             <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
             <returns>Экземпляр типа <typeparamref name="InstanceType"/></returns>
         </member>
+        <member name="T:Injectikus.IProviderFactory">
+            <summary>
+            Фабрика поставщиков обектов для стандартных ситуаций
+            </summary>
+        </member>
+        <member name="M:Injectikus.IProviderFactory.GetFactoryMethodProvider(System.Type,System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Получить поставщиков объектов для фабричного метода
+            </summary>
+            <param name="type">Тип, для которого нужно создать поставщик</param>
+            <param name="factoryMethod">Фабричный метод</param>
+        </member>
+        <member name="M:Injectikus.IProviderFactory.GetClassInstanceProvider(System.Type)">
+            <summary>
+            Получить поставщик объектов для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого необходимо создать поставщик объектов</param>
+        </member>
         <member name="T:Injectikus.Providers.ClassInstanceProvider">
             <summary>
             Поставщик объектов, создающий объекты по объекту их типа
@@ -564,6 +727,55 @@
             </summary>
             <param name="container">Контейнер внедрения зависимостей, используемый для создания объекта</param>
             <returns>Экземпляр-одиночка типа <see cref="P:Injectikus.FactoryMethodProvider.Type"/></returns>
+        </member>
+        <member name="T:Injectikus.Providers.SingletonProviderFactory">
+            <summary>
+            Фабрика поставщиков объектов-одиночек.
+            </summary>
+        </member>
+        <member name="F:Injectikus.Providers.SingletonProviderFactory.baseFactory">
+            <summary>
+            Базавая фабрика поставщиков объектов.
+            </summary>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonProviderFactory.#ctor(Injectikus.IProviderFactory)">
+            <summary>
+            Конструктор фабрики поставщиков экземпляров-одиночек
+            </summary>
+            <param name="baseFactory">Базовая фабрика поставщиков обектов</param>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonProviderFactory.GetClassInstanceProvider(System.Type)">
+            <summary>
+            Создаёт поставщик экземпляра-одиночки типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип экземпляра-одиночки</param>
+            <returns>Поставщик экземпляра-одиночки типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.Providers.SingletonProviderFactory.GetFactoryMethodProvider(System.Type,System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Создаёт поставщик экземпляра-одиночки типа <paramref name="type"/> с помощью метода-поставщика <paramref name="method"/>
+            </summary>
+            <param name="type">Тип экземпляра</param>
+            <param name="method">Метод-поставщик объектов</param>
+            <returns>Поставщик экземпляра-одиночки типа <paramref name="type"/></returns>
+        </member>
+        <member name="T:Injectikus.DefaultProviderFactory">
+            <summary>
+            Фабрика поставщиков обектов по-умолчанию.
+            </summary>
+        </member>
+        <member name="M:Injectikus.DefaultProviderFactory.GetClassInstanceProvider(System.Type)">
+            <summary>
+            Получить поставщик объектов для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого необходимо создать поставщик объектов</param>
+        </member>
+        <member name="M:Injectikus.DefaultProviderFactory.GetFactoryMethodProvider(System.Type,System.Func{Injectikus.IContainer,System.Object})">
+            <summary>
+            Получить поставщиков объектов для фабричного метода.
+            </summary>
+            <param name="type">Тип, для которого нужно создать поставщик</param>
+            <param name="factoryMethod">Фабричный метод</param>
         </member>
         <member name="T:Injectikus.FactoryMethodProvider">
             <summary>

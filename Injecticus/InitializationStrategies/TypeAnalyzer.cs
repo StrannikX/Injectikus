@@ -6,23 +6,41 @@ using Injectikus.Attributes;
 
 namespace Injectikus.InitializationStrategies
 {
+    /// <summary>
+    /// Класс-помошник в анализе типов
+    /// </summary>
     internal static class TypeAnalyzer
     {
+        /// <summary>
+        /// Проверить, есть ли в члена класса атрибут <paramref name="member"/>
+        /// </summary>
+        /// <typeparam name="Attr">Атрибут</typeparam>
+        /// <param name="member">Описание члена класса</param>
+        /// <returns>Результат проверки</returns>
         internal static bool HasAttribute<Attr>(this MemberInfo member) where Attr : Attribute
         {
             return member.GetCustomAttribute<Attr>() != null;
         }
 
+        /// <summary>
+        /// Помечен ли конструктор атрибутом <see cref="Attributes.InjectionConstructorAttribute"/>
+        /// </summary>
         internal static bool IsMarkedConstructor(this ConstructorInfo constructor)
         {
             return constructor.HasAttribute<InjectionConstructorAttribute>();
         }
 
+        /// <summary>
+        /// Возвращает массив публичных конструкторов
+        /// </summary>
         internal static ConstructorInfo[] GetPublicConstructors(this Type t)
         {
             return t.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
         }
 
+        /// <summary>
+        /// Получить все конструкторы, отмеченные аттрибутом <see cref="Attributes.InjectionConstructorAttribute"/>
+        /// </summary>
         internal static ConstructorInfo[] GetMarkedConstructors(this Type t)
         {
             return t.GetPublicConstructors()
@@ -30,17 +48,10 @@ namespace Injectikus.InitializationStrategies
                 .ToArray();
         }
 
-        internal static Type[] GetUnresolvedTypes(this MethodBase method, IContainer container)
-        {
-            return method
-                .GetParameters()
-                .Select(p => p.ParameterType)
-                .Distinct()
-                .Where(p => !container.Contains(p))
-                .ToArray();
-        }
-
-        internal static ConstructorInfo GetPublicEmptyConstructor(this Type type)
+        /// <summary>
+        /// Получить публичный конструктор по-умолчанию
+        /// </summary>
+        internal static ConstructorInfo GetPublicDefaultConstructor(this Type type)
         {
             return type.GetConstructor(
                 BindingFlags.Public | BindingFlags.Instance,
@@ -49,16 +60,25 @@ namespace Injectikus.InitializationStrategies
                 null);
         }
 
+        /// <summary>
+        /// Получить публичные методы типа
+        /// </summary>
         internal static MethodInfo[] GetPublicMethods(this Type type)
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
         }
 
+        /// <summary>
+        /// Помечен ли метод атрибутом <see cref="InjectionSetterAttribute"/>
+        /// </summary>
         internal static bool IsMarkedSetter(MethodInfo method)
         {
             return method.HasAttribute<InjectionSetterAttribute>();
         }
 
+        /// <summary>
+        /// Получить методы, помеченные атрибутом <see cref="InjectionSetterAttribute"/>
+        /// </summary>
         internal static MethodInfo[] GetMarkedSetters(this Type type)
         {
             return type
@@ -67,6 +87,9 @@ namespace Injectikus.InitializationStrategies
                 .ToArray();
         }
 
+        /// <summary>
+        /// Получить методы, помеченные атрибутом <see cref="DIMethodAttribute"/>
+        /// </summary>
         internal static MethodInfo[] GetMarkedMethods(this Type type)
         {
             return type
@@ -75,21 +98,33 @@ namespace Injectikus.InitializationStrategies
                 .ToArray();
         }
 
+        /// <summary>
+        /// Помечен ли метод атрибутом <see cref="DIMethodAttribute"/>
+        /// </summary>
         internal static bool IsMarkedMethod(MethodInfo method)
         {
-            return method.HasAttribute<InjectionInitializationMethodAttribute>();
+            return method.HasAttribute<DIMethodAttribute>();
         }
 
+        /// <summary>
+        /// Получить все публичные свойства
+        /// </summary>
         internal static PropertyInfo[] GetPublicProperties(this Type type)
         {
             return type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
         }
 
+        /// <summary>
+        /// Помечен ли свойство атрибутом <see cref="InjectionPropertyAttribute"/>
+        /// </summary>
         internal static bool IsMarkedProperty(PropertyInfo property)
         {
             return property.HasAttribute<InjectionPropertyAttribute>();
         }
 
+        /// <summary>
+        /// Получить свойства, помеченные атрибутом <see cref="InjectionPropertyAttribute"/>
+        /// </summary>
         internal static PropertyInfo[] GetMarkedProperties(this Type type)
         {
             return type
@@ -98,15 +133,21 @@ namespace Injectikus.InitializationStrategies
                 .ToArray();
         }
 
-        internal static InitializationMethod? GetUserDefinedInitializationMethod(this Type type)
+        /// <summary>
+        /// Возвращает значение атрибута <see cref="InjectionSetterAttribute"/>, если такой присутствует у типа
+        /// </summary>
+        internal static DependencyInjectionMethod? GetUserDefinedInitializationMethod(this Type type)
         {
-            var attr = type.GetCustomAttribute<InjectionInitializationAttribute>();
-            return attr?.InitializationMethod;
+            var attr = type.GetCustomAttribute<InjectionMethodAttribute>();
+            return attr?.DependencyInjectionMethod;
         }
 
+        /// <summary>
+        /// Проверяет, помечено ли свойство атрибутом <see cref="InjectArrayAttribute"/>
+        /// </summary>
         internal static bool HasArrayInjectionAttribute(this ParameterInfo parameter)
         {
-            return parameter.GetCustomAttribute<ArrayInjectionAttribute>() != null;
+            return parameter.GetCustomAttribute<InjectArrayAttribute>() != null;
         }
     }
 }

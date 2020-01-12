@@ -45,18 +45,18 @@ namespace Injectikus
         void UnbindProvider<TargetType>(IObjectProvider provider);
 
         /// <summary>
-        /// Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+        /// Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
         /// </summary>
         /// <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
         /// <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        bool Contains<TargetType>();
+        bool CanResolve<TargetType>();
 
         /// <summary>
-        /// Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+        /// Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка</param>
         /// <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        bool Contains(Type type);
+        bool CanResolve(Type type);
 
         /// <summary>
         /// Получить экземпляр типа <typeparamref name="TargetType"/> из контейнера

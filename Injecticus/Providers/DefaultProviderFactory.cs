@@ -9,7 +9,7 @@ namespace Injectikus
     public class DefaultProviderFactory : IProviderFactory
     {
         /// <summary>
-        /// Получить поставщик объектов для типа <paramref cref="type">
+        /// Получить поставщик объектов для типа <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого необходимо создать поставщик объектов</param>
         public virtual IObjectProvider GetClassInstanceProvider(Type type)
@@ -24,7 +24,7 @@ namespace Injectikus
         /// <param name="factoryMethod">Фабричный метод</param>
         public virtual IObjectProvider GetFactoryMethodProvider(Type type, Func<IContainer, object> factoryMethod)
         {
-            return new FactoryMethodProvider(type, method);
+            return new FactoryMethodProvider(type, factoryMethod);
         }
     }
 }

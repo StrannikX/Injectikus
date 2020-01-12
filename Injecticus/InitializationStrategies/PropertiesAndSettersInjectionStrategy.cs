@@ -7,19 +7,27 @@ using System.Text;
 
 namespace Injectikus.InitializationStrategies
 {
+    /// <summary>
+    /// Стратегия, основанная на создании объекта с помощью конструктора по-умолчанию
+    /// и внедрении зависимостей через свойства и сеттеры
+    /// </summary>
     class PropertiesAndSettersInjectionStrategy : ObjectInitializationStrategy
     {
-        protected IContainer container;
+        /// <summary>
+        /// Основана ли стратегии на аттрибутах 
+        /// <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="Attributes.InjectionSetterAttribute"/>
+        /// или свойств с атрибутом <see cref="Attributes.InjectionPropertyAttribute"/></value>
+        /// </summary>
         public override bool IsAttributeBasedStrategy => true;
 
-        public PropertiesAndSettersInjectionStrategy(IContainer container)
-        {
-            this.container = container;
-        }
-
+        /// <summary>
+        /// Создаёт для типа <paramref name="type"/> новый построитель экземпляра, реализующий данную стратегию.
+        /// </summary>
+        /// <param name="type">Тип, для которого создаётся построитель</param>
+        /// <returns><see cref="PropertiesAndSettersInjectionInstanceBuilder"/></returns>
         public override IInstanceBuilder CreateBuilderFor(Type type)
         {
-            var constructor = type.GetPublicEmptyConstructor();
+            var constructor = type.GetPublicDefaultConstructor();
 
             if (constructor == null)
             {
@@ -40,9 +48,16 @@ namespace Injectikus.InitializationStrategies
             return new PropertiesAndSettersInjectionInstanceBuilder(constructor, setters, properties);
         }
 
+        /// <summary>
+        /// Применима ли данная стратегия для типа <paramref name="type"/>
+        /// </summary>
+        /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
+        /// <returns><c>true</c> если тип <paramref name="type"/> иммет конструктор по-умолчанию и хотя бы один 
+        /// отмеченный атрибутом <see cref="Attributes.InjectionSetterAttribute"/> метод
+        /// или отмеченное атрибутом <see cref="Attributes.InjectionPropertyAttribute"/> свойство, иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {
-            var constructor = type.GetPublicEmptyConstructor();
+            var constructor = type.GetPublicDefaultConstructor();
             if (constructor == null) return false;
 
             var properties = type.GetMarkedProperties();
@@ -51,6 +66,7 @@ namespace Injectikus.InitializationStrategies
             return properties.Length + setters.Length > 0;
         }
 
+        // Провести валидацию свойств 
         protected void VerifyProperties(PropertyInfo[] properties)
         {
             foreach(var property in properties)
@@ -62,6 +78,7 @@ namespace Injectikus.InitializationStrategies
             }
         }
 
+        // Провести валидацию сеттеров 
         protected void VerifySetters(MethodInfo[] setters)
         {
             foreach (var setter in setters)
@@ -71,7 +88,7 @@ namespace Injectikus.InitializationStrategies
                     throw new ArgumentException("Setter method should have parameters!");
                 }
 
-                if (setter.GetParameters().Any(p => p.IsRetval || p.IsOptional || p.IsRetval))
+                if (setter.GetParameters().Any(p => p.IsRetval || p.IsOut))
                 {
                     throw new ArgumentException("Incorrect parameter modifiers!");
                 }

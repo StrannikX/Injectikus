@@ -17,7 +17,7 @@ namespace Injectikus
         IObjectProvider GetFactoryMethodProvider(Type type, Func<IContainer, object> factoryMethod);
         
         /// <summary>
-        /// Получить поставщик объектов для типа <paramref cref="type">
+        /// Получить поставщик объектов для типа <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого необходимо создать поставщик объектов</param>
         IObjectProvider GetClassInstanceProvider(Type type);

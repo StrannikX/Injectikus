@@ -218,21 +218,21 @@ namespace Injectikus
         }
 
         /// <summary>
-        /// Проверяет, содержит ли контейнер поставщик для типа <typeparamref name="TargetType"/>
+        /// Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
         /// </summary>
         /// <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
         /// <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        public bool Contains<TargetType>()
+        public bool CanResolve<TargetType>()
         {
-            return Contains(typeof(TargetType));
+            return CanResolve(typeof(TargetType));
         }
 
         /// <summary>
-        /// Проверяет, содержит ли контейнер поставщик для типа <paramref name="type"/>
+        /// Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка</param>
         /// <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        public bool Contains(Type type)
+        public bool CanResolve(Type type)
         {
             if (!providers.ContainsKey(type)) return false;
             var p = providers.GetOrAdd(type, _ => ImmutableList<IObjectProvider>.Empty);
