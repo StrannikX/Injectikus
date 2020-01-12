@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Injectikus
 {
+    /// <summary>
+    /// Фабрика объектов связывания по-умолчанию.
+    /// </summary>
     public class DefaultBinderFactory : IBinderFactory
     {
         IContainer container;
