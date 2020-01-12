@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Injectikus
+namespace Injectikus.Providers
 {
     /// <summary>
     /// Поставщик объектов, создающий их с помощью заданного производящего делегата

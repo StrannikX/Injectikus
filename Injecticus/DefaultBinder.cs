@@ -58,7 +58,7 @@ namespace Injectikus
         /// <param name="type">Тип к которому осуществляется привязка базового типа</param>
         public void To(Type type)
         {
-            IObjectProvider provider = DefaultProviderFactory.GetClassInstanceProvider(Type);
+            IObjectProvider provider = DefaultProviderFactory.GetClassInstanceProvider(type);
             Container.BindProvider(Type, provider);
         }
     }

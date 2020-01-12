@@ -28,6 +28,10 @@ namespace Injectikus.Providers
         /// <returns>Поставщик экземпляра-одиночки типа <paramref name="type"/></returns>
         public IObjectProvider GetClassInstanceProvider(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
             return new SingletonObjectProvider(baseFactory.GetClassInstanceProvider(type));
         }
 
@@ -39,6 +43,10 @@ namespace Injectikus.Providers
         /// <returns>Поставщик экземпляра-одиночки типа <paramref name="type"/></returns>
         public IObjectProvider GetFactoryMethodProvider(Type type, Func<IContainer, object> method)
         {
+            if (type == null || method == null)
+            {
+                throw new ArgumentNullException();
+            }
             return new SingletonObjectProvider(baseFactory.GetFactoryMethodProvider(type, method));
         }
     }

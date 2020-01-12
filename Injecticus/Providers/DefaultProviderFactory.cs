@@ -14,6 +14,10 @@ namespace Injectikus
         /// <param name="type">Тип, для которого необходимо создать поставщик объектов</param>
         public virtual IObjectProvider GetClassInstanceProvider(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
             return new ClassInstanceProvider(type);
         }
 
@@ -24,6 +28,10 @@ namespace Injectikus
         /// <param name="factoryMethod">Фабричный метод</param>
         public virtual IObjectProvider GetFactoryMethodProvider(Type type, Func<IContainer, object> factoryMethod)
         {
+            if (type == null || factoryMethod == null)
+            {
+                throw new ArgumentNullException();
+            }
             return new FactoryMethodProvider(type, factoryMethod);
         }
     }

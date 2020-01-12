@@ -10,7 +10,7 @@ namespace Injectikus
     /// </summary>
     public class Injectikus : IContainer
     {
-        private ConcurrentDictionary<Type, ImmutableList<IObjectProvider>> providers =
+        protected ConcurrentDictionary<Type, ImmutableList<IObjectProvider>> providers =
             new ConcurrentDictionary<Type, ImmutableList<IObjectProvider>>();
 
         /// <value>
@@ -62,7 +62,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Тип экземпляра</typeparam>
         /// <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
         /// <exception cref="ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
-        public TargetType Get<TargetType>()
+        public virtual TargetType Get<TargetType>()
         {
             return (TargetType)Get(typeof(TargetType));
         }
@@ -74,7 +74,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Требуемый тип</typeparam>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        public bool TryGet<TargetType>(out TargetType obj)
+        public virtual bool TryGet<TargetType>(out TargetType obj)
         {
             obj = default;
             if (TryGet(typeof(TargetType), out var temp))
@@ -91,7 +91,7 @@ namespace Injectikus
         /// <param name="type">Требуемый тип</param>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        public bool TryGet(Type type, out object obj)
+        public virtual bool TryGet(Type type, out object obj)
         {
             obj = default;
             if (this.providers.TryGetValue(type, out var providers))
@@ -112,7 +112,7 @@ namespace Injectikus
         /// <param name="type">Тип экземпляра</param>
         /// <returns>Экземпляр типа <paramref name="type"/></returns>
         /// <exception cref="ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
-        public object Get(Type type)
+        public virtual object Get(Type type)
         {
             if (TryGet(type, out var obj))
             {
@@ -129,7 +129,7 @@ namespace Injectikus
         /// <returns>Массив <typeparamref name="TargetType"/>[]. 
         /// Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
         /// то будет возращен массив длины 0</returns>
-        public TargetType[] GetAll<TargetType>()
+        public virtual TargetType[] GetAll<TargetType>()
         {
             var type = typeof(TargetType);
             if (this.providers.TryGetValue(type, out var providers))
@@ -152,7 +152,7 @@ namespace Injectikus
         /// <returns>Массив object[] с элементами типа <paramref name="type"/>. 
         /// Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
         /// то будет возращен массив длины 0</returns>
-        public object[] GetAll(Type type)
+        public virtual object[] GetAll(Type type)
         {
             if (this.providers.TryGetValue(type, out var providers))
             {
@@ -172,7 +172,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип, с которым следует связать поставщика</param>
         /// <param name="provider">Поставщик объектов</param>
-        public void BindProvider(Type type, IObjectProvider provider)
+        public virtual void BindProvider(Type type, IObjectProvider provider)
         {
             ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
@@ -187,7 +187,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип, с которым следует связать поставщика</typeparam>
         /// <param name="provider">Поставщик объектов</param>
-        public void BindProvider<TargetType>(IObjectProvider provider)
+        public virtual void BindProvider<TargetType>(IObjectProvider provider)
         {
             BindProvider(typeof(TargetType), provider);
         }
@@ -197,7 +197,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип</param>
         /// <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
-        public void UnbindProvider(Type type, IObjectProvider provider)
+        public virtual void UnbindProvider(Type type, IObjectProvider provider)
         {
             ImmutableList<IObjectProvider> oldProviders, newProviders;
             do
@@ -212,7 +212,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип</typeparam>
         /// <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
-        public void UnbindProvider<TargetType>(IObjectProvider provider)
+        public virtual void UnbindProvider<TargetType>(IObjectProvider provider)
         {
             UnbindProvider(typeof(TargetType), provider);
         }
@@ -222,7 +222,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
         /// <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        public bool CanResolve<TargetType>()
+        public virtual bool CanResolve<TargetType>()
         {
             return CanResolve(typeof(TargetType));
         }
@@ -232,7 +232,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка</param>
         /// <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        public bool CanResolve(Type type)
+        public virtual bool CanResolve(Type type)
         {
             if (!providers.ContainsKey(type)) return false;
             var p = providers.GetOrAdd(type, _ => ImmutableList<IObjectProvider>.Empty);
@@ -246,7 +246,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
         /// <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
-        public TargetType CreateInstance<TargetType>() where TargetType : class
+        public virtual TargetType CreateInstance<TargetType>() where TargetType : class
         {
             return BinderFactory
                 .GetBinder<TargetType>()
@@ -262,7 +262,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип создаваемого экземпляра</param>
         /// <returns>Экземпляр класса <paramref name="type"/></returns>
-        public object CreateInstance(Type type)
+        public virtual object CreateInstance(Type type)
         {
             return BinderFactory
                 .GetBinder(type)
