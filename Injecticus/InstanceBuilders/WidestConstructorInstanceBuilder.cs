@@ -11,7 +11,7 @@ namespace Injectikus.InstanceBuilders
     /// разрешены контейнером.
     /// Поиск подхлдящего конструктора осуществляется каждый раз, когда вызывается метод <see cref="BuildInstance(IContainer)"/>
     /// </summary>
-    class WidestConstructorInstanceBuilder : IInstanceBuilder
+    internal class WidestConstructorInstanceBuilder : IInstanceBuilder
     {
         /// <summary>
         /// Тип создаваемого объекта
@@ -37,7 +37,6 @@ namespace Injectikus.InstanceBuilders
         {
             // Ищем подходящий конструктор
             var constructor = type.GetPublicConstructors()
-                .Where(c => c.GetParameters().Length > 0)
                 .Where(c => CheckConstructorTypes(c, container))
                 .OrderBy(GetConstructorWeight)
                 .LastOrDefault();
@@ -88,7 +87,7 @@ namespace Injectikus.InstanceBuilders
         {
             return info
                 .GetParameters()
-                .All(p => container.CanResolve(p.ParameterType) || p.IsOptional);
+                .All(p => container.CanResolve(p.ParameterType) || p.IsOptional || p.HasArrayInjectionAttribute());
         }
     }
 }
