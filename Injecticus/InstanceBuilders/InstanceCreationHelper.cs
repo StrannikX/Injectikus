@@ -64,5 +64,30 @@ namespace Injectikus.InstanceBuilders
 
             return Walk(method.GetParameters()).ToArray();
         }
+
+        /// <summary>
+        /// Получить зависимости свойства <paramref name="property"/> разрешенные контейнером <paramref name="container"/>
+        /// </summary>
+        /// <param name="property">Свойство, для которого необходимо разрешить зависимости</param>
+        /// <param name="container">Контейнер, который будет разрешать зависимости</param>
+        /// <returns>Объект, разрешающий зависимость</returns>
+        internal static object GetPropertyDependency(PropertyInfo property, IContainer container)
+        {
+            if (container.TryGet(property.PropertyType, out var value))
+            {
+                return value;
+            }
+            else if (property.PropertyType.IsArray)
+            {
+                var type = property.PropertyType.GetElementType();
+                var temp = container.GetAll(type);
+                var objects = Array.CreateInstance(type, temp.Length);
+                Array.Copy(temp, objects, objects.Length);
+                return objects;
+            }
+            {
+                throw new ArgumentException($"No suitable value found for {property.Name} property");
+            }
+        }
     }
 }

@@ -54,13 +54,7 @@ namespace Injectikus.InstanceBuilders
                 // И пытаемся установить отмеченные свойства
                 foreach (var property in properties)
                 {
-                    if (container.TryGet(property.PropertyType, out var value))
-                    {
-                        property.SetValue(obj, value);
-                    } else
-                    {
-                        throw new ArgumentException($"No suitable value found for {property.Name} property");
-                    }
+                    property.SetValue(obj, InstanceCreationHelper.GetPropertyDependency(property, container));
                 }
 
                 // И методы
