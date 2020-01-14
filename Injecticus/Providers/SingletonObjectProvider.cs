@@ -31,7 +31,7 @@ namespace Injectikus.Providers
         /// <param name="provider">Базовый поставщик объектов</param>
         public SingletonObjectProvider(IObjectProvider provider)
         {
-            this.provider = provider;
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
             this.Type = provider.Type;
         }
 
@@ -41,7 +41,7 @@ namespace Injectikus.Providers
         /// <param name="instance">Объект-одиночка</param>
         public SingletonObjectProvider(object instance)
         {
-            this.instance = instance;
+            this.instance = instance ?? throw new ArgumentNullException(nameof(instance));
             this.Type = instance.GetType();
         }
 

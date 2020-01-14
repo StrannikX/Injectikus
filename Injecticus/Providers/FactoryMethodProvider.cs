@@ -26,8 +26,8 @@ namespace Injectikus.Providers
         /// <param name="method">Производящий делегат</param>
         public FactoryMethodProvider(Type type, Func<IContainer, object> method)
         {
-            this.Type = type;
-            this.method = method;
+            this.Type = type ?? throw new ArgumentNullException(nameof(type));
+            this.method = method ?? throw new ArgumentNullException(nameof(method));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Injectikus.Providers
         /// <returns>Экземпляр типа <see cref="FactoryMethodProvider.Type"/></returns>
         public object Create(IContainer container)
         {
-            return method?.Invoke(container);
+            return method.Invoke(container);
         }
     }
 }

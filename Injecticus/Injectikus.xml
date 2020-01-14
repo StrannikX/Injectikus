@@ -402,18 +402,22 @@
             <typeparam name="TargetType">Тип</typeparam>
             <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
         </member>
-        <member name="M:Injectikus.IContainer.CanResolve``1">
+        <member name="M:Injectikus.IContainer.CanResolve``1(System.Boolean)">
             <summary>
             Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
+            По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
             </summary>
             <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
+            <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
             <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
         </member>
-        <member name="M:Injectikus.IContainer.CanResolve(System.Type)">
+        <member name="M:Injectikus.IContainer.CanResolve(System.Type,System.Boolean)">
             <summary>
-            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
+            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>. 
+            По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
+            <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
         </member>
         <member name="M:Injectikus.IContainer.Get``1">
@@ -756,16 +760,11 @@
             <seealso cref="T:Injectikus.IBinder"/>
             </value>
         </member>
-        <member name="M:Injectikus.Injectikus.#ctor">
-            <summary>
-            Создаёт новый контейнер инъекции зависимостей
-            </summary>
-        </member>
         <member name="M:Injectikus.Injectikus.#ctor(Injectikus.IBinderFactory)">
             <summary>
             Создаёт новый контейнер внедрения зависимостей c указанной в <paramref name="binderFactory"/> фабрикой объектов связывания
             </summary>
-            <param name="binderFactory"></param>
+            <param name="binderFactory"/>
         </member>
         <member name="M:Injectikus.Injectikus.InitContainer">
             <summary>
@@ -778,7 +777,6 @@
             </summary>
             <typeparam name="TargetType">Тип экземпляра</typeparam>
             <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
-            <exception cref="T:System.ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
         </member>
         <member name="M:Injectikus.Injectikus.TryGet``1(``0@)">
             <summary>
@@ -802,7 +800,6 @@
             </summary>
             <param name="type">Тип экземпляра</param>
             <returns>Экземпляр типа <paramref name="type"/></returns>
-            <exception cref="T:System.ArgumentException"/>
             <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.GetAll``1">
@@ -831,6 +828,7 @@
             <param name="type">Тип, с которым следует связать поставщика</param>
             <param name="provider">Поставщик объектов</param>
             <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.InvalidCastException"/>
         </member>
         <member name="M:Injectikus.Injectikus.BindProvider``1(Injectikus.IObjectProvider)">
             <summary>
@@ -854,18 +852,23 @@
             <typeparam name="TargetType">Тип</typeparam>
             <param name="provider">Ассоцированный с типом <typeparamref name="TargetType"/> поставщик</param>
         </member>
-        <member name="M:Injectikus.Injectikus.CanResolve``1">
+        <member name="M:Injectikus.Injectikus.CanResolve``1(System.Boolean)">
             <summary>
             Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
+            По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
             </summary>
             <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
+            <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
             <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
-        <member name="M:Injectikus.Injectikus.CanResolve(System.Type)">
+        <member name="M:Injectikus.Injectikus.CanResolve(System.Type,System.Boolean)">
             <summary>
-            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
+            Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>. 
+            По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
+            <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
             <exception cref="T:System.ArgumentNullException"/>
         </member>

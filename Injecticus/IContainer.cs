@@ -46,17 +46,21 @@ namespace Injectikus
 
         /// <summary>
         /// Проверяет, может ли контейнер разрешить зависимость <typeparamref name="TargetType"/>
+        /// По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
         /// </summary>
         /// <typeparam name="TargetType">Тип, для которого выполняется проверка</typeparam>
+        /// <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
         /// <returns><c>true</c> если поставщик для типа <typeparamref name="TargetType"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        bool CanResolve<TargetType>();
+        bool CanResolve<TargetType>(bool strictArrayCheck = false);
 
         /// <summary>
-        /// Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>
+        /// Проверяет, может ли контейнер разрешить зависимость <paramref name="type"/>. 
+        /// По умолчанию для любого типа массива результат true, если не задано <paramref name="strictArrayCheck"/>
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка</param>
+        /// <param name="strictArrayCheck">Выполнять ли строгую проверку для массивов</param>
         /// <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
-        bool CanResolve(Type type);
+        bool CanResolve(Type type, bool strictArrayCheck = false);
 
         /// <summary>
         /// Получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
