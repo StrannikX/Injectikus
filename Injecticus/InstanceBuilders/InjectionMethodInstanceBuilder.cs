@@ -37,13 +37,20 @@ namespace Injectikus.InstanceBuilders
         /// <returns>Экземпляр класса, с внедрёнными в него зависимостями</returns>
         public object BuildInstance(IContainer container)
         {
-            // Создаём объект
-            var obj = constructor.Invoke(Type.EmptyTypes);
-            // Получаем его зависимости
-            var methodParameters = InstanceCreationHelper.GetMethodDependencies(method, container);
-            // И внедряем их с помощью метода
-            method.Invoke(obj, methodParameters);
-            return obj;
+            try
+            {
+                // Создаём объект
+                var obj = constructor.Invoke(Type.EmptyTypes);
+                // Получаем его зависимости
+                var methodParameters = InstanceCreationHelper.GetMethodDependencies(method, container);
+                // И внедряем их с помощью метода
+                method.Invoke(obj, methodParameters);
+                return obj;
+            }
+            catch (TargetInvocationException e)
+            {
+                throw e.InnerException;
+            }
         }
     }
 }

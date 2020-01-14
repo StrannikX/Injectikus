@@ -46,29 +46,35 @@ namespace Injectikus.InstanceBuilders
         /// <exception cref="ArgumentException"/>
         public object BuildInstance(IContainer container)
         {
-            // Создаём экземпляр
-            var obj = constructor.Invoke(Type.EmptyTypes);
-
-            // И пытаемся установить отмеченные свойства
-            foreach(var property in properties)
+            try
             {
-                if (container.TryGet(property.PropertyType, out var value))
+                // Создаём экземпляр
+                var obj = constructor.Invoke(Type.EmptyTypes);
+
+                // И пытаемся установить отмеченные свойства
+                foreach (var property in properties)
                 {
-                    property.SetValue(obj, value);
-                } else
-                {
-                    throw new ArgumentException($"No suitable value found for {property.Name} property");
+                    if (container.TryGet(property.PropertyType, out var value))
+                    {
+                        property.SetValue(obj, value);
+                    } else
+                    {
+                        throw new ArgumentException($"No suitable value found for {property.Name} property");
+                    }
                 }
-            }
 
-            // И методы
-            foreach(var setter in setters)
+                // И методы
+                foreach (var setter in setters)
+                {
+                    var parameters = InstanceCreationHelper.GetMethodDependencies(setter, container);
+                    setter.Invoke(obj, parameters);
+                }
+
+                return obj;
+            }  catch (TargetInvocationException e)
             {
-                var parameters = InstanceCreationHelper.GetMethodDependencies(setter, container);
-                setter.Invoke(obj, parameters);
+                throw e.InnerException;
             }
-
-            return obj;
         }
     }
 }

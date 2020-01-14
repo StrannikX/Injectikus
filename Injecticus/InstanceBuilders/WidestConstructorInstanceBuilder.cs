@@ -47,7 +47,14 @@ namespace Injectikus.InstanceBuilders
             {
                 // Вызываем его, внедряя зависимости
                 var parameters = InstanceCreationHelper.GetMethodDependencies(constructor, container);
-                return constructor.Invoke(parameters);
+                try
+                {
+                    return constructor.Invoke(parameters);
+                } catch (TargetInvocationException e)
+                {
+                    throw e.InnerException;
+                }
+                
             }
 
             throw new ArgumentException($"No suitable constructor found in {type.Name} class");

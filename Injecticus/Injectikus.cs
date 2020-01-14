@@ -123,9 +123,15 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип экземпляра</param>
         /// <returns>Экземпляр типа <paramref name="type"/></returns>
-        /// <exception cref="ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
+        /// <exception cref="ArgumentException"/>
+        /// <exception cref="ArgumentNullException"/>
         public virtual object Get(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+            
             if (TryGet(type, out var obj))
             {
                 return obj;
@@ -164,8 +170,14 @@ namespace Injectikus
         /// <returns>Массив object[] с элементами типа <paramref name="type"/>. 
         /// Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
         /// то будет возращен массив длины 0</returns>
+        /// <exception cref="ArgumentNullException"/>
         public virtual object[] GetAll(Type type)
         {
+            if (type == null)
+            {
+                throw new ArgumentNullException();
+            }
+            
             if (this.providers.TryGetValue(type, out var providers))
             {
                 if (!providers.IsEmpty)
@@ -184,6 +196,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип, с которым следует связать поставщика</param>
         /// <param name="provider">Поставщик объектов</param>
+        /// <exception cref="ArgumentNullException"/>
         public virtual void BindProvider(Type type, IObjectProvider provider)
         {
             if (type == null)
@@ -194,11 +207,6 @@ namespace Injectikus
             if (provider == null)
             {
                 throw new ArgumentNullException();
-            }
-
-            if (!type.IsAssignableFrom(provider.Type))
-            {
-                throw new ArgumentException();
             }
 
             ImmutableList<IObjectProvider> oldProviders, newProviders;
@@ -224,6 +232,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип</param>
         /// <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
+        /// <exception cref="ArgumentNullException"/>
         public virtual void UnbindProvider(Type type, IObjectProvider provider)
         {
             if (type == null)
@@ -264,6 +273,7 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка</param>
         /// <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
+        /// <exception cref="ArgumentNullException"/>
         public virtual bool CanResolve(Type type)
         {
             if (!providers.ContainsKey(type)) return false;
@@ -278,7 +288,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип создаваемого экземпляра</typeparam>
         /// <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
-        public virtual TargetType CreateInstance<TargetType>() where TargetType : class
+        public TargetType CreateInstance<TargetType>() where TargetType : class
         {
             return BinderFactory
                 .GetBinder<TargetType>()
@@ -294,11 +304,12 @@ namespace Injectikus
         /// </summary>
         /// <param name="type">Тип создаваемого экземпляра</param>
         /// <returns>Экземпляр класса <paramref name="type"/></returns>
-        public virtual object CreateInstance(Type type)
+        /// <exception cref="ArgumentNullException"/>
+        public object CreateInstance(Type type)
         {
             if (type == null)
             {
-                throw new ArgumentNullException();
+                var e = new ArgumentNullException();
             }
 
             return BinderFactory

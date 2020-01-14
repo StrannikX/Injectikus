@@ -29,7 +29,13 @@ namespace Injectikus.InstanceBuilders
         /// <returns>Экземпляр объекта</returns>
         public object BuildInstance(IContainer container)
         {
-            return constructor.Invoke(Type.EmptyTypes);
+            try
+            {
+                return constructor.Invoke(Type.EmptyTypes);
+            } catch (TargetInvocationException e)
+            {
+                throw e.InnerException;
+            }
         }
     }
 }

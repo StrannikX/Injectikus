@@ -31,7 +31,14 @@ namespace Injectikus.InstanceBuilders
             // Получаем параметры конструктора
             object[] parameters = InstanceCreationHelper
                 .GetMethodDependencies(constructor, container);
-            return constructor.Invoke(parameters);
+            try
+            {
+                return constructor.Invoke(parameters);
+            } catch (TargetInvocationException e)
+            {
+                throw e.InnerException;
+            }
+            
         }
     }
 }
