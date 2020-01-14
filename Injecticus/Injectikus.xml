@@ -802,7 +802,8 @@
             </summary>
             <param name="type">Тип экземпляра</param>
             <returns>Экземпляр типа <paramref name="type"/></returns>
-            <exception cref="T:System.ArgumentException">Объект типа <paramref name="type"/> не найден в контейнере</exception>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.GetAll``1">
             <summary>
@@ -821,6 +822,7 @@
             <returns>Массив object[] с элементами типа <paramref name="type"/>. 
             Если к контейнере остуствуют поставщики объектов для типа <paramref name="type"/>,
             то будет возращен массив длины 0</returns>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.BindProvider(System.Type,Injectikus.IObjectProvider)">
             <summary>
@@ -828,6 +830,7 @@
             </summary>
             <param name="type">Тип, с которым следует связать поставщика</param>
             <param name="provider">Поставщик объектов</param>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.BindProvider``1(Injectikus.IObjectProvider)">
             <summary>
@@ -842,6 +845,7 @@
             </summary>
             <param name="type">Тип</param>
             <param name="provider">Ассоцированный с типом <paramref name="type"/> поставщик</param>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.UnbindProvider``1(Injectikus.IObjectProvider)">
             <summary>
@@ -863,6 +867,7 @@
             </summary>
             <param name="type">Тип, для которого выполняется проверка</param>
             <returns><c>true</c> если поставщик для типа <paramref name="type"/> присутствует в контейнерею, иначе <c>false</c></returns>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="M:Injectikus.Injectikus.CreateInstance``1">
             <summary>
@@ -881,6 +886,7 @@
             </summary>
             <param name="type">Тип создаваемого экземпляра</param>
             <returns>Экземпляр класса <paramref name="type"/></returns>
+            <exception cref="T:System.ArgumentNullException"/>
         </member>
         <member name="T:Injectikus.InstanceBuilders.DefaultConstructorInstanceBuilder">
             <summary>
@@ -970,6 +976,14 @@
             <param name="method">Метод, для параметров которого необходимо разрешить зависимости</param>
             <param name="container">Контейнер, который будет разрешать зависимости</param>
             <returns>Массив в с разрешёнными зависимостями</returns>
+        </member>
+        <member name="M:Injectikus.InstanceBuilders.InstanceCreationHelper.GetPropertyDependency(System.Reflection.PropertyInfo,Injectikus.IContainer)">
+            <summary>
+            Получить зависимости свойства <paramref name="property"/> разрешенные контейнером <paramref name="container"/>
+            </summary>
+            <param name="property">Свойство, для которого необходимо разрешить зависимости</param>
+            <param name="container">Контейнер, который будет разрешать зависимости</param>
+            <returns>Объект, разрешающий зависимость</returns>
         </member>
         <member name="T:Injectikus.InstanceBuilders.PropertiesAndSettersInjectionInstanceBuilder">
             <summary>

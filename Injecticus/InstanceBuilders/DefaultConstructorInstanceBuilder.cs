@@ -6,7 +6,7 @@ namespace Injectikus.InstanceBuilders
     /// <summary>
     /// Фабрика объектов, использующая конструктор по-умолчанию
     /// </summary>
-    class DefaultConstructorInstanceBuilder : IInstanceBuilder
+    internal class DefaultConstructorInstanceBuilder : IInstanceBuilder
     {
         /// <summary>
         /// Конструктор по-умолчанию объекта

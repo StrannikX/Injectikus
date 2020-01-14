@@ -5,7 +5,7 @@ namespace Injectikus.InstanceBuilders
     /// <summary>
     /// Фабрика экземпляров, использующая конкретный конструктор объекта и осуществляющая внедрение зависимостей через его параметры
     /// </summary>
-    class InjectionConstructorInstanceBuilder : IInstanceBuilder
+    internal class InjectionConstructorInstanceBuilder : IInstanceBuilder
     {
         /// <summary>
         /// Конструктор объекта

@@ -101,7 +101,13 @@ namespace Injectikus
             }
 
             // Выбираем наиболее приоритетную из возможных
-            strategy = possibleStrategies.First();
+            strategy = possibleStrategies.FirstOrDefault();
+
+            if (strategy == null)
+            {
+                throw new ArgumentException($"No suitable instantiation and injection strategies found for type {type.FullName}");
+            }
+
             // И используем её
             return strategy.CreateBuilderFor(type);
         }

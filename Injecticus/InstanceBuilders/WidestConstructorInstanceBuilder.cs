@@ -38,7 +38,9 @@ namespace Injectikus.InstanceBuilders
             // Ищем подходящий конструктор
             var constructor = type.GetPublicConstructors()
                 .Where(c => CheckConstructorTypes(c, container))
+                .ToArray()
                 .OrderBy(GetConstructorWeight)
+                .ToArray()
                 .LastOrDefault();
 
             // И если он найден
@@ -74,7 +76,7 @@ namespace Injectikus.InstanceBuilders
         /// <returns>Неотрицательное число - вес параметра</returns>
         int GetParameterWeight(ParameterInfo p)
         {
-            return p.IsOptional ? 1 : 0;
+            return p.IsOptional ? 2 : 1;
         }
 
         /// <summary>

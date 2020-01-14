@@ -7,7 +7,7 @@ namespace Injectikus.InstanceBuilders
     /// Фабрика экземпляров, создающая их с помощью конструктора по-умолчанию 
     /// и внедряющая зависимости путём вызова определённого метода.
     /// </summary>
-    class InjectionMethodInstanceBuilder : IInstanceBuilder
+    internal class InjectionMethodInstanceBuilder : IInstanceBuilder
     {
         /// <summary>
         /// Конструктор по-умолчанию
