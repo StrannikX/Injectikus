@@ -632,7 +632,7 @@
             Класс-помошник в анализе типов
             </summary>
         </member>
-        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.HasAttribute``1(System.Reflection.MemberInfo)">
+        <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsDefined``1(System.Reflection.MemberInfo)">
             <summary>
             Проверить, есть ли в члена класса атрибут <paramref name="member"/>
             </summary>

@@ -17,9 +17,9 @@ namespace Injectikus.InitializationStrategies
         /// <typeparam name="Attr">Атрибут</typeparam>
         /// <param name="member">Описание члена класса</param>
         /// <returns>Результат проверки</returns>
-        internal static bool HasAttribute<Attr>(this MemberInfo member) where Attr : Attribute
+        internal static bool IsDefined<Attr>(this MemberInfo member) where Attr : Attribute
         {
-            return member.GetCustomAttribute<Attr>() != null;
+            return member.IsDefined(typeof(Attr));
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         internal static bool IsMarkedConstructor(this ConstructorInfo constructor)
         {
-            return constructor.HasAttribute<InjectionConstructorAttribute>();
+            return constructor.IsDefined<InjectionConstructorAttribute>();
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         internal static bool IsMarkedSetter(MethodInfo method)
         {
-            return method.HasAttribute<InjectionSetterAttribute>();
+            return method.IsDefined<InjectionSetterAttribute>();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         internal static bool IsMarkedMethod(MethodInfo method)
         {
-            return method.HasAttribute<DIMethodAttribute>();
+            return method.IsDefined<DIMethodAttribute>();
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         internal static bool IsMarkedProperty(PropertyInfo property)
         {
-            return property.HasAttribute<InjectionPropertyAttribute>();
+            return property.IsDefined<InjectionPropertyAttribute>();
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         internal static bool HasArrayInjectionAttribute(this ParameterInfo parameter)
         {
-            return parameter.GetCustomAttribute<InjectArrayAttribute>() != null;
+            return parameter.IsDefined(typeof(InjectArrayAttribute));
         }
     }
 }
