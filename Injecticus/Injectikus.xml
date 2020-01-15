@@ -4,82 +4,67 @@
         <name>Injectikus</name>
     </assembly>
     <members>
-        <member name="T:Injectikus.Attributes.DIMethodAttribute">
-            <summary>
-            Аттрибут, указывающий на то, что этот метод необходимо использовать для внедрения завимостей в объект
-            </summary>
-        </member>
-        <member name="T:Injectikus.Attributes.InjectArrayAttribute">
+        <member name="T:Injectikus.InjectArrayAttribute">
             <summary>
             Аттрибут, указывающий на то, что в указанный параметр необходимо внедридить массив экземпляров.
             </summary>
         </member>
-        <member name="T:Injectikus.Attributes.InjectionConstructorAttribute">
+        <member name="T:Injectikus.InjectHereAttribute">
             <summary>
-            Аттрибут, указывающий на то, что данный конструтор должен быть использован для внедрения зависимостей
+            Атрибут, указывающий на то, что этот член класс необходимо использовать для внедрения зависимостей
             </summary>
         </member>
-        <member name="T:Injectikus.Attributes.DependencyInjectionMethod">
+        <member name="T:Injectikus.DependencyInjectionMethod">
             <summary>
             Способ инициализации экземпляра класса
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.Auto">
+        <member name="F:Injectikus.DependencyInjectionMethod.Auto">
             <summary>
             Определить способ автоматически.
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.ConstructorParametersInjection">
+        <member name="F:Injectikus.DependencyInjectionMethod.ConstructorParametersInjection">
             <summary>
             Внедрение зависимостей через параметры конструктора.
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.MethodParametersInjection">
+        <member name="F:Injectikus.DependencyInjectionMethod.MethodParametersInjection">
             <summary>
             Вызов указанного метода и внедрение зависимостей через его параметры.
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.PropertiesAndSettersInjection">
+        <member name="F:Injectikus.DependencyInjectionMethod.PropertiesAndSettersInjection">
             <summary>
-            Внедрение зависимостей через помеченные аттрибутами <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/> и <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/> методы и свойства
+            Внедрение зависимостей через помеченные аттрибутом <see cref="T:Injectikus.InjectHereAttribute"/> методы и свойства
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.WidestConstructorParametersInjection">
+        <member name="F:Injectikus.DependencyInjectionMethod.WidestConstructorParametersInjection">
             <summary>
             Выбор конструктора с максимальным количеством параметров, типы которых удасться разрешить.
             И внедрение зависимостей через эти параметры.
             </summary>
         </member>
-        <member name="F:Injectikus.Attributes.DependencyInjectionMethod.DefaultConstructorWithoutInjection">
+        <member name="F:Injectikus.DependencyInjectionMethod.DefaultConstructorWithoutInjection">
             <summary>
             Вызов конструктора по-умолчанию, без внедрения зависимостей.
             </summary>
         </member>
-        <member name="T:Injectikus.Attributes.InjectionMethodAttribute">
+        <member name="T:Injectikus.InjectionMethodAttribute">
             <summary>
             Аттрибут, указывающий способ внедрения зависимостей для класса.
             </summary>
         </member>
-        <member name="P:Injectikus.Attributes.InjectionMethodAttribute.DependencyInjectionMethod">
+        <member name="P:Injectikus.InjectionMethodAttribute.DependencyInjectionMethod">
             <summary>
             Указанный способ внедрения зависимостей
             </summary>
         </member>
-        <member name="M:Injectikus.Attributes.InjectionMethodAttribute.#ctor(Injectikus.Attributes.DependencyInjectionMethod)">
+        <member name="M:Injectikus.InjectionMethodAttribute.#ctor(Injectikus.DependencyInjectionMethod)">
             <summary>
             Создать аттрибут для указанного метода внедрения зависимостей <paramref name="method"/>
             </summary>
             <param name="method">Указанный способ внедрения зависимостей</param>
-        </member>
-        <member name="T:Injectikus.Attributes.InjectionPropertyAttribute">
-            <summary>
-            Аттрибут, указывающий на то, что данное свойство должно использоваться для внедрения зависимости
-            </summary>
-        </member>
-        <member name="T:Injectikus.Attributes.InjectionSetterAttribute">
-            <summary>
-            Аттрибут, указывающий на то, что данный сеттер должен использоваться для внедрения зависимости
-            </summary>
         </member>
         <member name="T:Injectikus.BaseContainer">
             <summary>
@@ -679,7 +664,7 @@
         <member name="P:Injectikus.InitializationStrategies.ConstructorInjectionStrategy.IsAttributeBasedStrategy">
             <summary>
             Основана ли стратегии на аттрибутах 
-            <value><c>true</c> - Данная стратегия требует наличия конструктора с атрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/></value>
+            <value><c>true</c> - Данная стратегия требует наличия конструктора с атрибутом <see cref="T:Injectikus.InjectHereAttribute"/></value>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.ConstructorInjectionStrategy.CreateBuilderFor(System.Type)">
@@ -696,7 +681,7 @@
             </summary>
             <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
             <returns><c>true</c> если тип <paramref name="type"/> имеет открытые конструкторы, 
-            помеченные аттрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/> иначе <c>false</c></returns>
+            помеченные аттрибутом <see cref="T:Injectikus.InjectHereAttribute"/> иначе <c>false</c></returns>
         </member>
         <member name="T:Injectikus.InitializationStrategies.DefaultConstructorStrategy">
             <summary>
@@ -732,7 +717,7 @@
         <member name="P:Injectikus.InitializationStrategies.InjectionMethodStrategy.IsAttributeBasedStrategy">
             <summary>
             Основана ли стратегии на аттрибутах 
-            <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/></value>
+            <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="T:Injectikus.InjectHereAttribute"/></value>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.InjectionMethodStrategy.CreateBuilderFor(System.Type)">
@@ -747,7 +732,7 @@
             Применима ли данная стратегия для типа <paramref name="type"/>
             </summary>
             <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
-            <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/> метод, иначе <c>false</c></returns>
+            <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="T:Injectikus.InjectHereAttribute"/> метод, иначе <c>false</c></returns>
         </member>
         <member name="T:Injectikus.InitializationStrategies.ObjectInitializationStrategy">
             <summary>
@@ -782,8 +767,8 @@
         <member name="P:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy.IsAttributeBasedStrategy">
             <summary>
             Основана ли стратегии на аттрибутах 
-            <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
-            или свойств с атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/></value>
+            <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
+            или свойств с атрибутом <see cref="T:Injectikus.InjectHereAttribute"/></value>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.PropertiesAndSettersInjectionStrategy.CreateBuilderFor(System.Type)">
@@ -799,8 +784,8 @@
             </summary>
             <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
             <returns><c>true</c> если тип <paramref name="type"/> иммет конструктор по-умолчанию и хотя бы один 
-            отмеченный атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/> метод
-            или отмеченное атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/> свойство, иначе <c>false</c></returns>
+            отмеченный атрибутом <see cref="T:Injectikus.InjectHereAttribute"/> метод
+            или отмеченное атрибутом <see cref="T:Injectikus.InjectHereAttribute"/> свойство, иначе <c>false</c></returns>
         </member>
         <member name="T:Injectikus.InitializationStrategies.TypeAnalyzer">
             <summary>
@@ -817,7 +802,7 @@
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedConstructor(System.Reflection.ConstructorInfo)">
             <summary>
-            Помечен ли конструктор атрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/>
+            Помечен ли конструктор атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicConstructors(System.Type)">
@@ -827,7 +812,7 @@
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedConstructors(System.Type)">
             <summary>
-            Получить все конструкторы, отмеченные аттрибутом <see cref="T:Injectikus.Attributes.InjectionConstructorAttribute"/>
+            Получить все конструкторы, отмеченные аттрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicDefaultConstructor(System.Type)">
@@ -842,22 +827,22 @@
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedSetter(System.Reflection.MethodInfo)">
             <summary>
-            Помечен ли метод атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
+            Помечен ли метод атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedSetters(System.Type)">
             <summary>
-            Получить методы, помеченные атрибутом <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>
+            Получить методы, помеченные атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedMethods(System.Type)">
             <summary>
-            Получить методы, помеченные атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/>
+            Получить методы, помеченные атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedMethod(System.Reflection.MethodInfo)">
             <summary>
-            Помечен ли метод атрибутом <see cref="T:Injectikus.Attributes.DIMethodAttribute"/>
+            Помечен ли метод атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetPublicProperties(System.Type)">
@@ -867,22 +852,22 @@
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.IsMarkedProperty(System.Reflection.PropertyInfo)">
             <summary>
-            Помечен ли свойство атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/>
+            Помечен ли свойство атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetMarkedProperties(System.Type)">
             <summary>
-            Получить свойства, помеченные атрибутом <see cref="T:Injectikus.Attributes.InjectionPropertyAttribute"/>
+            Получить свойства, помеченные атрибутом <see cref="T:Injectikus.InjectHereAttribute"/>
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.GetUserDefinedInitializationMethod(System.Type)">
             <summary>
-            Возвращает значение атрибута <see cref="T:Injectikus.Attributes.InjectionSetterAttribute"/>, если такой присутствует у типа
+            Возвращает значение атрибута <see cref="T:Injectikus.InjectHereAttribute"/>, если такой присутствует у типа
             </summary>
         </member>
         <member name="M:Injectikus.InitializationStrategies.TypeAnalyzer.HasArrayInjectionAttribute(System.Reflection.ParameterInfo)">
             <summary>
-            Проверяет, помечено ли свойство атрибутом <see cref="T:Injectikus.Attributes.InjectArrayAttribute"/>
+            Проверяет, помечено ли свойство атрибутом <see cref="T:Injectikus.InjectArrayAttribute"/>
             </summary>
         </member>
         <member name="T:Injectikus.InitializationStrategies.WidestConstructorStrategy">

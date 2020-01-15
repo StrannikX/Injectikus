@@ -67,7 +67,7 @@ object @object = container.Get(typeof(I))
   ```csharp    
   class Car
   {
-      [InjectionConstructor]
+      [InjectHere]
       public Car(IEngine engine)
       {
           ...
@@ -78,10 +78,10 @@ object @object = container.Get(typeof(I))
    ```csharp     
    class Car
    {
-       [InjectionProperty]
+       [InjectHere]
        public IEngine Engine { get; set;}
 
-       [InjectionSetter]
+       [InjectHere]
        public void SetTransmission(ITransmission transmission)
        {
            ...
@@ -92,7 +92,7 @@ object @object = container.Get(typeof(I))
     ```csharp
   class Car
   {
-      [InjectionInitMethod]
+      [InjectHere]
       public void Init(IEngine engine, ITransmission transmission)
       {
           ...
@@ -142,7 +142,7 @@ object @object = container.Get(typeof(I))
 [InjectionMethod(DependencyInjectionMethod.ConstructorParametersInjection)]
 class Car
 {
-    [InjectionConstructor]
+    [InjectHere]
     public Car(IEngine engine)
     {
         ...
@@ -155,8 +155,7 @@ class Car
 ```csharp 
 class Garage
 {
-    [InjectionProperty]
-    [InjectArray]
+    [InjectHere][InjectArray]
     public ICar Cars { get; set; }
 }
 
@@ -164,7 +163,7 @@ class Garage
 
 class Garage
 {
-    [InjectionConstructor]
+    [InjectHere]
     public Garage([InjectArray] ICar[] cars)
     {
         ...
@@ -178,7 +177,7 @@ class Car
     public IEngine Engine { get; }
     public ITransmission Transmission { get; }
 
-    [InjectionConstructor]
+    [InjectHere]
     public Car(IEngine engine, ITransmission transmission = null)
     {
         Engine = engine;

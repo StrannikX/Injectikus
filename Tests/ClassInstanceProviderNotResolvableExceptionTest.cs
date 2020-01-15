@@ -1,5 +1,4 @@
 ﻿using Injectikus;
-using Injectikus.Attributes;
 using Injectikus.Providers;
 using NUnit.Framework;
 using System;
@@ -18,7 +17,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.ConstructorParametersInjection)]
         class ClassWithUnresolvableDependencyInConstructorParameter
         {
-            [Injectikus.Attributes.InjectionConstructor]
+            [InjectHere]
             public ClassWithUnresolvableDependencyInConstructorParameter(TestInterface cnt)
             {
             }
@@ -27,7 +26,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.PropertiesAndSettersInjection)]
         class ClassWithUnresolvableDependencyInSetterParameter
         {
-            [InjectionSetter]
+            [InjectHere]
             public void SetContainer(TestInterface cnt)
             {
                 
@@ -37,14 +36,14 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.PropertiesAndSettersInjection)]
         class ClassWithUnresolvableDependencyInProperty
         {
-            [InjectionProperty]
+            [InjectHere]
             public TestInterface Container { get; set; }
         }
 
         [InjectionMethod(DependencyInjectionMethod.MethodParametersInjection)]
         class ClassWitUnresolvableDependencyInInitMethod
         {
-            [InjectionInitMethod]
+            [InjectHere]
             public void Init(TestInterface cnt)
             {
             }

@@ -10,7 +10,7 @@ namespace Injectikus.InitializationStrategies
     {
         /// <summary>
         /// Основана ли стратегии на аттрибутах 
-        /// <value><c>true</c> - Данная стратегия требует наличия конструктора с атрибутом <see cref="Attributes.InjectionConstructorAttribute"/></value>
+        /// <value><c>true</c> - Данная стратегия требует наличия конструктора с атрибутом <see cref="Injectikus.InjectHereAttribute"/></value>
         /// </summary>
         public override bool IsAttributeBasedStrategy => true;
 
@@ -41,7 +41,7 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
         /// <returns><c>true</c> если тип <paramref name="type"/> имеет открытые конструкторы, 
-        /// помеченные аттрибутом <see cref="Attributes.InjectionConstructorAttribute"/> иначе <c>false</c></returns>
+        /// помеченные аттрибутом <see cref="Injectikus.InjectHereAttribute"/> иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {
             var constructors = type.GetMarkedConstructors();

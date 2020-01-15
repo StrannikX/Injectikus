@@ -1,6 +1,5 @@
 ﻿using Injectikus;
 using NUnit.Framework;
-using Injectikus.Attributes;
 using Injectikus.Providers;
 using System;
 

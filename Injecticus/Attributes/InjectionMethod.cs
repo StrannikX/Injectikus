@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Injectikus.Attributes
+namespace Injectikus
 {
     /// <summary>
     /// Способ инициализации экземпляра класса
@@ -23,7 +23,7 @@ namespace Injectikus.Attributes
         MethodParametersInjection,
 
         /// <summary>
-        /// Внедрение зависимостей через помеченные аттрибутами <see cref="InjectionPropertyAttribute"/> и <see cref="InjectionSetterAttribute"/> методы и свойства
+        /// Внедрение зависимостей через помеченные аттрибутом <see cref="InjectHereAttribute"/> методы и свойства
         /// </summary>
         PropertiesAndSettersInjection,
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using Injectikus.Attributes;
 
 namespace Injectikus.InitializationStrategies
 {
@@ -23,11 +22,11 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Помечен ли конструктор атрибутом <see cref="Attributes.InjectionConstructorAttribute"/>
+        /// Помечен ли конструктор атрибутом <see cref="Injectikus.InjectHereAttribute"/>
         /// </summary>
         internal static bool IsMarkedConstructor(this ConstructorInfo constructor)
         {
-            return constructor.IsDefined<InjectionConstructorAttribute>();
+            return constructor.IsDefined<InjectHereAttribute>();
         }
 
         /// <summary>
@@ -39,7 +38,7 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Получить все конструкторы, отмеченные аттрибутом <see cref="Attributes.InjectionConstructorAttribute"/>
+        /// Получить все конструкторы, отмеченные аттрибутом <see cref="Injectikus.InjectHereAttribute"/>
         /// </summary>
         internal static ConstructorInfo[] GetMarkedConstructors(this Type t)
         {
@@ -69,15 +68,15 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Помечен ли метод атрибутом <see cref="InjectionSetterAttribute"/>
+        /// Помечен ли метод атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static bool IsMarkedSetter(MethodInfo method)
         {
-            return method.IsDefined<InjectionSetterAttribute>();
+            return method.IsDefined<InjectHereAttribute>();
         }
 
         /// <summary>
-        /// Получить методы, помеченные атрибутом <see cref="InjectionSetterAttribute"/>
+        /// Получить методы, помеченные атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static MethodInfo[] GetMarkedSetters(this Type type)
         {
@@ -88,7 +87,7 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Получить методы, помеченные атрибутом <see cref="InjectionInitMethodAttribute"/>
+        /// Получить методы, помеченные атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static MethodInfo[] GetMarkedMethods(this Type type)
         {
@@ -99,11 +98,11 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Помечен ли метод атрибутом <see cref="InjectionInitMethodAttribute"/>
+        /// Помечен ли метод атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static bool IsMarkedMethod(MethodInfo method)
         {
-            return method.IsDefined<InjectionInitMethodAttribute>();
+            return method.IsDefined<InjectHereAttribute>();
         }
 
         /// <summary>
@@ -115,15 +114,15 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Помечен ли свойство атрибутом <see cref="InjectionPropertyAttribute"/>
+        /// Помечен ли свойство атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static bool IsMarkedProperty(PropertyInfo property)
         {
-            return property.IsDefined<InjectionPropertyAttribute>();
+            return property.IsDefined<InjectHereAttribute>();
         }
 
         /// <summary>
-        /// Получить свойства, помеченные атрибутом <see cref="InjectionPropertyAttribute"/>
+        /// Получить свойства, помеченные атрибутом <see cref="InjectHereAttribute"/>
         /// </summary>
         internal static PropertyInfo[] GetMarkedProperties(this Type type)
         {
@@ -134,7 +133,7 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Возвращает значение атрибута <see cref="InjectionSetterAttribute"/>, если такой присутствует у типа
+        /// Возвращает значение атрибута <see cref="InjectHereAttribute"/>, если такой присутствует у типа
         /// </summary>
         internal static DependencyInjectionMethod? GetUserDefinedInitializationMethod(this Type type)
         {

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Injectikus;
-using Injectikus.Attributes;
 using Injectikus.Providers;
 
 namespace Tests
@@ -17,7 +16,7 @@ namespace Tests
             public TestType Object { get; private set; }
             public IContainer Container { get; private set; }
 
-            [InjectionConstructor]
+            [InjectHere]
             public ClassWithConstructorParametersInjection(TestType @object)
             {
                 Object = @object;
@@ -31,14 +30,14 @@ namespace Tests
         }
         class ClassWithPropertyInjection
         {
-            [InjectionProperty]
+            [InjectHere]
             public TestType Object { get; set; } = null;
         }
         class ClassWithSetterParametersInjection
         {
             public TestType Object { get; set; } = null;
 
-            [InjectionSetter]
+            [InjectHere]
             public void SetObject(TestType obj)
             {
                 Object = obj;
@@ -48,7 +47,7 @@ namespace Tests
         {
             public TestType Object { get; set; } = null;
 
-            [InjectionInitMethod]
+            [InjectHere]
             public void SetObject(TestType obj)
             {
                 Object = obj;

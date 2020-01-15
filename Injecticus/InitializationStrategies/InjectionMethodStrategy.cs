@@ -12,7 +12,7 @@ namespace Injectikus.InitializationStrategies
     {
         /// <summary>
         /// Основана ли стратегии на аттрибутах 
-        /// <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="Attributes.InjectionInitMethodAttribute"/></value>
+        /// <value><c>true</c> - Данная стратегия требует наличия метода с атрибутом <see cref="InjectHereAttribute"/></value>
         /// </summary>
         public override bool IsAttributeBasedStrategy => true;
 
@@ -51,7 +51,7 @@ namespace Injectikus.InitializationStrategies
         /// Применима ли данная стратегия для типа <paramref name="type"/>
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
-        /// <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="Attributes.InjectionInitMethodAttribute"/> метод, иначе <c>false</c></returns>
+        /// <returns><c>true</c> если тип <paramref name="type"/> иммет отмеченный атрибутом <see cref="InjectHereAttribute"/> метод, иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {
             return type.GetMarkedMethods().Length > 0;

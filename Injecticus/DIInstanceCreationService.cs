@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using Injectikus.InitializationStrategies;
-using Injectikus.Attributes;
 using System.Linq;
 
 namespace Injectikus

@@ -15,8 +15,8 @@ namespace Injectikus.InitializationStrategies
     {
         /// <summary>
         /// Основана ли стратегии на аттрибутах 
-        /// <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="Attributes.InjectionSetterAttribute"/>
-        /// или свойств с атрибутом <see cref="Attributes.InjectionPropertyAttribute"/></value>
+        /// <value><c>true</c> - Данная стратегия требует наличия методов с атрибутом <see cref="InjectHereAttribute"/>
+        /// или свойств с атрибутом <see cref="InjectHereAttribute"/></value>
         /// </summary>
         public override bool IsAttributeBasedStrategy => true;
 
@@ -53,8 +53,8 @@ namespace Injectikus.InitializationStrategies
         /// </summary>
         /// <param name="type">Тип, для которого выполняется проверка применимости стратегии</param>
         /// <returns><c>true</c> если тип <paramref name="type"/> иммет конструктор по-умолчанию и хотя бы один 
-        /// отмеченный атрибутом <see cref="Attributes.InjectionSetterAttribute"/> метод
-        /// или отмеченное атрибутом <see cref="Attributes.InjectionPropertyAttribute"/> свойство, иначе <c>false</c></returns>
+        /// отмеченный атрибутом <see cref="InjectHereAttribute"/> метод
+        /// или отмеченное атрибутом <see cref="InjectHereAttribute"/> свойство, иначе <c>false</c></returns>
         public override bool IsAcceptableFor(Type type)
         {
             var constructor = type.GetPublicDefaultConstructor();

@@ -1,5 +1,4 @@
 ﻿using Injectikus;
-using Injectikus.Attributes;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.ConstructorParametersInjection)]
         class ClassWithExceptionInConstructorWithAttribite
         {
-            [Injectikus.Attributes.InjectionConstructor]
+            [InjectHere]
             public ClassWithExceptionInConstructorWithAttribite(IContainer container)
             {
                 throw new DivideByZeroException();
@@ -41,7 +40,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.PropertiesAndSettersInjection)]
         class ClassWithExceptionInSetter
         {
-            [InjectionSetter]
+            [InjectHere]
             public void SetContainer(IContainer cnt)
             {
                 throw new DivideByZeroException();
@@ -51,7 +50,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.PropertiesAndSettersInjection)]
         class ClassWithSetterButWithExceptionInDefaultConstructor
         {
-            [InjectionSetter]
+            [InjectHere]
             public void SetContainer(IContainer cnt)
             {
             }
@@ -65,7 +64,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.PropertiesAndSettersInjection)]
         class ClassWithExceptionInPropertySetter
         {
-            [InjectionProperty]
+            [InjectHere]
             public IContainer Container
             {
                 set
@@ -87,7 +86,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.MethodParametersInjection)]
         class ClassWithExceptionInInitMethod
         { 
-            [InjectionInitMethod]
+            [InjectHere]
             public void Init(IContainer cnt)
             {
                 throw new DivideByZeroException();
