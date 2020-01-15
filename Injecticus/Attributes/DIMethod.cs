@@ -8,7 +8,7 @@ namespace Injectikus.Attributes
     /// Аттрибут, указывающий на то, что этот метод необходимо использовать для внедрения завимостей в объект
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class DIMethodAttribute : Attribute
+    public class InjectionInitMethodAttribute : Attribute
     {
     }
 }

@@ -55,7 +55,7 @@ namespace Tests
         {
             public TestType[] Objects { get; private set; }
 
-            [DIMethod]
+            [InjectionInitMethod]
             public void Init([InjectArray]TestType[] @object)
             {
                 Objects = @object;

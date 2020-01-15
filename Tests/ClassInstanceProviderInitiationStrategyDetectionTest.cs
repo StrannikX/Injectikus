@@ -48,7 +48,7 @@ namespace Tests
         {
             public TestType Object { get; set; } = null;
 
-            [DIMethod]
+            [InjectionInitMethod]
             public void SetObject(TestType obj)
             {
                 Object = obj;

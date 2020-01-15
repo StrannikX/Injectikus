@@ -87,7 +87,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.MethodParametersInjection)]
         class ClassWithExceptionInInitMethod
         { 
-            [DIMethod]
+            [InjectionInitMethod]
             public void Init(IContainer cnt)
             {
                 throw new DivideByZeroException();

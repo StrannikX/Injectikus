@@ -88,7 +88,7 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Получить методы, помеченные атрибутом <see cref="DIMethodAttribute"/>
+        /// Получить методы, помеченные атрибутом <see cref="InjectionInitMethodAttribute"/>
         /// </summary>
         internal static MethodInfo[] GetMarkedMethods(this Type type)
         {
@@ -99,11 +99,11 @@ namespace Injectikus.InitializationStrategies
         }
 
         /// <summary>
-        /// Помечен ли метод атрибутом <see cref="DIMethodAttribute"/>
+        /// Помечен ли метод атрибутом <see cref="InjectionInitMethodAttribute"/>
         /// </summary>
         internal static bool IsMarkedMethod(MethodInfo method)
         {
-            return method.IsDefined<DIMethodAttribute>();
+            return method.IsDefined<InjectionInitMethodAttribute>();
         }
 
         /// <summary>

@@ -62,7 +62,7 @@ namespace Tests
         {
             public TestType Object { get; private set; }
 
-            [DIMethod]
+            [InjectionInitMethod]
             public void Init(TestType @object)
             {
                 Object = @object;

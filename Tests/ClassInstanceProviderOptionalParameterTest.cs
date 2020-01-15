@@ -50,7 +50,7 @@ namespace Tests
         {
             public TestType Object { get; private set; }
 
-            [DIMethod]
+            [InjectionInitMethod]
             public void Init(IContainer cnt, TestType @object = null)
             {
                 Object = @object;

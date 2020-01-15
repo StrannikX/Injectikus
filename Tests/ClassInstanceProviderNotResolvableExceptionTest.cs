@@ -44,7 +44,7 @@ namespace Tests
         [InjectionMethod(DependencyInjectionMethod.MethodParametersInjection)]
         class ClassWitUnresolvableDependencyInInitMethod
         {
-            [DIMethod]
+            [InjectionInitMethod]
             public void Init(TestInterface cnt)
             {
             }
