@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Tests
 {
-    internal class InjectikusClassTestWrapper : Injectikus.Injectikus
+    internal class InjectikusClassTestWrapper : Injectikus.BaseContainer
     {
         public IObjectProvider GetRegisteredProviderFor(Type type)
         {

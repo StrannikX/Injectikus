@@ -19,11 +19,7 @@ namespace Injectikus.Providers
         /// <param name="type">Тип создаваемого поставщиком объекта</param>
         public ClassInstanceProvider(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-            Type = type;
+            Type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         /// <summary>

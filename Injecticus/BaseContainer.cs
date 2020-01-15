@@ -8,7 +8,7 @@ namespace Injectikus
     /// <summary>
     /// Базовый потокобезопасный контейнер внедрения зависимостей.
     /// </summary>
-    public class Injectikus : IContainer
+    public class BaseContainer : IContainer
     {
         /// <summary>
         /// Словарь тип - список поставщиков
@@ -27,7 +27,7 @@ namespace Injectikus
         /// Создаёт новый контейнер внедрения зависимостей c указанной в <paramref name="binderFactory"/> фабрикой объектов связывания
         /// </summary>
         /// <param name="binderFactory"/>
-        public Injectikus(IBinderFactory binderFactory = null)
+        public BaseContainer(IBinderFactory binderFactory = null)
         {
             BinderFactory = binderFactory ?? new DefaultBinderFactory(this);
             InitContainer();
@@ -116,13 +116,13 @@ namespace Injectikus
             {
                 throw new ArgumentNullException(nameof(type));
             }
-            
+
             if (TryGet(type, out var obj))
             {
                 return obj;
             }
 
-            throw new ArgumentException($"Type {type.FullName} not known to container");
+            throw new DependencyIsNotResolvableByContainerException(type);
         }
 
         /// <summary>

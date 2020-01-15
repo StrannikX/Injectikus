@@ -79,7 +79,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            cnt = new Injectikus.Injectikus();
+            cnt = new Injectikus.BaseContainer();
             cnt.Bind<TestType>().Singleton(TestObject);
         }
 

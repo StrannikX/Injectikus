@@ -55,8 +55,9 @@ namespace Injectikus.InstanceBuilders
                         }
                         else
                         {
-                            throw new ArgumentException(
-                            $"Instance of type {param.ParameterType.FullName} for non optional parameter {param.Name} not known to container");
+                            throw new DependencyIsNotResolvableByContainerException(
+                                param.ParameterType,
+                                $"Instance of type {param.ParameterType.FullName} for non optional parameter {param.Name} not known to container");
                         }
                     }
                 }
@@ -86,7 +87,9 @@ namespace Injectikus.InstanceBuilders
                 return objects;
             }
             {
-                throw new ArgumentException($"No suitable value found for {property.Name} property");
+                throw new DependencyIsNotResolvableByContainerException(
+                    property.PropertyType,
+                    $"No suitable value found for {property.Name} property");
             }
         }
     }

@@ -34,7 +34,7 @@ namespace Tests
         [SetUp]
         public void Init()
         {
-            container = new Injectikus.Injectikus();
+            container = new Injectikus.BaseContainer();
         }
 
         [Test]

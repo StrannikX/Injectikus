@@ -84,6 +84,16 @@ namespace Tests
             }
         }
 
+        [InjectionMethod(DependencyInjectionMethod.MethodParametersInjection)]
+        class ClassWithExceptionInInitMethod
+        { 
+            [DIMethod]
+            public void Init(IContainer cnt)
+            {
+                throw new DivideByZeroException();
+            }
+        }
+
         [Test]
         public void ShouldRethrowExceptionIfItHappendInDefaultConstructor()
         {
@@ -115,6 +125,13 @@ namespace Tests
         public void ShouldRethrowExceptionIfItHappendInWidestConstructor()
         {
             IObjectProvider provider = new Injectikus.Providers.ClassInstanceProvider(typeof(ClassWithExceptionInWidestConstructor));
+            Assert.That(() => provider.Create(container), Throws.InstanceOf<DivideByZeroException>());
+        }
+
+        [Test]
+        public void ShouldRethrowExceptionIfItHappendInInitMethod()
+        {
+            IObjectProvider provider = new Injectikus.Providers.ClassInstanceProvider(typeof(ClassWithExceptionInInitMethod));
             Assert.That(() => provider.Create(container), Throws.InstanceOf<DivideByZeroException>());
         }
     }
