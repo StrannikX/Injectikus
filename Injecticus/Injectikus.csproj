@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Injectikus</RootNamespace>
+    <Version>0.5.0</Version>
+    <Authors>Danila Kalinin</Authors>
+    <Company />
+    <Description>Injectikus is yet anothe dependency injection container.</Description>
+    <RepositoryUrl>https://github.com/StrannikX/Injectikus</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
