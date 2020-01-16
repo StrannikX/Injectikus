@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Injectikus.InitializationStrategies;
+using Injectikus.InstanceBuilders.Resolvers;
 
 namespace Injectikus.InstanceBuilders
 {
@@ -11,6 +12,40 @@ namespace Injectikus.InstanceBuilders
     /// </summary>
     internal static class InstanceCreationHelper
     {
+
+        internal static IPropertyResolver[] propertyResolvers;
+        internal static IParameterResolver[] parameterResolvers;
+
+        static InstanceCreationHelper()
+        {
+            propertyResolvers = new IPropertyResolver[]
+            {
+                new ArrayPropertyResolver(),
+                new DefaultPropertyResolver(),
+                new LazyPropertyResolver(),
+                new FactoryMethodPropertyResolver()
+            };
+
+            parameterResolvers = new IParameterResolver[]
+            {
+                new ArrayParameterResolver(),
+                new DefaultParameterResolver(),
+                new LazyParameterResolver(),
+                new FactoryMethodParameterResolver(),
+                new OptionalParameterResolver()
+            };
+        }
+
+        internal static IParameterResolver GetParameterResolver(ParameterInfo parameter, IContainer container)
+        {
+            return parameterResolvers
+                .Where(r => r.CanResolve(parameter, container))
+                .FirstOrDefault() 
+            ?? throw new DependencyIsNotResolvableByContainerException(
+                    parameter.ParameterType,
+                    $"Instance of type {parameter.ParameterType.FullName} for non optional parameter {parameter.Name} not known to container");
+        }
+
         /// <summary>
         /// Получить зависимости метода <paramref name="method"/> разрешенные контейнером <paramref name="container"/>
         /// </summary>
@@ -19,51 +54,10 @@ namespace Injectikus.InstanceBuilders
         /// <returns>Массив в с разрешёнными зависимостями</returns>
         internal static object[] GetMethodDependencies(MethodBase method, IContainer container)
         {
-            // Обойти список параметров объекта и вернуть значение для каждого из них
-            IEnumerable<object> Walk(ParameterInfo[] parameters)
-            {
-                foreach (var param in parameters)
-                {
-                    object obj;
-
-                    // Если в параметр требуется внедрить массив
-                    if (param.HasArrayInjectionAttribute())
-                    {
-                        // Получаем массив из контейнера
-                        var type = param.ParameterType.GetElementType();
-                        var tempArr = container.GetAll(type);
-                        // Проиводим его к нужному типу
-                        var objects = Array.CreateInstance(type, tempArr.Length);
-                        Array.Copy(tempArr, objects, objects.Length);
-                        // И возвращаем объект
-                        yield return objects;
-                    } 
-                    // Если удалось получить объект из контейнера
-                    else if (container.TryGet(param.ParameterType, out obj))
-                    {
-                        // Возращаем его
-                        yield return obj;
-                    }
-                    else
-                    {
-                        // Иначе, если параметр опционален
-                        if (param.IsOptional)
-                        {
-                            // Возвращаем значение по-умолчанию
-                            yield return param.DefaultValue;
-
-                        }
-                        else
-                        {
-                            throw new DependencyIsNotResolvableByContainerException(
-                                param.ParameterType,
-                                $"Instance of type {param.ParameterType.FullName} for non optional parameter {param.Name} not known to container");
-                        }
-                    }
-                }
-            }
-
-            return Walk(method.GetParameters()).ToArray();
+            return method
+                .GetParameters()
+                .Select(p => GetParameterResolver(p, container).Resolve(p, container))
+                .ToArray();
         }
 
         /// <summary>
@@ -74,23 +68,18 @@ namespace Injectikus.InstanceBuilders
         /// <returns>Объект, разрешающий зависимость</returns>
         internal static object GetPropertyDependency(PropertyInfo property, IContainer container)
         {
-            if (container.TryGet(property.PropertyType, out var value))
+            var resolver = propertyResolvers
+                .Where(r => r.CanResolve(property, container))
+                .FirstOrDefault();
+
+            if (resolver != null)
             {
-                return value;
+                return resolver.Resolve(property, container);
             }
-            else if (property.PropertyType.IsArray)
-            {
-                var type = property.PropertyType.GetElementType();
-                var temp = container.GetAll(type);
-                var objects = Array.CreateInstance(type, temp.Length);
-                Array.Copy(temp, objects, objects.Length);
-                return objects;
-            }
-            {
-                throw new DependencyIsNotResolvableByContainerException(
-                    property.PropertyType,
-                    $"No suitable value found for {property.Name} property");
-            }
+
+            throw new DependencyIsNotResolvableByContainerException(
+                property.PropertyType,
+                $"No suitable value found for {property.Name} property");
         }
     }
 }

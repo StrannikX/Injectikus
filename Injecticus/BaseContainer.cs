@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Injectikus.InstanceBuilders;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Linq;
@@ -48,6 +49,9 @@ namespace Injectikus
             // и внедрения в них зависимостей из контейнера 
             this.Bind<DIInstanceCreationService>()
                 .Singleton(new DIInstanceCreationService(this));
+
+            this.Bind<LazyFactoriesService>().Singleton().ToThemselves();
+            this.Bind<FactoryMethodsService>().Singleton().ToThemselves();
         }
 
         /// <summary>

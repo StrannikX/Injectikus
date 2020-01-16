@@ -89,7 +89,15 @@ namespace Injectikus.InstanceBuilders
         {
             return info
                 .GetParameters()
-                .All(p => container.CanResolve(p.ParameterType) || p.IsOptional || p.HasArrayInjectionAttribute());
+                .All(p => p.IsOptional 
+                       || p.HasArrayInjectionAttribute() 
+                       || IsLazy(p.ParameterType) 
+                       || IsFactoryMethod(p.ParameterType)
+                       || container.CanResolve(p.ParameterType));
         }
+
+        bool IsLazy(Type type) => type.IsGenericType && ReferenceEquals(type.GetGenericTypeDefinition(), typeof(Lazy<>));
+
+        bool IsFactoryMethod(Type type) => type.IsGenericType && ReferenceEquals(type.GetGenericTypeDefinition(), typeof(Func<>));
     }
 }
