@@ -28,7 +28,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип, с которым следует связать поставщика</typeparam>
         /// <param name="provider">Поставщик объектов</param>
-        void BindProvider<TargetType>(IObjectProvider provider);
+        void BindProvider<TargetType>(IObjectProvider provider) where TargetType : class; 
 
         /// <summary>
         /// Удаляет связь между типом <paramref name="type"/> и поставщиком <paramref name="provider"/>
@@ -68,7 +68,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Тип экземпляра</typeparam>
         /// <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
         /// <exception cref="ArgumentException">Объект типа <typeparamref name="TargetType"/> не найден в контейнере</exception>
-        TargetType Get<TargetType>();
+        TargetType Get<TargetType>() where TargetType : class;
 
         /// <summary>
         /// Попробовать получить экземпляр типа <typeparamref name="TargetType"/> из контейнера
@@ -85,7 +85,7 @@ namespace Injectikus
         /// <returns>Массив <typeparamref name="TargetType"/>[]. 
         /// Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
         /// то будет возращен массив длины 0</returns>
-        TargetType[] GetAll<TargetType>();
+        TargetType[] GetAll<TargetType>() where TargetType : class;
 
         /// <summary>
         /// Создаёт экземпляр класса <typeparamref name="TargetType"/>, внедряя в него зависимости по одной из доступных стратегий.

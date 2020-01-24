@@ -26,7 +26,7 @@ namespace Injectikus
         /// <param name="container">Контейнер, в котором выполняется связывание</param>
         /// <typeparam name="TargetT">Связываемый тип</typeparam>
         /// <returns>Объект связывания для типа <typeparamref name="TargetT"/></returns>
-        public static IBinder<TargetT> Bind<TargetT>(this IContainer container)
+        public static IBinder<TargetT> Bind<TargetT>(this IContainer container) where TargetT : class
         {
             return container.BinderFactory.GetBinder<TargetT>();
         }

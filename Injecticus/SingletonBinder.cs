@@ -94,7 +94,7 @@ namespace Injectikus
     /// обёрнутого объекта-связывания.
     /// </summary>
     /// <typeparam name="TargetT">Базовый тип</typeparam>
-    public class SingletonBinder<TargetT> : SingletonBinder, IBinder<TargetT>
+    public class SingletonBinder<TargetT> : SingletonBinder, IBinder<TargetT> where TargetT : class
     {
         /// <summary>
         /// Оборачиваемый параметризованный объект-связывания

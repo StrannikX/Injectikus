@@ -67,7 +67,7 @@ namespace Injectikus
     /// Базовый объект связывания
     /// <typeparam name="TargetT">Базовый тип, к которому осуществляется привязка</typeparam>
     /// </summary>
-    public class DefaultBinder<TargetT> : DefaultBinder, IBinder<TargetT>
+    public class DefaultBinder<TargetT> : DefaultBinder, IBinder<TargetT> where TargetT : class
     {
         /// <summary>
         /// Конструктор объекта связывания

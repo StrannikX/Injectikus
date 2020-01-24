@@ -45,7 +45,7 @@ namespace Injectikus
     /// Предоставляет интерфейс для удобного добавления объектов в контейнер.
     /// <typeparam name="TargetT">Базовый тип, к которому осуществляется привязка</typeparam>
     /// </summary>
-    public interface IBinder<TargetT> : IBinder
+    public interface IBinder<TargetT> : IBinder where TargetT : class
     {
         /// <summary>
         /// Выполнить привязку производного класса <typeparamref name="InstanceT"/> к базовому типу <typeparamref name="TargetT"/>

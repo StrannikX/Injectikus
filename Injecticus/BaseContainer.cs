@@ -60,7 +60,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип экземпляра</typeparam>
         /// <returns>Экземпляр типа <typeparamref name="TargetType"/></returns>
-        public virtual TargetType Get<TargetType>()
+        public virtual TargetType Get<TargetType>() where TargetType : class
         {
             return (TargetType)Get(typeof(TargetType));
         }
@@ -137,7 +137,7 @@ namespace Injectikus
         /// <returns>Массив <typeparamref name="TargetType"/>[]. 
         /// Если к контейнере остуствуют поставщики объектов для типа <typeparamref name="TargetType"/>,
         /// то будет возращен массив длины 0</returns>
-        public virtual TargetType[] GetAll<TargetType>()
+        public virtual TargetType[] GetAll<TargetType>() where TargetType : class
         {
             var type = typeof(TargetType);
             if (this.providers.TryGetValue(type, out var providers))
@@ -218,7 +218,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetType">Тип, с которым следует связать поставщика</typeparam>
         /// <param name="provider">Поставщик объектов</param>
-        public virtual void BindProvider<TargetType>(IObjectProvider provider)
+        public virtual void BindProvider<TargetType>(IObjectProvider provider) where TargetType : class
         {
             BindProvider(typeof(TargetType), provider);
         }

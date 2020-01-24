@@ -25,7 +25,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Базовый тип</typeparam>
         /// <param name="binder">Базовый объект-связывания</param>
         /// <returns>Объект связывания для экземпляров-одиночек с базовым типом <typeparamref name="TargetType"/></returns>
-        public static SingletonBinder<TargetType> Singleton<TargetType>(this IBinder<TargetType> binder)
+        public static SingletonBinder<TargetType> Singleton<TargetType>(this IBinder<TargetType> binder) where TargetType : class
         {
             return new SingletonBinder<TargetType>(binder);
         }
@@ -37,7 +37,7 @@ namespace Injectikus
         /// <typeparam name="InstanceT">Тип объекта-одиночки <paramref name="instance"/></typeparam>
         /// <param name="binder">Базовый объект-связывания</param>
         /// <param name="instance">Конкретный экземпляр-одиночка</param>
-        public static void Singleton<TargetType, InstanceT>(this IBinder<TargetType> binder, InstanceT instance) where InstanceT : class, TargetType
+        public static void Singleton<TargetType, InstanceT>(this IBinder<TargetType> binder, InstanceT instance) where TargetType : class where InstanceT : TargetType
         {
             (new SingletonBinder<TargetType>(binder)).ToObject(instance);
         }

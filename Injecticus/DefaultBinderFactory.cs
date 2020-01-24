@@ -35,7 +35,7 @@ namespace Injectikus
         /// </summary>
         /// <typeparam name="TargetT">Тип, для которого нужно получить объект связывания</typeparam>
         /// <returns>Объект связывание для типа <typeparamref name="TargetT"/></returns>
-        public IBinder<TargetT> GetBinder<TargetT>()
+        public IBinder<TargetT> GetBinder<TargetT>() where TargetT : class
         {
             return new DefaultBinder<TargetT>(container, factory);
         }
