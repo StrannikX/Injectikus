@@ -18,7 +18,10 @@ namespace Injectikus.InstanceBuilders.Resolvers
                 throw new ArgumentException($"Property {property.GetType().FullName}.{property.Name} have attribute InjectArray, " +
                     $"but parameter type {property.PropertyType.FullName} isn't array");
             }
-            var type = property.PropertyType.GetElementType();
+
+            // Так как PropertyType.IsArray == true, то PropertyType.GetElementType() != null
+            // Поэтому форсируем приведение к non-nullable типу
+            var type = property.PropertyType.GetElementType()!;
             var temp = container.GetAll(type);
             var arr = Array.CreateInstance(type, temp.Length);
             temp.CopyTo(arr, 0);

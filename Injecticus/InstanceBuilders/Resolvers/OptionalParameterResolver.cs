@@ -12,7 +12,7 @@ namespace Injectikus.InstanceBuilders.Resolvers
             return parameter.IsOptional;
         }
 
-        public object Resolve(ParameterInfo parameter, IContainer container)
+        public object? Resolve(ParameterInfo parameter, IContainer container)
         {
             return parameter.DefaultValue;
         }

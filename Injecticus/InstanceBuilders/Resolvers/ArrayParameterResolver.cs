@@ -20,7 +20,9 @@ namespace Injectikus.InstanceBuilders.Resolvers
                     $"but parameter type {parameter.ParameterType.FullName} isn't array");
             }
 
-            var type = parameter.ParameterType.GetElementType();
+            // Так как ParameterType.IsArray == true, то ParameterType.GetElementType() != null
+            // Поэтому форсируем приведение к non-nullable типу
+            var type = parameter.ParameterType.GetElementType()!;
             var temp = container.GetAll(type);
             var arr = Array.CreateInstance(type, temp.Length);
             temp.CopyTo(arr, 0);

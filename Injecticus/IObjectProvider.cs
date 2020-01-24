@@ -26,7 +26,7 @@ namespace Injectikus
     /// Базовый класс для реализаций интерфейса <see cref="IObjectProvider"/>
     /// </summary>
     /// <typeparam name="InstanceType">Тип возвращаемого поставщиком объекта</typeparam>
-    public abstract class ObjectProvider<InstanceType> : IObjectProvider
+    public abstract class ObjectProvider<InstanceType> : IObjectProvider where InstanceType : class
     {
         /// <summary>
         /// Тип создаваемого объекта

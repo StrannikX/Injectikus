@@ -34,7 +34,7 @@ namespace Injectikus.InstanceBuilders
                 return constructor.Invoke(Type.EmptyTypes);
             } catch (TargetInvocationException e)
             {
-                throw e.InnerException;
+                throw e.InnerException ?? e;
             }
         }
     }

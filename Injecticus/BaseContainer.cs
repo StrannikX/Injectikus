@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Injectikus
@@ -28,7 +29,7 @@ namespace Injectikus
         /// Создаёт новый контейнер внедрения зависимостей c указанной в <paramref name="binderFactory"/> фабрикой объектов связывания
         /// </summary>
         /// <param name="binderFactory"/>
-        public BaseContainer(IBinderFactory binderFactory = null)
+        public BaseContainer([DisallowNull] IBinderFactory? binderFactory = null)
         {
             BinderFactory = binderFactory ?? new DefaultBinderFactory(this);
             InitContainer();
@@ -71,7 +72,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Требуемый тип</typeparam>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        public virtual bool TryGet<TargetType>(out TargetType obj)
+        public virtual bool TryGet<TargetType>([NotNullWhen(returnValue: true)] out TargetType? obj) where TargetType : class
         {
             obj = default;
             if (TryGet(typeof(TargetType), out var temp))
@@ -88,7 +89,7 @@ namespace Injectikus
         /// <param name="type">Требуемый тип</param>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        public virtual bool TryGet(Type type, out object obj)
+        public virtual bool TryGet(Type type, [NotNullWhen(returnValue: true)] out object? obj)
         {
             if (type == null)
             {
@@ -296,11 +297,11 @@ namespace Injectikus
         /// <returns>Экземпляр класса <typeparamref name="TargetType"/></returns>
         public TargetType CreateInstance<TargetType>() where TargetType : class
         {
-            return BinderFactory
+            return (TargetType) BinderFactory
                 .GetBinder<TargetType>()
                 .DefaultProviderFactory
                 .GetClassInstanceProvider(typeof(TargetType))
-                .Create(this) as TargetType;
+                .Create(this);
         }
 
         /// <summary>

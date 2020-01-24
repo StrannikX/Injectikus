@@ -52,7 +52,7 @@ namespace Injectikus.InstanceBuilders
         /// <param name="method">Метод, для параметров которого необходимо разрешить зависимости</param>
         /// <param name="container">Контейнер, который будет разрешать зависимости</param>
         /// <returns>Массив в с разрешёнными зависимостями</returns>
-        internal static object[] GetMethodDependencies(MethodBase method, IContainer container)
+        internal static object?[] GetMethodDependencies(MethodBase method, IContainer container)
         {
             return method
                 .GetParameters()

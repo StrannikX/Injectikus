@@ -29,14 +29,14 @@ namespace Injectikus.InstanceBuilders
         public object BuildInstance(IContainer container)
         {
             // Получаем параметры конструктора
-            object[] parameters = InstanceCreationHelper
+            object?[] parameters = InstanceCreationHelper
                 .GetMethodDependencies(constructor, container);
             try
             {
                 return constructor.Invoke(parameters);
             } catch (TargetInvocationException e)
             {
-                throw e.InnerException;
+                throw e.InnerException ?? e;
             }
             
         }

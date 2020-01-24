@@ -8,6 +8,7 @@
     <Company />
     <Description>Injectikus is yet anothe dependency injection container.</Description>
     <RepositoryUrl>https://github.com/StrannikX/Injectikus</RepositoryUrl>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

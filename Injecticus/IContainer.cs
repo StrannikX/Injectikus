@@ -76,7 +76,7 @@ namespace Injectikus
         /// <typeparam name="TargetType">Требуемый тип</typeparam>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        bool TryGet<TargetType>(out TargetType obj);
+        bool TryGet<TargetType>(out TargetType? obj) where TargetType : class;
 
         /// <summary>
         /// Получить массив всех экземпляров типа <typeparamref name="TargetType"/> из контейнера
@@ -119,7 +119,7 @@ namespace Injectikus
         /// <param name="type">Требуемый тип</param>
         /// <param name="obj">Переменная, через которую осуществляется возврат экземпляра</param>
         /// <returns><c>true</c> если удалось получить объект, иначе <c>false</c></returns>
-        bool TryGet(Type type, out object obj);
+        bool TryGet(Type type, out object? obj);
 
         /// <summary>
         /// Получить массив всех экземпляров типа <paramref name="type"/> из контейнера

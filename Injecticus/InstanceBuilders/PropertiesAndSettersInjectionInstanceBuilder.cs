@@ -67,7 +67,7 @@ namespace Injectikus.InstanceBuilders
                 return obj;
             }  catch (TargetInvocationException e)
             {
-                throw e.InnerException;
+                throw e.InnerException ?? e;
             }
         }
     }

@@ -43,7 +43,7 @@ namespace Injectikus
             };
         }
 
-        private ObjectInitializationStrategy GetStrategyByInjectionMethod(DependencyInjectionMethod initMethod) =>
+        private ObjectInitializationStrategy? GetStrategyByInjectionMethod(DependencyInjectionMethod initMethod) =>
             // По типу выбираем стратегию
             initMethod switch
             {
@@ -86,7 +86,7 @@ namespace Injectikus
                 .GetUserDefinedInitializationMethod()
                 .GetValueOrDefault(DependencyInjectionMethod.Auto);
 
-            ObjectInitializationStrategy strategy = GetStrategyByInjectionMethod(initMethod);
+            var strategy = GetStrategyByInjectionMethod(initMethod);
 
             // Если нашлась,
             if (strategy != null)

@@ -50,7 +50,7 @@ namespace Injectikus.InitializationStrategies
         /// <summary>
         /// Получить публичный конструктор по-умолчанию
         /// </summary>
-        internal static ConstructorInfo GetPublicDefaultConstructor(this Type type)
+        internal static ConstructorInfo? GetPublicDefaultConstructor(this Type type)
         {
             return type.GetConstructor(
                 BindingFlags.Public | BindingFlags.Instance,

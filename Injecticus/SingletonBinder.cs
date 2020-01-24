@@ -24,7 +24,7 @@ namespace Injectikus
         /// <summary>
         /// Контейнер, в котором осуществляется привязка
         /// </summary>
-        public IContainer Container { get; }
+        public IContainer Container => binder.Container;
 
         /// <summary>
         /// Фабрика поставщиков объектов по-умолчанию
