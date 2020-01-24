@@ -43,6 +43,18 @@ namespace Injectikus
             };
         }
 
+        private ObjectInitializationStrategy GetStrategyByInjectionMethod(DependencyInjectionMethod initMethod) =>
+            // По типу выбираем стратегию
+            initMethod switch
+            {
+                DependencyInjectionMethod.ConstructorParametersInjection => strategies[0],
+                DependencyInjectionMethod.MethodParametersInjection => strategies[1],
+                DependencyInjectionMethod.PropertiesAndSettersInjection => strategies[2],
+                DependencyInjectionMethod.WidestConstructorParametersInjection => strategies[3],
+                DependencyInjectionMethod.DefaultConstructorWithoutInjection => strategies[4],
+                _ => null
+            };
+
         /// <summary>
         /// Создать экземпляр типа <paramref name="type"/>
         /// </summary>
@@ -62,33 +74,30 @@ namespace Injectikus
         /// <returns>Построитель экземпляров для типа <paramref name="type"/></returns>
         protected IInstanceBuilder CreateBuilder(Type type)
         {
+            var strategy = GetStrategyFor(type);   
+            // И используем её
+            return strategy.CreateBuilderFor(type);
+        }
+
+        private ObjectInitializationStrategy GetStrategyFor(Type type)
+        {
             // Пытаемся получить метод внедрения завимости для класса, если он указан через атрибут
             var initMethod = type
                 .GetUserDefinedInitializationMethod()
                 .GetValueOrDefault(DependencyInjectionMethod.Auto);
 
-            // По типу выбираем стратегию
-            var strategy = initMethod switch
-            {
-                DependencyInjectionMethod.MethodParametersInjection => strategies[1],
-                DependencyInjectionMethod.ConstructorParametersInjection => strategies[0],
-                DependencyInjectionMethod.PropertiesAndSettersInjection => strategies[2],
-                DependencyInjectionMethod.WidestConstructorParametersInjection => strategies[3],
-                DependencyInjectionMethod.DefaultConstructorWithoutInjection => strategies[4],
-                _ => null
-            };
+            ObjectInitializationStrategy strategy = GetStrategyByInjectionMethod(initMethod);
 
             // Если нашлась,
             if (strategy != null)
             {
                 // то используя её создаём построитель экземпляра
-                return strategy.CreateBuilderFor(type);
+                return strategy;
             }
-            
+
             // Иначе находим все возможные для данного класса стратегии инициализации
             var possibleStrategies = strategies
-                .Where(s => s.IsAcceptableFor(type))
-                .ToArray();
+                .Where(s => s.IsAcceptableFor(type));
 
             // Проверяем на то, чтобы не было больше одной основанной на аттрибутах 
             var attributeBasedStrategiesCount = possibleStrategies
@@ -107,8 +116,7 @@ namespace Injectikus
                 throw new ArgumentException($"No suitable instantiation and injection strategies found for type {type.FullName}");
             }
 
-            // И используем её
-            return strategy.CreateBuilderFor(type);
+            return strategy;
         }
     }
 }
