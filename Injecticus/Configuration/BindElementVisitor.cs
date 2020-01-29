@@ -15,9 +15,7 @@ namespace Injectikus.Configuration
         public const string SingletonAttributeName = "singleton";
 
         public readonly string[] singletonIsTrueValues = new[] { "1", "true" };
-        readonly MethodInfo CanResolveMethod = typeof(IContainer).GetMethod("CanResolve", new[] { typeof(Type) })!;
-        readonly MethodInfo GetMethod = typeof(IContainer).GetMethod("Get", new[] { typeof(Type) })!;
-        readonly MethodInfo CreateInstanceMethod = typeof(IContainer).GetMethod("CreateInstance", new[] { typeof(Type) })!;
+        readonly ObjectBuildingExpressionTreeBuilder builder = new ObjectBuildingExpressionTreeBuilder();
 
         public string ElementName => "bind";
 
@@ -62,18 +60,16 @@ namespace Injectikus.Configuration
 
         private Func<IContainer, object> CreateFactoryMethodFor(Type concreteType, XElement element, IInitializationContext context)
         {
-            var types = element.Elements()
-                .Select(e => GetTypeOf(e, context))
+            var childExpressions = element
+                .Elements()
+                .Select(el => builder.BuildObjectBuildingExpressionTree(el, context))
                 .ToArray();
 
-            var constructor = concreteType.GetConstructor(types);
-            
-            var containerParameter = Expression.Parameter(typeof(IContainer), "container");
-            var childExpressions = element.Elements().Select(el => CreateExpressionFor(el, containerParameter, context));
+            var constructor = concreteType.GetConstructor(childExpressions.Select(e => e.Type).ToArray());
 
             var lambda = Expression.Lambda<Func<IContainer, object>>(
                 Expression.New(constructor, childExpressions.ToArray()),
-                new[] { containerParameter }
+                new[] { builder.ContainerParameter }
             );
 
             return lambda.Compile();
@@ -82,11 +78,6 @@ namespace Injectikus.Configuration
         private Type GetTypeOf(XElement element, IInitializationContext context)
         {
             throw new NotImplementedException();
-        }
-
-        private Expression CreateExpressionFor(XElement element, ParameterExpression param, IInitializationContext context)
-        {
-
         }
     }
 }

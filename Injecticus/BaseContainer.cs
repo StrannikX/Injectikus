@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Xml;
 
 namespace Injectikus
 {
@@ -12,6 +13,13 @@ namespace Injectikus
     /// </summary>
     public class BaseContainer : IContainer
     {
+        public static IContainer Load(XmlDocument doc)
+        {
+            var reader = new Configuration.ConfigReader();
+            return reader.BuildContainer(doc);
+        }
+        
+        
         /// <summary>
         /// Словарь тип - список поставщиков
         /// </summary>

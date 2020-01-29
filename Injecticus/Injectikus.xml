@@ -66,6 +66,37 @@
             </summary>
             <param name="method">Указанный способ внедрения зависимостей</param>
         </member>
+        <member name="T:Injectikus.BaseBinderFactory">
+            <summary>
+            Базовый класс для фабрик объектов привязки.
+            Единственная цель - задать интерфейс на конструктор
+            </summary>
+        </member>
+        <member name="F:Injectikus.BaseBinderFactory.container">
+            <summary>
+            Контенйнер, в котором выполняется привязка
+            </summary>
+        </member>
+        <member name="M:Injectikus.BaseBinderFactory.#ctor(Injectikus.IContainer)">
+            <summary>
+            Конструктор фабрики объектов привязки к контейнеру <paramref name="container"/>
+            </summary>
+            <param name="container">Контенйнер, в котором выполняется привязка</param>
+        </member>
+        <member name="M:Injectikus.BaseBinderFactory.GetBinder(System.Type)">
+            <summary>
+            Получить объект связывание для типа <paramref name="type"/>
+            </summary>
+            <param name="type">Тип, для которого нужно получить объект связывания</param>
+            <returns>Объект связывание для типа <paramref name="type"/></returns>
+        </member>
+        <member name="M:Injectikus.BaseBinderFactory.GetBinder``1">
+            <summary>
+            Получить объект связывание для типа <typeparamref name="TargetT"/>
+            </summary>
+            <typeparam name="TargetT">Тип, для которого нужно получить объект связывания</typeparam>
+            <returns>Объект связывание для типа <typeparamref name="TargetT"/></returns>
+        </member>
         <member name="T:Injectikus.BaseContainer">
             <summary>
             Базовый потокобезопасный контейнер внедрения зависимостей.

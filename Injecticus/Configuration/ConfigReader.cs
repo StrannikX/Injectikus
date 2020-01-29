@@ -50,7 +50,7 @@ namespace Injectikus.Configuration
         {
             var rootElement = document.ToXDocument().Root;
 
-            if (rootElement.Name == RootElementName)
+            if (rootElement.Name.LocalName.ToLower().CompareTo(RootElementName) != 0)
             {
                 throw new ArgumentException($"Unexpected root element of docuement. Expected {RootElementName}, but {rootElement.Name} given");
             }
