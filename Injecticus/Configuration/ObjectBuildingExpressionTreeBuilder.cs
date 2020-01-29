@@ -19,6 +19,7 @@ namespace Injectikus.Configuration
             visitors = new ObjectBuildingTreeVisitor[]
             {
                 new Visitors.ObjectVisitor(this),
+                new Visitors.InstanceVisitor(this),
                 new Visitors.PrimitiveTypeVisitor<bool>(this),
                 new Visitors.PrimitiveTypeVisitor<byte>(this),
                 new Visitors.PrimitiveTypeVisitor<sbyte>(this),
