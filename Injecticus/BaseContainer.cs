@@ -13,13 +13,6 @@ namespace Injectikus
     /// </summary>
     public class BaseContainer : IContainer
     {
-        public static IContainer Load(XmlDocument doc)
-        {
-            var reader = new Configuration.ConfigReader();
-            return reader.BuildContainer(doc);
-        }
-        
-        
         /// <summary>
         /// Словарь тип - список поставщиков
         /// </summary>

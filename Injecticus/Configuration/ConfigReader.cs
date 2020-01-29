@@ -23,11 +23,12 @@ namespace Injectikus.Configuration
         {
             visitors = new IElementVisitor[]
             {
-                new BindElementVisitor()
+                new BindElementVisitor(),
+                new AliasVisitor()
             };
         }
 
-        public IContainer BuildContainer(XmlDocument document)
+        public IContainer BuildContainer(XDocument document)
         {
             XElement rootElement = GetRootElement(document);
             TrySetDefaultAssembly(rootElement);
@@ -37,7 +38,7 @@ namespace Injectikus.Configuration
             return container;
         }
 
-        public IContainer BuildContainer(XmlDocument document, IContainer container)
+        public IContainer BuildContainer(XDocument document, IContainer container)
         {
             XElement rootElement = GetRootElement(document);
             TrySetDefaultAssembly(rootElement);
@@ -46,9 +47,9 @@ namespace Injectikus.Configuration
             return container;
         }
 
-        private static XElement GetRootElement(XmlDocument document)
+        private static XElement GetRootElement(XDocument document)
         {
-            var rootElement = document.ToXDocument().Root;
+            var rootElement = document.Root;
 
             if (rootElement.Name.LocalName.ToLower().CompareTo(RootElementName) != 0)
             {
@@ -138,18 +139,6 @@ namespace Injectikus.Configuration
                 {
                     throw new Exception();
                 }
-            }
-        }
-    }
-
-    internal static class XmlDocumentExtension
-    {
-        public static XDocument ToXDocument(this XmlDocument doc)
-        {
-            using (var nodeReader = new XmlNodeReader(doc))
-            {
-                nodeReader.MoveToContent();
-                return XDocument.Load(nodeReader);
             }
         }
     }

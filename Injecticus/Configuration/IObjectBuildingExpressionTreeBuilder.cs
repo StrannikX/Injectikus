@@ -6,6 +6,7 @@ namespace Injectikus.Configuration
 {
     interface IObjectBuildingExpressionTreeBuilder
     {
+        ParameterExpression ContainerParameter { get; }
         Expression BuildObjectBuildingExpressionTree(XElement element, IInitializationContext context);
     }
 }

@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
 namespace Injectikus.Configuration
 {
-    class ConfigReaderInitializationContext : IInitializationContext
+    internal class ConfigReaderInitializationContext : IInitializationContext
     {
-        private Assembly? defaultAssembly;
-        private string? defaultNamespace;
+        public Assembly? DefaultAssembly { get; internal set; }
+        public string? DefaultNamespace { get; internal set; }
 
-        public Assembly? DefaultAssembly
-        {
-            get => defaultAssembly;
-            set => defaultAssembly = value;
-        }
-        public string? DefaultNamespace 
-        { 
-            get => defaultNamespace; 
-            set => defaultNamespace = value; 
-        }
+        private Dictionary<string, Expression> aliases
+            = new Dictionary<string, Expression>();
+
+        public IObjectBuildingExpressionTreeBuilder Builder { get; } = new ObjectBuildingExpressionTreeBuilder();
 
         public Type GetType(string typeName)
         {
-            Type? type = defaultAssembly?.GetType(typeName)
-                ?? defaultAssembly?.GetType(combineWithNamespace(typeName))
+            Type? type = DefaultAssembly?.GetType(typeName)
+                ?? DefaultAssembly?.GetType(combineWithNamespace(typeName))
                 ?? Type.GetType(typeName)
                 ?? Type.GetType(combineWithNamespace(typeName));
 
@@ -37,7 +32,17 @@ namespace Injectikus.Configuration
 
         public string combineWithNamespace(string typeName)
         {
-            return defaultNamespace + '.' + typeName;
+            return DefaultNamespace + '.' + typeName;
+        }
+
+        public void AddAlias(string key, Expression expression)
+        {
+            aliases.Add(key, expression);
+        }
+
+        public Expression GetAlias(string key)
+        {
+            return aliases[key];
         }
     }
 }

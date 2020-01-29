@@ -33,7 +33,7 @@ namespace Injectikus.Configuration.Visitors
             var type = context.GetType(typeAttribute);
             var method = GetGenericMethod.MakeGenericMethod(new[] { type });
 
-            return Expression.Call(builder.ContainerParameter, method, new Expression[0]);
+            return Expression.Call(builder.containerParameter, method, new Expression[0]);
         }
     }
 }

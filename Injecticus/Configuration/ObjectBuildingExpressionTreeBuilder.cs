@@ -9,7 +9,7 @@ namespace Injectikus.Configuration
 {
     internal class ObjectBuildingExpressionTreeBuilder : IObjectBuildingExpressionTreeBuilder
     {   
-        internal readonly ParameterExpression ContainerParameter =
+        public readonly ParameterExpression containerParameter =
             Expression.Parameter(typeof(IContainer), "container");
 
         internal readonly ObjectBuildingTreeVisitor[] visitors;
@@ -33,9 +33,12 @@ namespace Injectikus.Configuration
                 new Visitors.PrimitiveTypeVisitor<ulong>(this),
                 new Visitors.PrimitiveTypeVisitor<short>(this),
                 new Visitors.PrimitiveTypeVisitor<ushort>(this),
-                new Visitors.StringVisitor(this)
+                new Visitors.StringVisitor(this),
+                new Visitors.AliasVisitor(this)
             };
         }
+
+        ParameterExpression IObjectBuildingExpressionTreeBuilder.ContainerParameter => containerParameter;
 
         public Expression BuildObjectBuildingExpressionTree(XElement element, IInitializationContext context)
         {

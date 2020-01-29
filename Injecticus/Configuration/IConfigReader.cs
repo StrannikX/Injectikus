@@ -1,10 +1,11 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 
 namespace Injectikus.Configuration
 {
     internal interface IConfigReader
     {
-        IContainer BuildContainer(XmlDocument root);
-        IContainer BuildContainer(XmlDocument root, IContainer container);
+        IContainer BuildContainer(XDocument root);
+        IContainer BuildContainer(XDocument root, IContainer container);
     }
 }

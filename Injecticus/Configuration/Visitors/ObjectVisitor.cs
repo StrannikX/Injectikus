@@ -60,7 +60,7 @@ namespace Injectikus.Configuration.Visitors
             } else
             {
                 var method = CreateInstanceMethod.MakeGenericMethod(new[] { type });
-                return Expression.Call(builder.ContainerParameter, method, new Expression[0]);
+                return Expression.Call(builder.containerParameter, method, new Expression[0]);
             }
         }
     }

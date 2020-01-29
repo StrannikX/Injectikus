@@ -15,7 +15,6 @@ namespace Injectikus.Configuration
         public const string SingletonAttributeName = "singleton";
 
         public readonly string[] singletonIsTrueValues = new[] { "1", "true" };
-        readonly ObjectBuildingExpressionTreeBuilder builder = new ObjectBuildingExpressionTreeBuilder();
 
         public string ElementName => "bind";
 
@@ -29,9 +28,9 @@ namespace Injectikus.Configuration
                 .Select(attr => attr.Value)
                 .FirstOrDefault();
 
-            bool isSingleton = element.Attributes(SingletonAttributeName)
-                .Where(a => singletonIsTrueValues.Contains(a.Value.ToLower()))
-                .Any();
+            bool isSingleton = element
+                .Attributes(SingletonAttributeName)
+                .Any(a => singletonIsTrueValues.Contains(a.Value.ToLower()));
 
             if (abstractTypeName == null || concreteClassName == null)
             {
@@ -62,14 +61,22 @@ namespace Injectikus.Configuration
         {
             var childExpressions = element
                 .Elements()
-                .Select(el => builder.BuildObjectBuildingExpressionTree(el, context))
+                .Select(el => context.Builder.BuildObjectBuildingExpressionTree(el, context))
                 .ToArray();
 
             var constructor = concreteType.GetConstructor(childExpressions.Select(e => e.Type).ToArray());
 
+            if (constructor == null)
+            {
+                var typeNames = childExpressions.Select(e => e.Type.FullName);
+                var typeString = string.Join(", ", typeNames);
+                throw new ArgumentException(
+                    $"Class {concreteType.FullName} doesn't have constructor with parameters with types {typeString}");
+            }
+            
             var lambda = Expression.Lambda<Func<IContainer, object>>(
                 Expression.New(constructor, childExpressions.ToArray()),
-                new[] { builder.ContainerParameter }
+                new[] { context.Builder.ContainerParameter }
             );
 
             return lambda.Compile();

@@ -44,7 +44,7 @@ namespace Tests
         [Test]
         public void BaseTest()
         {
-            var container = BaseContainer.Load(document);
+            var container = Container.Load(document);
             Assert.NotNull(container);
             I a = container.Get<I>();
             Assert.AreEqual(a.GetA(), 21);
