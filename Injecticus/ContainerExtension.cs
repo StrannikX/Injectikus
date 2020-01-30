@@ -33,24 +33,38 @@ namespace Injectikus
             return container.BinderFactory.GetBinder<TargetT>();
         }
 
+        /// <summary>
+        /// Сконфигурировать контейнер с конфигурацией, описанной в <paramref name="document"/> 
+        /// Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+        /// </summary>
+        /// <param name="container">Контейнер</param>
+        /// <param name="document">XML-документ с конфигурацией</param>
         public static void LoadConfig(this IContainer container, XDocument document)
         {
             var reader = new Configuration.ConfigReader();
             reader.BuildContainer(document, container);
         }
 
+        /// <summary>
+        /// Сконфигурировать контейнер с конфигурацией, описанной в xml-строке <paramref name="xml"/> 
+        /// Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+        /// </summary>
+        /// <param name="container">Контейнер</param>
+        /// <param name="xml">XML-строка конфигурации объекта</param>
         public static void LoadFromString(this IContainer container, string xml)
         {
             container.LoadConfig(XDocument.Parse(xml));
         }
 
-        public static void LoadFromFile(this IContainer container, string path)
+        /// <summary>
+        /// Сконфигурировать контейнер с конфигурацией, описанной в xml-файле <paramref name="filename"/> 
+        /// Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+        /// </summary>
+        /// <param name="container">Контейнер</param>
+        /// <param name="filename">XML-файл с конфигурацией</param>
+        public static void LoadFromFile(this IContainer container, string filename)
         {
-            container.LoadFromStream(new FileStream(path, FileMode.Open));
-        }
-
-        public static void LoadFromStream(this IContainer container, Stream stream)
-        {
+            using var stream = new FileStream(filename, FileMode.Open);
             container.LoadConfig(XDocument.Load(stream));
         }
     }

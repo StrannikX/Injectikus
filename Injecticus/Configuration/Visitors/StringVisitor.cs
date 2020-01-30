@@ -9,16 +9,22 @@ namespace Injectikus.Configuration.Visitors
 {
     internal class StringVisitor : ObjectBuildingTreeVisitor
     {
+        const string XMLElementName = "string";
+        const string ValueAttributeName = "value";
+
         public StringVisitor(ObjectBuildingExpressionTreeBuilder builder) : base(builder)
         {
         }
 
-        public override string ElementName => "string";
+        public override bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public override Expression VisitElement(XElement element, IInitializationContext context)
         {
             var valueAttribute = element
-                .Attributes("value")
+                .Attributes(ValueAttributeName)
                 .Select(attr => attr.Value)
                 .FirstOrDefault();
 

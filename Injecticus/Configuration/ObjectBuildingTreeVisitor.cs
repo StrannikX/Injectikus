@@ -5,7 +5,7 @@ namespace Injectikus.Configuration
 {
     internal abstract class ObjectBuildingTreeVisitor
     {
-        public abstract string ElementName { get; }
+        public abstract bool MatchElement(XElement element);
         
         protected ObjectBuildingExpressionTreeBuilder builder;
 

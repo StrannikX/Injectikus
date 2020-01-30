@@ -10,12 +10,16 @@ namespace Injectikus.Configuration.Visitors
     internal class AliasVisitor : ObjectBuildingTreeVisitor
     {
         const string NameAttributeName = "name";
+        const string XMLElementName = "alias";
 
         public AliasVisitor(ObjectBuildingExpressionTreeBuilder builder) : base(builder)
         {
         }
 
-        public override string ElementName => "alias";
+        public override bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public override Expression VisitElement(XElement element, IInitializationContext context)
         {
@@ -26,12 +30,12 @@ namespace Injectikus.Configuration.Visitors
 
             if (nameAttribute == null)
             {
-                throw new ArgumentException("Alias element must have name attribute");
+                throw new ConfirurationFileFormatException("Alias element must have name attribute");
             }
 
             if (element.HasElements)
             {
-                throw new ArgumentException("Alias element shoudn't have child elements");
+                throw new ConfirurationFileFormatException("Alias element shoudn't have child elements");
             }
 
             return context.GetAlias(nameAttribute);

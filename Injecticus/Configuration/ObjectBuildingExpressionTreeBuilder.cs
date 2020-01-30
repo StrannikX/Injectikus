@@ -42,12 +42,12 @@ namespace Injectikus.Configuration
 
         public Expression BuildObjectBuildingExpressionTree(XElement element, IInitializationContext context)
         {
-            var visitor = visitors.FirstOrDefault(v => v.ElementName == element.Name.LocalName);
+            var visitor = visitors.FirstOrDefault(v => v.MatchElement(element));
             if (visitor != null)
             {
                 return visitor.VisitElement(element, context);
             }
-            throw new ArgumentException($"Unknown element {element.Name}");
+            throw new ConfirurationFileFormatException($"Unknown element {element.Name}");
         }
     }
 }

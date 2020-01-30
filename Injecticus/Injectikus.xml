@@ -245,6 +245,50 @@
             <returns>Экземпляр класса <paramref name="type"/></returns>
             <exception cref="T:System.ArgumentNullException"/>
         </member>
+        <member name="T:Injectikus.Configuration.ConfirurationFileFormatException">
+            <summary>
+            Исключение некорректного формата XML-файла конфигурации контейнера
+            </summary>
+        </member>
+        <member name="T:Injectikus.Container">
+            <summary>
+            Статический класс с методами инициализации контейнера
+            </summary>
+        </member>
+        <member name="M:Injectikus.Container.Create">
+            <summary>
+            Создать пустой контейнер внедрения зависимостей
+            </summary>
+            <returns>Пустой кон</returns>
+        </member>
+        <member name="M:Injectikus.Container.Load(System.Xml.Linq.XDocument)">
+            <summary>
+            Создать контейнер, использую конфигурацию из <paramref name="document"/>
+            </summary>
+            <param name="document">XML-локумент с конфигурацией объекта</param>
+            <returns>Сконфигурированный контейнер</returns>
+        </member>
+        <member name="M:Injectikus.Container.Load(System.Xml.XmlDocument)">
+            <summary>
+            Создать контейнер, использую конфигурацию из <paramref name="document"/>
+            </summary>
+            <param name="document">XML-локумент с конфигурацией объекта</param>
+            <returns>Сконфигурированный контейнер</returns>
+        </member>
+        <member name="M:Injectikus.Container.Load(System.String)">
+            <summary>
+            Создать контейнер, использую конфигурацию из xml-строки <paramref name="xml"/>
+            </summary>
+            <param name="xml">Строка с xml-конфигурацией объекта</param>
+            <returns>Сконфигурированный контейнер</returns>
+        </member>
+        <member name="M:Injectikus.Container.LoadFile(System.String)">
+            <summary>
+            Создать контейнер, использую конфигурацию из xml-файла, расположенного по пути <paramref name="path"/>
+            </summary>
+            <param name="path">Путь к xml-файлу с конфигурацией</param>
+            <returns>Сконфигурированный контейнер</returns>
+        </member>
         <member name="T:Injectikus.ContainerExtension">
             <summary>
             Класс с методами расширения для <see cref="T:Injectikus.IContainer"/>
@@ -265,6 +309,30 @@
             <param name="container">Контейнер, в котором выполняется связывание</param>
             <typeparam name="TargetT">Связываемый тип</typeparam>
             <returns>Объект связывания для типа <typeparamref name="TargetT"/></returns>
+        </member>
+        <member name="M:Injectikus.ContainerExtension.LoadConfig(Injectikus.IContainer,System.Xml.Linq.XDocument)">
+            <summary>
+            Сконфигурировать контейнер с конфигурацией, описанной в <paramref name="document"/> 
+            Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+            </summary>
+            <param name="container">Контейнер</param>
+            <param name="document">XML-документ с конфигурацией</param>
+        </member>
+        <member name="M:Injectikus.ContainerExtension.LoadFromString(Injectikus.IContainer,System.String)">
+            <summary>
+            Сконфигурировать контейнер с конфигурацией, описанной в xml-строке <paramref name="xml"/> 
+            Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+            </summary>
+            <param name="container">Контейнер</param>
+            <param name="xml">XML-строка конфигурации объекта</param>
+        </member>
+        <member name="M:Injectikus.ContainerExtension.LoadFromFile(Injectikus.IContainer,System.String)">
+            <summary>
+            Сконфигурировать контейнер с конфигурацией, описанной в xml-файле <paramref name="filename"/> 
+            Позволяет доконфигурировать уже существующий контейнер, тем самым давая возможность использовать несколько файлов конфигурации.
+            </summary>
+            <param name="container">Контейнер</param>
+            <param name="filename">XML-файл с конфигурацией</param>
         </member>
         <member name="T:Injectikus.DefaultBinder">
             <summary>

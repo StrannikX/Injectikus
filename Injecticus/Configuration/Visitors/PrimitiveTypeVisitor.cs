@@ -9,7 +9,29 @@ namespace Injectikus.Configuration.Visitors
 {
     internal class PrimitiveTypeVisitor<T> : ObjectBuildingTreeVisitor where T : struct
     {
-        private Func<string, T> Parse;
+        const string ValueAttributeName = "value";
+        
+        private static string? GetCSharpTypeName() =>
+            typeof(T).Name switch
+            {
+                nameof(Boolean) => "bool",
+                nameof(Byte) => "byte",
+                nameof(SByte) => "sbyte",
+                nameof(Char) => "char",
+                nameof(Decimal) => "decimal",
+                nameof(Double) => "double",
+                nameof(Single) => "float",
+                nameof(Int32) => "int",
+                nameof(UInt32) => "uint",
+                nameof(Int64) => "long",
+                nameof(UInt64) => "ulong",
+                nameof(Int16) => "short",
+                nameof(UInt16) => "ushort",
+                nameof(String) => "string",
+                _ => null
+            };
+        
+        private readonly Func<string, T> Parse;
 
         public PrimitiveTypeVisitor(ObjectBuildingExpressionTreeBuilder builder) : base(builder)
         {
@@ -26,12 +48,18 @@ namespace Injectikus.Configuration.Visitors
             Parse = lambda.Compile();
         }
 
-        public override string ElementName => typeof(T).Name;
+        public override bool MatchElement(XElement element)
+        {
+            var xmlElementName = element.Name.LocalName.ToLower();
+            var elementName = typeof(T).Name.ToLower();
+            var aliasName = GetCSharpTypeName();
+            return elementName.Equals(xmlElementName) || (aliasName != null && aliasName.Equals(xmlElementName));
+        }
 
         public override Expression VisitElement(XElement element, IInitializationContext context)
         {
             var valueAttribute = element
-                .Attributes("value")
+                .Attributes(ValueAttributeName)
                 .Select(attr => attr.Value)
                 .FirstOrDefault();
 

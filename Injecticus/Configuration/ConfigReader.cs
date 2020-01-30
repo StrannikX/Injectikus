@@ -53,7 +53,7 @@ namespace Injectikus.Configuration
 
             if (rootElement.Name.LocalName.ToLower().CompareTo(RootElementName) != 0)
             {
-                throw new ArgumentException($"Unexpected root element of docuement. Expected {RootElementName}, but {rootElement.Name} given");
+                throw new ConfirurationFileFormatException($"Unexpected root element of docuement. Expected {RootElementName}, but {rootElement.Name} given");
             }
 
             return rootElement;
@@ -84,11 +84,6 @@ namespace Injectikus.Configuration
             if (customContainerClass != null)
             {
                 var classType = context.GetType(customContainerClass);
-
-                if (classType == null)
-                {
-                    throw new ArgumentException($"Class with name {customContainerClass} not found!");
-                }
 
                 if (!typeof(IContainer).IsAssignableFrom(classType))
                 {
@@ -130,7 +125,7 @@ namespace Injectikus.Configuration
         {
             foreach (var element in rootElement.Elements())
             {
-                IElementVisitor? visitor = visitors.FirstOrDefault(v => v.ElementName == element.Name);
+                IElementVisitor? visitor = visitors.FirstOrDefault(v => v.MatchElement(element));
                 if (visitor != null)
                 {
                     visitor.VisitElement(element, container, context);

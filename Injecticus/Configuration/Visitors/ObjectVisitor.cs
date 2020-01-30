@@ -10,6 +10,7 @@ namespace Injectikus.Configuration.Visitors
 {
     internal class ObjectVisitor : ObjectBuildingTreeVisitor
     {
+        const string XMLElementName = "object";
         const string ClassAttributeName = "class";
 
         static readonly MethodInfo CreateInstanceMethod = 
@@ -21,7 +22,10 @@ namespace Injectikus.Configuration.Visitors
         {
         }
 
-        public override string ElementName => "object";
+        public override bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public override Expression VisitElement(XElement element, IInitializationContext context)
         {
@@ -32,7 +36,7 @@ namespace Injectikus.Configuration.Visitors
 
             if (className == null)
             {
-                throw new ArgumentException("Object element should have class attribute");
+                throw new ConfirurationFileFormatException("Object element should have class attribute");
             }
 
             var type = context.GetType(className);
@@ -53,7 +57,7 @@ namespace Injectikus.Configuration.Visitors
                 if (constructor == null)
                 {
                     var typesStr = string.Join(", ", types.Select(t => t.FullName).ToArray());
-                    throw new ArgumentException($"Class {className} doesn't have constructor with parameter types \"{typesStr}\"");
+                    throw new ConfirurationFileFormatException($"Class {className} doesn't have constructor with parameter types \"{typesStr}\"");
                 }
 
                 return Expression.New(constructor, subExpression);

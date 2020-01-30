@@ -9,8 +9,12 @@ namespace Injectikus.Configuration
     internal class AliasVisitor : IElementVisitor
     {
         const string NameAttributeName = "name";
+        const string XMLElementName = "alias";
 
-        public string ElementName => "alias";
+        public bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public void VisitElement(XElement element, IContainer container, IInitializationContext context)
         {
@@ -21,12 +25,12 @@ namespace Injectikus.Configuration
 
             if (nameAttribute == null)
             {
-                throw new ArgumentException("Alias element must have name attribute");
+                throw new ConfirurationFileFormatException("Alias element must have name attribute");
             }
 
             if (!element.HasElements || element.Elements().Count() > 1)
             {
-                throw new ArgumentException("Alias element must have one child attribute");
+                throw new ConfirurationFileFormatException("Alias element must have one child attribute");
             }
 
             var expression = 

@@ -8,7 +8,9 @@ namespace Injectikus.Configuration.Visitors
 {
     internal class InstanceVisitor : ObjectBuildingTreeVisitor
     {
-
+        const string TypeAttributeName = "type";
+        const string XMLElementName = "instance";
+        
         static readonly MethodInfo GetGenericMethod =
             typeof(IContainer).GetMethods()
                 .Where(m => m.Name == "Get")
@@ -18,17 +20,20 @@ namespace Injectikus.Configuration.Visitors
         {
         }
 
-        public override string ElementName => "instance";
+        public override bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public override Expression VisitElement(XElement element, IInitializationContext context)
         {
-            if (element.HasElements) throw new ArgumentException("Instance element shouldn't have child elements");
+            if (element.HasElements) throw new ConfirurationFileFormatException("Instance element shouldn't have child elements");
 
-            var typeAttribute = element.Attributes("type")
+            var typeAttribute = element.Attributes(TypeAttributeName)
                 .Select(attr => attr.Value)
                 .FirstOrDefault();
 
-            if (typeAttribute == null) throw new ArgumentException("Instance element should have type attribute");
+            if (typeAttribute == null) throw new ConfirurationFileFormatException("Instance element should have type attribute");
 
             var type = context.GetType(typeAttribute);
             var method = GetGenericMethod.MakeGenericMethod(new[] { type });

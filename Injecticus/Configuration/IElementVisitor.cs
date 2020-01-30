@@ -4,7 +4,7 @@ namespace Injectikus.Configuration
 {
     interface IElementVisitor
     {
-        string ElementName { get; }
+        bool MatchElement(XElement element);
 
         void VisitElement(XElement element, IContainer container, IInitializationContext context);
     }

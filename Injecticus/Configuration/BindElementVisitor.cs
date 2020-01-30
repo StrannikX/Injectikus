@@ -10,13 +10,17 @@ namespace Injectikus.Configuration
 {
     internal class BindElementVisitor : IElementVisitor
     {
-        public const string AbstractTypeAttributeName = "abstract";
-        public const string ConcreteTypeAttributeName = "concrete";
-        public const string SingletonAttributeName = "singleton";
+        const string AbstractTypeAttributeName = "abstract";
+        const string ConcreteTypeAttributeName = "concrete";
+        const string SingletonAttributeName = "singleton";
+        const string XMLElementName = "bind"; 
 
         public readonly string[] singletonIsTrueValues = new[] { "1", "true" };
 
-        public string ElementName => "bind";
+        public bool MatchElement(XElement element)
+        {
+            return element.Name.LocalName.ToLower().Equals(XMLElementName);
+        }
 
         public void VisitElement(XElement element, IContainer container, IInitializationContext context)
         {
@@ -34,7 +38,7 @@ namespace Injectikus.Configuration
 
             if (abstractTypeName == null || concreteClassName == null)
             {
-                throw new Exception();
+                throw new ConfirurationFileFormatException("Bind element should have abstarct and concrete attributes!");
             }
 
             var abstractType = context.GetType(abstractTypeName);
@@ -70,7 +74,7 @@ namespace Injectikus.Configuration
             {
                 var typeNames = childExpressions.Select(e => e.Type.FullName);
                 var typeString = string.Join(", ", typeNames);
-                throw new ArgumentException(
+                throw new ConfirurationFileFormatException(
                     $"Class {concreteType.FullName} doesn't have constructor with parameters with types {typeString}");
             }
             
@@ -80,11 +84,6 @@ namespace Injectikus.Configuration
             );
 
             return lambda.Compile();
-        }
-
-        private Type GetTypeOf(XElement element, IInitializationContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 }
